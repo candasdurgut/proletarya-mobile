@@ -383,7 +383,7 @@
     </div>
 
     <div class="mobile-footer">
-        <div>v0.31α - Designed By C.D.</div>
+        <div>v2.4 - Devrimci Sloganlar & Akıllı Sayac</div>
         <div style="margin-top: 5px;">Ana ekrene ekle → Uygulama gibi kullan</div>
     </div>
 </div>
@@ -402,7 +402,8 @@ let notificationState = {
     money250: false,
     money500: false,
     hourlyShown: {},
-    countdownShown: {}
+    countdownShown: {},
+    workdayCounted: false
 };
 
 function showNotification(message, type = 'info') {
@@ -438,6 +439,45 @@ function clearNotification() {
     currentNotification = null;
 }
 
+// ZENGİNLEŞTİRİLMİŞ SLOGANLAR
+const slogans = [
+    "✊ Emekçinin birliği sermayeyi yenecek!",
+    "⚡ Sömürüye son, hakkını al!",
+    "🔨 Gücümüz birliğimizde!",
+    "⚖️ Kazanç adaletle büyür!",
+    "🌍 Her işçi bir devrimcidir!",
+    "💪 Günlük emeğin kutsaldır!",
+    "🔥 Burjuvazi yıkılacak, işçi sınıfı kazanacak!",
+    "🏭 Fabrikalar işçinin, yönetim işçinin!",
+    "⛓️ Sermayenin zincirlerini kıralım!",
+    "🚩 İşçi sınıfı örgütlü, sermaye perişan!",
+    "💥 Her fabrika bir devrim ocağı!",
+    "🛑 Ücretli kölelik son bulsun!",
+    "💰 Patronun kârı emekçinin alın teri!",
+    "📈 Asgari ücret açlık sınırı olsun!",
+    "🎯 Emeğin karşılığı tam olarak alınsın!",
+    "📢 Sendikalı işçi güçlü işçidir!",
+    "🌐 Bütün ülkelerin işçileri birleşin!",
+    "🎓 Sınıf bilinciyle donanmış işçi yenilmez!",
+    "🤝 Enternasyonal dayanışma yaşasın!",
+    "🚀 İşçi sınıfı sınır tanımaz!",
+    "❤️ Dünya işçileri kardeştir!",
+    "⚔️ Eşit işe eşit ücret!",
+    "🎪 Grev hakkımız gasp edilemez!",
+    "📜 Sendika hakkı insan hakkıdır!",
+    "⏰ Çalışma saatleri insani olsun!",
+    "🛡️ İş güvencesi temel haktır!",
+    "🌟 Her işçi bir örgütçüdür!",
+    "💢 Boyun eğme, diren, kazan!",
+    "✨ Alın terimiz, onurumuz!",
+    "🎊 Üretenden güçlü yok!",
+    "🏆 Bugünün mücadelesi yarının zaferi!",
+    "☭ Orak-çekiç işçinin gücüdür!",
+    "⚒️ Üretim araçları emekçinin olacak!",
+    "🔴 Kızıl bayrak dalgalansın!",
+    "⭐ Proletarya enternasyonalizmi yaşasın!"
+];
+
 // ORJİNAL KOD
 let dailyWage = 0;
 let workStart = null;
@@ -446,15 +486,8 @@ let workDuration = 0;
 let timerInterval = null;
 let daysWorkedSoFar = 0;  
 let totalWorkdaysThisMonth = 0;
-
-const slogans = [
-    "Emekçinin birliği sermayeyi yenecek!",
-    "Sömürüye son, hakkını al!",
-    "Gücümüz birliğimizde!",
-    "Kazanç adaletle büyür!",
-    "Her işçi bir devrimcidir!",
-    "Günlük emeğin kutsaldır!"
-];
+let workdaysRemaining = 0;
+let lastWorkdayCheckDate = null;
 
 function updateClock(){
     const now = new Date();
@@ -521,15 +554,10 @@ function calc() {
     dailyWage = salary / totalWorkdaysThisMonth;
     let monthlyEarnedBase = daysWorkedSoFar * dailyWage;
 
-    let wdRemaining = 0;
-    let tmp = new Date(now);
-    while (tmp <= paydayDate){
-        let g = tmp.getDay();
-        if (g!==0 && g!==6) wdRemaining++;
-        tmp.setDate(tmp.getDate()+1);
-    }
+    // YENİ: MESAJİ BİTİMİNDE DÜŞEN İŞ GÜNÜ HESAPLAMA
+    workdaysRemaining = calculateWorkdaysRemaining(now, paydayDate);
+    lastWorkdayCheckDate = now.getDate();
 
-    // CANLI PANELİ OLUŞTUR (ÜSTE)
     document.getElementById("livePanel").innerHTML = `
     <div class="live-panel">
         <h2>⏱ Canlı Mesai Takibi</h2>
@@ -571,7 +599,7 @@ function calc() {
     document.getElementById("results").innerHTML = `
         <h3>📢 Genel Rapor</h3>
         <p>Maaşa kalan gün: <b>${totalDaysRemaining}</b></p>
-        <p>Maaşa kalan iş günü: <b>${wdRemaining}</b></p>
+        <p>Maaşa kalan iş günü: <b>${workdaysRemaining}</b></p>
         <p>Günlük hakediş: <b>${dailyWage.toFixed(2)}₺</b></p>
         <h3>📆 Proletarya Takvimi</h3>
         ${calHtml}
@@ -608,11 +636,53 @@ function calc() {
         money250: false,
         money500: false,
         hourlyShown: {},
-        countdownShown: {}
+        countdownShown: {},
+        workdayCounted: false
     };
 
     showNotification("✅ Rapor oluşturuldu! Canlı takip başlatıldı.");
     startLiveCounter(monthlyEarnedBase);
+}
+
+// YENİ: MESAJİ BİTİMİNDE DÜŞEN İŞ GÜNÜ HESAPLAMA
+function calculateWorkdaysRemaining(now, paydayDate) {
+    let tmp = new Date(now);
+    tmp.setDate(tmp.getDate() + 1); // YARINDAN başla
+    
+    let workdays = 0;
+    while (tmp <= paydayDate) {
+        let gun = tmp.getDay();
+        if (gun !== 0 && gun !== 6) {
+            workdays++;
+        }
+        tmp.setDate(tmp.getDate() + 1);
+    }
+    return workdays;
+}
+
+// YENİ: İŞ GÜNÜ SAYAÇ KONTROLÜ
+function checkWorkdayCounter() {
+    const now = new Date();
+    
+    // Gün değişti mi kontrol et
+    if (lastWorkdayCheckDate !== now.getDate()) {
+        notificationState.workdayCounted = false;
+        lastWorkdayCheckDate = now.getDate();
+    }
+    
+    // Mesai bitti mi ve bugün sayılmadı mı?
+    if (now > workEnd && !notificationState.workdayCounted && workdaysRemaining > 0) {
+        workdaysRemaining--;
+        notificationState.workdayCounted = true;
+        
+        showNotification(
+            `🎯 Mesai tamamlandı! Bir iş günü daha bitti. ` +
+            `Maaşa kalan iş günü: ${workdaysRemaining}`
+        );
+        
+        // Sonuçları güncelle
+        document.querySelector("#results p:nth-child(2) b").textContent = workdaysRemaining;
+    }
 }
 
 function startLiveCounter(monthlyEarnedBase){
@@ -630,6 +700,9 @@ function startLiveCounter(monthlyEarnedBase){
         const now = new Date();
         let earnedToday = 0;
         let progress = 0;
+
+        // İŞ GÜNÜ SAYAÇ KONTROLÜ
+        checkWorkdayCounter();
 
         if (now >= workStart && now <= workEnd) {
             const passed = (now - workStart)/1000;
@@ -759,5 +832,3 @@ window.addEventListener('scroll', function() {
 </script>
 </body>
 </html>
-
-
