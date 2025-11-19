@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#f2d16b">
+<title>Proletarya Mobil</title>
+<style>
+  /* MOBİL OPTİMİZASYONLARI */
+  * {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #1a1a1a;
+    color: #f2d16b;
+    padding: 15px;
+    padding-bottom: 30px;
+    min-height: 100vh;
+    padding-top: constant(safe-area-inset-top);
+    padding-top: env(safe-area-inset-top);
+  }
+
+  /* MOBİL INPUTLAR */
+  input, button {
+    width: 100%; 
+    padding: 16px;
+    border-radius: 12px;
+    border: none;
+    margin: 10px 0;
+    background: rgba(70,70,70,0.85);
+    color: #f2d16b;
+    font-size: 16px;
+  }
+
+  button { 
+    background: rgba(242,209,107,0.9);
+    color: #1a1a1a;
+    font-weight: bold;
+    font-size: 18px;
+  }
+
+  /* TOUCH FRIENDLY */
+  button:active {
+    transform: scale(0.98);
+    background: rgba(242,209,107,1);
+  }
+
+  .results {
+    background: rgba(40,40,40,0.9);
+    padding: 18px;
+    border-radius: 15px;
+    margin-top: 20px;
+  }
+
+  .calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+    margin-top: 20px;
+  }
+
+  .day {
+    padding: 8px;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 14px;
+    min-height: 55px;
+  }
+
+  .past { background: #4caf50; color:white; }
+  .today { background: #f2d16b; color:black; }
+  .future { background: #d9534f; color:white; }
+  .holiday { background: #ff80b9; color:black; }
+
+  .bar-container {
+    background: rgba(70,70,70,0.7);
+    width:100%; 
+    height:25px;
+    border-radius:15px;
+    margin-top:15px;
+    position: relative;
+  }
+
+  .bar {
+    height:100%; 
+    width:0%;
+    background:#f2d16b; 
+    border-radius:15px;
+    transition: width 0.2s linear;
+    position: relative;
+  }
+
+  .bar-text {
+    position: absolute;
+    width:100%;
+    text-align:center;
+    top:0; 
+    left:0;
+    line-height:25px;
+    font-weight:bold;
+    color:black;
+    pointer-events:none;
+    font-size: 14px;
+  }
+
+  .live-panel {
+    background: rgba(60,60,60,0.6);
+    padding: 15px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+  }
+
+  /* MOBİL HEADER */
+  .top-panel {
+    position: sticky;
+    top: 0;
+    background: rgba(30,30,30,0.95);
+    padding: 12px 15px;
+    z-index: 999;
+    margin: -15px -15px 20px -15px;
+    border-bottom: 2px solid #f2d16b;
+  }
+
+  .top-panel h1 { 
+    font-weight:bold; 
+    margin:0; 
+    font-size:18px;
+    text-align: center;
+  }
+
+  .top-panel .slogan {
+    font-size: 12px;
+    color: #f2d16b;
+    margin-top: 4px;
+    font-weight: normal;
+    text-align: center;
+  }
+
+  #currentDate {
+    font-size: 12px;
+    text-align: center;
+    margin-top: 5px;
+    opacity: 0.8;
+  }
+
+  /* MOBİL BİLDİRİM PANELİ */
+  .notification-panel {
+    background: rgba(242,209,107,0.1);
+    border: 1px solid #f2d16b;
+    padding: 12px;
+    border-radius: 12px;
+    margin: 15px 0;
+    font-size: 14px;
+  }
+
+  .notification-panel h3 {
+    margin: 0 0 8px 0;
+    color: #f2d16b;
+  }
+
+  /* MOBİL BOTTOM ALANI */
+  .mobile-footer {
+    margin-top: 30px;
+    text-align: center;
+    font-size: 12px;
+    opacity: 0.7;
+  }
+
+  /* iPhone X+ NOTCH DESTEĞİ */
+  @supports(padding: max(0px)) {
+    body {
+      padding-left: max(15px, env(safe-area-inset-left));
+      padding-right: max(15px, env(safe-area-inset-right));
+    }
+  }
+
+  /* KÜÇÜK EKRANLAR İÇİN */
+  @media (max-width: 380px) {
+    .day {
+      font-size: 12px;
+      padding: 6px;
+      min-height: 45px;
+    }
+    
+    input, button {
+      padding: 14px;
+    }
+  }
+
+  /* YATAY MOD İÇİN */
+  @media (max-height: 500px) and (orientation: landscape) {
+    body {
+      padding-bottom: 15px;
+    }
+    
+    .top-panel {
+      position: relative;
+      margin-bottom: 15px;
+    }
+  }
+
+</style>
+</head>
+<body>
+
+<div class="top-panel">
+    <h1>✊ Proletarya Mobil ✊</h1>
+    <div id="currentDate"></div>
+    <div class="slogan" id="dailySlogan"></div>
+</div>
+
+<!-- BİLDİRİM ALANI -->
+<div class="notification-panel" id="notificationArea">
+    <h3>📢 Mobil Bildirimler</h3>
+    <p id="notificationText">Uygulama açıkken bildirimler burada görünecek</p>
+</div>
+
+<label>Maaş:</label>
+<input id="salary" type="number" placeholder="15000" inputmode="numeric"/>
+
+<label>Maaş Günü (1–31):</label>
+<input id="payday" type="number" placeholder="15" min="1" max="31" inputmode="numeric"/>
+
+<label>Mesai Başlangıç Saati:</label>
+<input id="start" type="time" value="09:00"/>
+
+<label>Mesai Bitiş Saati:</label>
+<input id="end" type="time" value="18:00"/>
+
+<button onclick="calc()">📊 Raporu Oluştur</button>
+
+<div id="livePanel"></div>
+<div class="results" id="results"></div>
+
+<div class="mobile-footer">
+    <div>v0.31α - Architected By C.D.</div>
+    <div style="margin-top: 5px;">Ana ekrene ekle → Uygulama gibi kullan</div>
+</div>
+
+<script>
+// MOBİL BİLDİRİM SİSTEMİ
+let notificationHistory = [];
+let lastNotificationTime = 0;
+
+function showNotification(message, type = 'info') {
+    const now = Date.now();
+    if (now - lastNotificationTime < 30000) return; // 30 saniyede bir
+    
+    const notificationArea = document.getElementById('notificationArea');
+    const notificationText = document.getElementById('notificationText');
+    
+    notificationText.textContent = message;
+    notificationHistory.push({ time: new Date(), message: message });
+    
+    // Geçici vurgulama
+    notificationArea.style.background = 'rgba(242,209,107,0.2)';
+    setTimeout(() => {
+        notificationArea.style.background = 'rgba(242,209,107,0.1)';
+    }, 2000);
+    
+    lastNotificationTime = now;
+    
+    // iOS titreşim efekti (desteklenirse)
+    if (navigator.vibrate) {
+        navigator.vibrate(200);
+    }
+}
+
+// ORJİNAL KOD (MOBİL OPTİMİZE)
+let dailyWage = 0;
+let workStart = null;
+let workEnd = null;
+let workDuration = 0;
+let timerInterval = null;
+let daysWorkedSoFar = 0;  
+let totalWorkdaysThisMonth = 0;
+
+const slogans = [
+    "Emekçinin birliği sermayeyi yenecek!",
+    "Sömürüye son, hakkını al!",
+    "Gücümüz birliğimizde!",
+    "Kazanç adaletle büyür!",
+    "Her işçi bir devrimcidir!",
+    "Günlük emeğin kutsaldır!"
+];
+
+function updateClock(){
+    const now = new Date();
+    const days = ["Pazar","Pzt","Salı","Çar","Per","Cuma","Cmt"];
+    const months = ["Oca","Şub","Mar","Nis","May","Haz","Tem","Ağu","Eyl","Eki","Kas","Ara"];
+    const formatted = `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} - ${now.toLocaleTimeString().slice(0,5)}`;
+    document.getElementById("currentDate").innerText = formatted;
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+function randomSlogan(){
+    const s = slogans[Math.floor(Math.random()*slogans.length)];
+    document.getElementById("dailySlogan").innerText = s;
+}
+setInterval(randomSlogan, 15000);
+randomSlogan();
+
+function calc() {
+    clearInterval(timerInterval);
+
+    const salary = Number(document.getElementById('salary').value);
+    const payday = Number(document.getElementById('payday').value);
+
+    if (!salary || !payday) {
+        showNotification("⚠️ Lütfen maaş ve maaş gününü girin");
+        return;
+    }
+
+    const startTime = document.getElementById("start").value;
+    const endTime   = document.getElementById("end").value;
+
+    const now = new Date();
+    const [sh, sm] = startTime.split(":").map(Number);
+    const [eh, em] = endTime.split(":").map(Number);
+
+    workStart = new Date(now.getFullYear(), now.getMonth(), now.getDate(), sh, sm, 0);
+    workEnd   = new Date(now.getFullYear(), now.getMonth(), now.getDate(), eh, em, 0);
+    workDuration = (workEnd - workStart) / 1000;
+
+    const year = now.getFullYear();
+    const month = now.getMonth();
+
+    let paydayDate = new Date(year, month, payday);
+    if (paydayDate < now) paydayDate = new Date(year, month + 1, payday);
+
+    const totalDaysRemaining = Math.ceil((paydayDate - now)/(1000*3600*24));
+
+    const start = new Date(year, month, 1);
+    const end = new Date(year, month+1, 0);
+
+    totalWorkdaysThisMonth = 0;
+    daysWorkedSoFar = 0;
+
+    for (let d=1; d<=end.getDate(); d++){
+        const date = new Date(year, month, d);
+        const isWeekend = (date.getDay()===0 || date.getDay()===6);
+        if (!isWeekend) {
+            totalWorkdaysThisMonth++;
+            if (date < now) daysWorkedSoFar++;
+        }
+    }
+
+    dailyWage = salary / totalWorkdaysThisMonth;
+    let monthlyEarnedBase = daysWorkedSoFar * dailyWage;
+
+    let wdRemaining = 0;
+    let tmp = new Date(now);
+    while (tmp <= paydayDate){
+        let g = tmp.getDay();
+        if (g!==0 && g!==6) wdRemaining++;
+        tmp.setDate(tmp.getDate()+1);
+    }
+
+    document.getElementById("livePanel").innerHTML = `
+    <div class="live-panel">
+        <h2>⏱ Canlı Mesai Takibi</h2>
+        <div class="bar-container"><div id="workBar" class="bar"><div class="bar-text" id="workBarText">0%</div></div></div>
+        <p id="progressText"></p>
+        <h3>💸 Anlık Kazanç</h3>
+        <p>Bugün: <b id="earnedToday"></b></p>
+        <p>Bu Ay: <b id="earnedMonth"></b></p>
+        <h3>📊 Ücret Oranları</h3>
+        <p>Saatlik: <b id="h"></b></p>
+        <p>Dakikalık: <b id="m"></b></p>
+        <p>Saniyelik: <b id="s"></b></p>
+        <h3>📈 Aylık İlerleme</h3>
+        <div class="bar-container"><div id="monthBar" class="bar"><div class="bar-text" id="monthBarText">0%</div></div></div>
+    </div>
+    `;
+
+    let calHtml = `<div class="calendar">`;
+    for (let d=1; d<=end.getDate(); d++){
+        const date = new Date(year, month, d);
+        const isWeekend = (date.getDay()===0 || date.getDay()===6);
+
+        let cls="";
+        if (isWeekend) cls="holiday";
+        else if (d === now.getDate()) cls="today";
+        else if (date < now) cls="past";
+        else cls="future";
+
+        calHtml += `<div class="day ${cls}">${d}<br>`;
+        if (!isWeekend) calHtml += `<small>${dailyWage.toFixed(2)}₺</small>`;
+        calHtml += `</div>`;
+    }
+    calHtml += `</div>`;
+
+    document.getElementById("results").innerHTML = `
+        <h3>📢 Genel Rapor</h3>
+        <p>Maaşa kalan gün: <b>${totalDaysRemaining}</b></p>
+        <p>Maaşa kalan iş günü: <b>${wdRemaining}</b></p>
+        <p>Günlük hakediş: <b>${dailyWage.toFixed(2)}₺</b></p>
+        <h3>📆 Proletarya Takvimi</h3>
+        ${calHtml}
+    `;
+
+    showNotification("✅ Rapor oluşturuldu! Canlı takip başlatıldı.");
+    startLiveCounter(monthlyEarnedBase);
+}
+
+function startLiveCounter(monthlyEarnedBase){
+    const hourly = dailyWage / (workDuration/3600);
+    const minutely = hourly / 60;
+    const secondly = minutely / 60;
+
+    document.getElementById("h").innerText = hourly.toFixed(2)+"₺";
+    document.getElementById("m").innerText = minutely.toFixed(4)+"₺";
+    document.getElementById("s").innerText = secondly.toFixed(6)+"₺";
+
+    let workStartNotificationShown = false;
+    let workEndNotificationShown = false;
+
+    timerInterval = setInterval(() => {
+        const now = new Date();
+        let earnedToday = 0;
+        let progress = 0;
+
+        if (now >= workStart && now <= workEnd) {
+            const passed = (now - workStart)/1000;
+            earnedToday = passed * secondly;
+            progress = (passed / workDuration) * 100;
+            
+            // Mesai başlangıç bildirimi
+            if (!workStartNotificationShown && passed < 60) {
+                showNotification("🏁 Mesai başladı! Bugünkü kazanç: " + earnedToday.toFixed(2) + "₺");
+                workStartNotificationShown = true;
+            }
+        }
+        else if (now > workEnd) {
+            earnedToday = dailyWage;
+            progress = 100;
+            
+            // Mesai bitiş bildirimi
+            if (!workEndNotificationShown) {
+                showNotification("🎯 Mesai tamamlandı! Bugünkü kazanç: " + earnedToday.toFixed(2) + "₺");
+                workEndNotificationShown = true;
+            }
+        }
+
+        document.getElementById("earnedToday").innerText = earnedToday.toFixed(2)+"₺";
+        const monthlyTotal = monthlyEarnedBase + earnedToday;
+        document.getElementById("earnedMonth").innerText = monthlyTotal.toFixed(2)+"₺";
+
+        document.getElementById("workBar").style.width = progress.toFixed(2) + "%";
+        document.getElementById("workBarText").innerText = progress.toFixed(1)+"%";
+
+        const monthProgress = ((daysWorkedSoFar + (earnedToday/dailyWage)) / totalWorkdaysThisMonth) * 100;
+        document.getElementById("monthBar").style.width = monthProgress.toFixed(2) + "%";
+        document.getElementById("monthBarText").innerText = monthProgress.toFixed(1)+"%";
+
+        if (now < workStart)
+            document.getElementById("progressText").innerText = "Mesai henüz başlamadı.";
+        else if (now > workEnd)
+            document.getElementById("progressText").innerText = "Mesai tamamlandı.";
+        else
+            document.getElementById("progressText").innerText = "Günlük mesai: %" + progress.toFixed(2);
+
+    }, 1000);
+}
+
+// MOBİL EVENT LISTENER'LAR
+document.querySelectorAll('input').forEach(input => {
+    input.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            calc();
+        }
+    });
+});
+
+// SAYFA YÜKLENİNCE
+window.addEventListener('load', function() {
+    // Varsayılan değerler
+    document.getElementById('salary').value = '15000';
+    document.getElementById('payday').value = '15';
+    
+    // iOS PWA kontrolü
+    if (window.navigator.standalone) {
+        showNotification("📱 PWA modunda çalışıyorsunuz");
+    }
+});
+
+// OFFLINE DESTEĞİ
+window.addEventListener('online', function() {
+    showNotification("🌐 İnternet bağlantısı aktif");
+});
+
+window.addEventListener('offline', function() {
+    showNotification("⚠️ İnternet bağlantısı yok - Çevrimdışı mod");
+});
+</script>
+</body>
+</html>
