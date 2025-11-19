@@ -25,16 +25,23 @@
     padding-top: env(safe-area-inset-top);
   }
 
-  /* INPUT STILLERİ - TÜMÜ EŞİT BOYUT */
+  /* TÜM INPUTLAR EŞİT BOYUTTA VE ESNEK */
   input, button {
     width: 100%; 
     padding: 16px;
     border-radius: 12px;
     border: none;
-    margin: 10px 0;
+    margin: 8px 0;
     background: rgba(70,70,70,0.85);
     color: #f2d16b;
     font-size: 16px;
+    -webkit-appearance: none;
+  }
+
+  input[type="time"] {
+    /* Time inputları diğerleriyle aynı boyutta */
+    height: auto;
+    min-height: 54px;
   }
 
   button { 
@@ -42,6 +49,7 @@
     color: #1a1a1a;
     font-weight: bold;
     font-size: 18px;
+    margin-top: 12px;
   }
 
   button:active {
@@ -56,18 +64,21 @@
     margin-top: 20px;
   }
 
-  /* SABİT VE SAYDAM HEADER */
-  .top-panel {
+  /* BİRLEŞİK HEADER VE BİLDİRİM ALANI */
+  .header-container {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
-    background: rgba(30,30,30,0.92);
-    backdrop-filter: blur(10px);
-    padding: 12px 15px;
+    background: rgba(30,30,30,0.95);
+    backdrop-filter: blur(15px);
     z-index: 1000;
-    border-bottom: 2px solid #f2d16b;
+    border-bottom: 1px solid #f2d16b;
     transition: all 0.3s ease;
+  }
+
+  .top-panel {
+    padding: 12px 15px 8px 15px;
   }
 
   .top-panel h1 { 
@@ -92,60 +103,72 @@
     opacity: 0.8;
   }
 
-  /* SABİT BİLDİRİM PANELİ */
+  /* BİLDİRİM ALANI - HEADER İLE BİRLEŞİK */
   .notification-panel {
-    position: fixed;
-    top: 110px;
-    left: 15px;
-    right: 15px;
-    background: rgba(242,209,107,0.1);
-    backdrop-filter: blur(10px);
-    border: 1px solid #f2d16b;
-    padding: 12px;
-    border-radius: 12px;
-    margin: 0;
-    font-size: 14px;
-    z-index: 999;
-    transition: all 0.3s ease;
+    background: rgba(242,209,107,0.08);
+    border-top: 1px solid #f2d16b30;
+    padding: 10px 15px;
+    min-height: 50px;
+    display: flex;
+    align-items: center;
   }
 
-  .notification-panel h3 {
-    margin: 0 0 8px 0;
+  .notification-content {
+    flex: 1;
+  }
+
+  .notification-text {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  .notification-clear {
+    background: rgba(242,209,107,0.2);
+    border: none;
     color: #f2d16b;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    margin-left: 10px;
+    cursor: pointer;
+  }
+
+  .notification-clear:active {
+    background: rgba(242,209,107,0.3);
   }
 
   /* ANA İÇERİK ALANI */
   .main-content {
-    margin-top: 180px; /* Header + notification için boşluk */
+    margin-top: 160px; /* Birleşik header için boşluk */
   }
 
-  /* FORM ALANI - RAPOR SONRASI ALTTA */
+  /* FORM ALANI - RAPOR SONRASI TAKVİM ALTINA */
   .form-section {
     transition: all 0.3s ease;
   }
 
   .form-section.collapsed {
-    order: 999;
-    margin-top: 30px;
-    opacity: 0.8;
+    margin-top: 25px;
+    opacity: 0.9;
+    background: rgba(40,40,40,0.7);
+    padding: 15px;
+    border-radius: 12px;
   }
 
   .form-section.collapsed h3 {
     font-size: 16px;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
     color: #f2d16b;
+    text-align: center;
   }
 
-  /* CANLI PANEL - RAPOR SONRASI ÜSTTE */
-  .live-panel-section {
-    order: 1;
-  }
-
+  /* CANLI PANEL */
   .live-panel {
     background: rgba(60,60,60,0.6);
     padding: 15px;
     border-radius: 12px;
-    margin-bottom: 25px;
+    margin-bottom: 20px;
   }
 
   /* MOBİL TAKVİM DÜZENİ */
@@ -235,12 +258,12 @@
       font-size: 8px;
     }
 
-    .notification-panel {
-      top: 100px;
+    .main-content {
+      margin-top: 150px;
     }
 
-    .main-content {
-      margin-top: 160px;
+    .notification-text {
+      font-size: 13px;
     }
   }
 
@@ -266,14 +289,8 @@
       padding-bottom: 15px;
     }
     
-    .top-panel {
+    .header-container {
       position: relative;
-    }
-    
-    .notification-panel {
-      position: relative;
-      top: 0;
-      margin: 15px 0;
     }
     
     .main-content {
@@ -298,22 +315,30 @@
 </head>
 <body>
 
-<div class="top-panel">
-    <h1>✊ Proletarya Mobil ✊</h1>
-    <div id="currentDate"></div>
-    <div class="slogan" id="dailySlogan"></div>
-</div>
-
-<div class="notification-panel" id="notificationArea">
-    <h3>📢 Mobil Bildirimler</h3>
-    <p id="notificationText">Uygulama açıkken bildirimler burada görünecek</p>
+<!-- BİRLEŞİK HEADER VE BİLDİRİM ALANI -->
+<div class="header-container">
+    <div class="top-panel">
+        <h1>✊ Proletarya Mobil ✊</h1>
+        <div id="currentDate"></div>
+        <div class="slogan" id="dailySlogan"></div>
+    </div>
+    
+    <div class="notification-panel" id="notificationArea">
+        <div class="notification-content">
+            <p class="notification-text" id="notificationText">Uygulama açıkken bildirimler burada görünecek</p>
+        </div>
+        <button class="notification-clear" onclick="clearNotification()">Temizle</button>
+    </div>
 </div>
 
 <div class="main-content" id="mainContent">
-    <!-- CANLI PANEL - RAPOR SONRASI BURAYA GELECEK -->
+    <!-- CANLI PANEL - RAPOR SONRASI ÜSTTE -->
     <div id="livePanel"></div>
 
-    <!-- FORM ALANI - RAPOR SONRASI ALTA GİDECEK -->
+    <!-- SONUÇLAR -->
+    <div class="results" id="results"></div>
+
+    <!-- FORM ALANI - RAPOR SONRASI TAKVİM ALTINDA -->
     <div class="form-section" id="formSection">
         <label>Maaş:</label>
         <input id="salary" type="number" placeholder="15000" inputmode="numeric"/>
@@ -330,21 +355,16 @@
         <button onclick="calc()">📊 Raporu Oluştur</button>
     </div>
 
-    <!-- SONUÇLAR -->
-    <div class="results" id="results"></div>
-
     <div class="mobile-footer">
-        <div>v2.1 - Optimize Düzen</div>
+        <div>v2.2 - Optimize Düzen</div>
         <div style="margin-top: 5px;">Ana ekrene ekle → Uygulama gibi kullan</div>
     </div>
 </div>
 
 <script>
-// BİLDİRİM SİSTEMİ
+// BİLDİRİM SİSTEMİ - INTERAKTİF
 let notificationHistory = [];
-let lastNotificationTime = 0;
-let notificationCooldown = 30000;
-
+let currentNotification = null;
 let notificationState = {
     workStartShown: false,
     workEndShown: false,
@@ -359,32 +379,36 @@ let notificationState = {
 };
 
 function showNotification(message, type = 'info') {
-    const now = Date.now();
-    if (now - lastNotificationTime < notificationCooldown) return;
-
-    const notificationArea = document.getElementById('notificationArea');
     const notificationText = document.getElementById('notificationText');
+    const notificationArea = document.getElementById('notificationArea');
     
+    // Bildirimi kaydet
+    currentNotification = {
+        message: message,
+        type: type,
+        timestamp: new Date()
+    };
+    
+    notificationHistory.push(currentNotification);
+    
+    // Bildirimi göster
     notificationText.textContent = message;
-    notificationHistory.push({ 
-        time: new Date().toLocaleTimeString(), 
-        message: message 
-    });
     
-    notificationArea.style.background = 'rgba(242,209,107,0.2)';
-    notificationArea.style.border = '2px solid #f2d16b';
-    setTimeout(() => {
-        notificationArea.style.background = 'rgba(242,209,107,0.1)';
-        notificationArea.style.border = '1px solid #f2d16b';
-    }, 2000);
-    
-    lastNotificationTime = now;
-    
-    if (navigator.vibrate) {
-        navigator.vibrate(200);
-    }
+    // Görsel efekt
+    notificationArea.style.background = 'rgba(242,209,107,0.15)';
+    notificationArea.style.borderTop = '1px solid #f2d16b';
     
     console.log('📢 Bildirim:', message);
+}
+
+function clearNotification() {
+    const notificationText = document.getElementById('notificationText');
+    const notificationArea = document.getElementById('notificationArea');
+    
+    notificationText.textContent = 'Bildirim yok';
+    notificationArea.style.background = 'rgba(242,209,107,0.08)';
+    notificationArea.style.borderTop = '1px solid #f2d16b30';
+    currentNotification = null;
 }
 
 // ORJİNAL KOD
@@ -496,26 +520,6 @@ function calc() {
     </div>
     `;
 
-    // FORM ALANINI ALTA TAŞI
-    const formSection = document.getElementById('formSection');
-    formSection.classList.add('collapsed');
-    formSection.innerHTML = `
-        <h3>⚙️ Ayarlar</h3>
-        <label>Maaş:</label>
-        <input id="salary" type="number" placeholder="15000" inputmode="numeric" value="${salary}"/>
-
-        <label>Maaş Günü:</label>
-        <input id="payday" type="number" placeholder="15" min="1" max="31" inputmode="numeric" value="${payday}"/>
-
-        <label>Mesai Başlangıç:</label>
-        <input id="start" type="time" value="${startTime}"/>
-
-        <label>Mesai Bitiş:</label>
-        <input id="end" type="time" value="${endTime}"/>
-
-        <button onclick="calc()">🔄 Raporu Güncelle</button>
-    `;
-
     // MOBİL TAKVİM DÜZENİ
     let calHtml = `<div class="calendar">`;
     for (let d=1; d<=end.getDate(); d++){
@@ -544,6 +548,26 @@ function calc() {
         <p>Günlük hakediş: <b>${dailyWage.toFixed(2)}₺</b></p>
         <h3>📆 Proletarya Takvimi</h3>
         ${calHtml}
+    `;
+
+    // FORM ALANINI TAKVİM ALTINA TAŞI
+    const formSection = document.getElementById('formSection');
+    formSection.classList.add('collapsed');
+    formSection.innerHTML = `
+        <h3>⚙️ Ayarlar</h3>
+        <label>Maaş:</label>
+        <input id="salary" type="number" placeholder="15000" inputmode="numeric" value="${salary}"/>
+
+        <label>Maaş Günü:</label>
+        <input id="payday" type="number" placeholder="15" min="1" max="31" inputmode="numeric" value="${payday}"/>
+
+        <label>Mesai Başlangıç:</label>
+        <input id="start" type="time" value="${startTime}"/>
+
+        <label>Mesai Bitiş:</label>
+        <input id="end" type="time" value="${endTime}"/>
+
+        <button onclick="calc()">🔄 Raporu Güncelle</button>
     `;
 
     // Bildirim durumunu sıfırla
@@ -697,15 +721,12 @@ window.addEventListener('load', function() {
 
 // SCROLL ANIMASYONU
 window.addEventListener('scroll', function() {
-    const topPanel = document.querySelector('.top-panel');
-    const notificationPanel = document.querySelector('.notification-panel');
+    const headerContainer = document.querySelector('.header-container');
     
     if (window.scrollY > 50) {
-        topPanel.style.background = 'rgba(30,30,30,0.85)';
-        notificationPanel.style.background = 'rgba(242,209,107,0.08)';
+        headerContainer.style.background = 'rgba(30,30,30,0.92)';
     } else {
-        topPanel.style.background = 'rgba(30,30,30,0.92)';
-        notificationPanel.style.background = 'rgba(242,209,107,0.1)';
+        headerContainer.style.background = 'rgba(30,30,30,0.95)';
     }
 });
 </script>
