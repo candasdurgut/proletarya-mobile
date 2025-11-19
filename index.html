@@ -78,7 +78,7 @@
   }
 
   .top-panel {
-    padding: 10px 15px 6px 15px;
+    padding: 10px 15px 4px 15px; /* Alt padding azaltıldı */
     position: relative;
   }
 
@@ -112,45 +112,46 @@
     white-space: nowrap;
   }
 
-  /* BİLDİRİM ALANI - ESKİ HALİ */
+  /* BİLDİRİM ALANI - 3'TE 1 KÜÇÜLTÜLMÜŞ */
   .notification-panel {
     background: rgba(242,209,107,0.08);
     border-top: 1px solid #f2d16b30;
-    padding: 8px 15px;
-    min-height: 44px;
+    padding: 4px 15px; /* Padding küçültüldü */
+    min-height: 30px; /* 44px'ten 30px'e küçültüldü */
+    max-height: 30px;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px; /* Gap küçültüldü */
   }
 
   .notification-content {
     flex: 1;
-    min-width: 0; /* Taşmayı önle */
+    min-width: 0;
   }
 
   .notification-text {
     margin: 0;
-    font-size: 14px;
-    line-height: 1.4;
+    font-size: 12px; /* Font küçültüldü */
+    line-height: 1.2; /* Line-height küçültüldü */
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
-  /* KÜÇÜK TEMİZLE BUTONU - 6'DA 1 BOYUT */
+  /* KÜÇÜK TEMİZLE BUTONU - DAHA DA KÜÇÜK */
   .notification-clear {
     background: rgba(242,209,107,0.2);
     border: none;
     color: #f2d16b;
-    padding: 4px 8px;
-    border-radius: 6px;
-    font-size: 10px;
+    padding: 2px 6px; /* Padding küçültüldü */
+    border-radius: 4px;
+    font-size: 9px; /* Font küçültüldü */
     cursor: pointer;
     flex-shrink: 0;
     width: auto;
-    min-width: 40px;
-    height: 24px;
-    line-height: 16px;
+    min-width: 30px; /* Genişlik küçültüldü */
+    height: 18px; /* Yükseklik küçültüldü */
+    line-height: 14px;
   }
 
   .notification-clear:active {
@@ -158,9 +159,9 @@
     transform: scale(0.95);
   }
 
-  /* ANA İÇERİK ALANI */
+  /* ANA İÇERİK ALANI - DAHA AZ MARGIN */
   .main-content {
-    margin-top: 130px; /* Compact header için optimize */
+    margin-top: 115px; /* 130px'ten 115px'e küçültüldü */
   }
 
   /* FORM ALANI - RAPOR SONRASI TAKVİM ALTINA */
@@ -279,7 +280,7 @@
     }
 
     .main-content {
-      margin-top: 120px;
+      margin-top: 105px; /* Küçültüldü */
     }
 
     .top-panel .slogan {
@@ -292,19 +293,20 @@
     }
 
     .notification-panel {
-      padding: 6px 12px;
-      min-height: 40px;
+      padding: 3px 12px; /* Daha da küçük */
+      min-height: 26px; /* Daha da küçük */
+      max-height: 26px;
     }
 
     .notification-text {
-      font-size: 13px;
+      font-size: 11px; /* Daha da küçük */
     }
 
     .notification-clear {
-      padding: 3px 6px;
-      font-size: 9px;
-      min-width: 35px;
-      height: 22px;
+      padding: 1px 4px; /* Daha da küçük */
+      font-size: 8px;
+      min-width: 25px;
+      height: 16px;
     }
   }
 
@@ -332,7 +334,7 @@
     }
 
     .notification-text {
-      font-size: 12px;
+      font-size: 10px;
     }
   }
 </style>
@@ -382,7 +384,7 @@
     </div>
 
     <div class="mobile-footer">
-        <div>v3.2 - Son Optimizasyon</div>
+        <div>v3.3 - Ultra Compact</div>
         <div style="margin-top: 5px;">Ana ekrene ekle → Uygulama gibi kullan</div>
     </div>
 </div>
