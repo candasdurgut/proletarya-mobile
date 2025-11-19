@@ -79,13 +79,12 @@
 
   .top-panel {
     padding: 10px 15px 6px 15px;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
+    position: relative;
   }
 
-  .header-left {
-    flex: 1;
+  .header-center {
+    text-align: center;
+    width: 100%;
   }
 
   .top-panel h1 { 
@@ -105,11 +104,12 @@
   }
 
   #currentDate {
+    position: absolute;
+    top: 12px;
+    right: 15px;
     font-size: 10px;
-    text-align: right;
     opacity: 0.8;
     white-space: nowrap;
-    margin-left: 10px;
   }
 
   /* BİLDİRİM ALANI - COMPACT */
@@ -120,11 +120,13 @@
     min-height: 50px;
     max-height: 50px;
     overflow: hidden;
+    position: relative;
   }
 
   .notification-stack {
     position: relative;
     height: 40px;
+    padding-right: 25px; /* X butonu için alan */
   }
 
   .notification-item {
@@ -152,18 +154,27 @@
 
   .notification-clear {
     position: absolute;
-    right: 0;
+    right: 10px;
     top: 50%;
     transform: translateY(-50%);
     background: rgba(242,209,107,0.2);
     border: none;
     color: #f2d16b;
-    padding: 2px 6px;
+    padding: 0;
     border-radius: 4px;
-    font-size: 9px;
+    font-size: 10px;
     cursor: pointer;
-    height: 18px;
-    line-height: 14px;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+  }
+
+  .notification-clear:active {
+    background: rgba(242,209,107,0.3);
+    transform: translateY(-50%) scale(0.95);
   }
 
   /* ANA İÇERİK ALANI */
@@ -296,6 +307,7 @@
 
     #currentDate {
       font-size: 9px;
+      top: 10px;
     }
 
     .notification-panel {
@@ -306,6 +318,12 @@
 
     .notification-item {
       font-size: 11px;
+    }
+
+    .notification-clear {
+      width: 18px;
+      height: 18px;
+      font-size: 9px;
     }
   }
 
@@ -339,7 +357,7 @@
 <!-- BİRLEŞİK HEADER VE BİLDİRİM ALANI -->
 <div class="header-container">
     <div class="top-panel">
-        <div class="header-left">
+        <div class="header-center">
             <h1>✊ Proletarya Mobil ✊</h1>
             <div class="slogan" id="dailySlogan"></div>
         </div>
@@ -350,8 +368,8 @@
         <div class="notification-stack" id="notificationStack">
             <div class="notification-item" id="notificationItem1"></div>
             <div class="notification-item" id="notificationItem2"></div>
-            <button class="notification-clear" onclick="clearAllNotifications()">X</button>
         </div>
+        <button class="notification-clear" onclick="clearAllNotifications()">X</button>
     </div>
 </div>
 
@@ -380,7 +398,7 @@
     </div>
 
     <div class="mobile-footer">
-        <div>v3.0 - Devrimci Optimizasyon</div>
+        <div>v3.1 - Mükemmel Hizalama</div>
         <div style="margin-top: 5px;">Ana ekrene ekle → Uygulama gibi kullan</div>
     </div>
 </div>
