@@ -383,7 +383,7 @@
     </div>
 
     <div class="mobile-footer">
-        <div>v2.4 - Devrimci Sloganlar & Akıllı Sayac</div>
+        <div>v2.5 - Hızlı Gün Sayacı</div>
         <div style="margin-top: 5px;">Ana ekrene ekle → Uygulama gibi kullan</div>
     </div>
 </div>
@@ -486,7 +486,7 @@ let workDuration = 0;
 let timerInterval = null;
 let daysWorkedSoFar = 0;  
 let totalWorkdaysThisMonth = 0;
-let workdaysRemaining = 0;
+let totalDaysRemaining = 0;
 let lastWorkdayCheckDate = null;
 
 function updateClock(){
@@ -534,7 +534,9 @@ function calc() {
     let paydayDate = new Date(year, month, payday);
     if (paydayDate < now) paydayDate = new Date(year, month + 1, payday);
 
-    const totalDaysRemaining = Math.ceil((paydayDate - now)/(1000*3600*24));
+    // YENİ: TÜM GÜNLERİ SAY (HAFTA SONU DAHİL)
+    totalDaysRemaining = calculateTotalDaysRemaining(now, paydayDate);
+    lastWorkdayCheckDate = now.getDate();
 
     const start = new Date(year, month, 1);
     const end = new Date(year, month+1, 0);
@@ -553,10 +555,6 @@ function calc() {
 
     dailyWage = salary / totalWorkdaysThisMonth;
     let monthlyEarnedBase = daysWorkedSoFar * dailyWage;
-
-    // YENİ: MESAJİ BİTİMİNDE DÜŞEN İŞ GÜNÜ HESAPLAMA
-    workdaysRemaining = calculateWorkdaysRemaining(now, paydayDate);
-    lastWorkdayCheckDate = now.getDate();
 
     document.getElementById("livePanel").innerHTML = `
     <div class="live-panel">
@@ -598,8 +596,8 @@ function calc() {
 
     document.getElementById("results").innerHTML = `
         <h3>📢 Genel Rapor</h3>
-        <p>Maaşa kalan gün: <b>${totalDaysRemaining}</b></p>
-        <p>Maaşa kalan iş günü: <b>${workdaysRemaining}</b></p>
+        <p>Maaşa kalan gün: <b id="remainingDays">${totalDaysRemaining}</b></p>
+        <p>Maaşa kalan iş günü: <b>${Math.ceil(totalWorkdaysThisMonth * (totalDaysRemaining / (end.getDate() - now.getDate() + 1)))}</b></p>
         <p>Günlük hakediş: <b>${dailyWage.toFixed(2)}₺</b></p>
         <h3>📆 Proletarya Takvimi</h3>
         ${calHtml}
@@ -644,24 +642,13 @@ function calc() {
     startLiveCounter(monthlyEarnedBase);
 }
 
-// YENİ: MESAJİ BİTİMİNDE DÜŞEN İŞ GÜNÜ HESAPLAMA
-function calculateWorkdaysRemaining(now, paydayDate) {
-    let tmp = new Date(now);
-    tmp.setDate(tmp.getDate() + 1); // YARINDAN başla
-    
-    let workdays = 0;
-    while (tmp <= paydayDate) {
-        let gun = tmp.getDay();
-        if (gun !== 0 && gun !== 6) {
-            workdays++;
-        }
-        tmp.setDate(tmp.getDate() + 1);
-    }
-    return workdays;
+// YENİ: TÜM GÜNLERİ SAYAN HESAPLAMA (HAFTA SONU DAHİL)
+function calculateTotalDaysRemaining(now, paydayDate) {
+    return Math.ceil((paydayDate - now) / (1000 * 3600 * 24));
 }
 
-// YENİ: İŞ GÜNÜ SAYAÇ KONTROLÜ
-function checkWorkdayCounter() {
+// YENİ: MESAJİ BİTİMİNDE HEMEN DÜŞEN GÜN SAYACI
+function checkDayCounter() {
     const now = new Date();
     
     // Gün değişti mi kontrol et
@@ -671,17 +658,24 @@ function checkWorkdayCounter() {
     }
     
     // Mesai bitti mi ve bugün sayılmadı mı?
-    if (now > workEnd && !notificationState.workdayCounted && workdaysRemaining > 0) {
-        workdaysRemaining--;
+    if (now > workEnd && !notificationState.workdayCounted && totalDaysRemaining > 0) {
+        totalDaysRemaining--;
         notificationState.workdayCounted = true;
         
         showNotification(
-            `🎯 Mesai tamamlandı! Bir iş günü daha bitti. ` +
-            `Maaşa kalan iş günü: ${workdaysRemaining}`
+            `🎯 Mesai tamamlandı! Bir gün daha bitti. ` +
+            `Maaşa kalan gün: ${totalDaysRemaining}`
         );
         
         // Sonuçları güncelle
-        document.querySelector("#results p:nth-child(2) b").textContent = workdaysRemaining;
+        document.getElementById("remainingDays").textContent = totalDaysRemaining;
+        
+        // İş günü hesaplamasını da güncelle
+        const year = now.getFullYear();
+        const month = now.getMonth();
+        const end = new Date(year, month+1, 0);
+        const remainingWorkdays = Math.ceil(totalWorkdaysThisMonth * (totalDaysRemaining / (end.getDate() - now.getDate() + 1)));
+        document.querySelector("#results p:nth-child(2) b").textContent = remainingWorkdays;
     }
 }
 
@@ -701,8 +695,8 @@ function startLiveCounter(monthlyEarnedBase){
         let earnedToday = 0;
         let progress = 0;
 
-        // İŞ GÜNÜ SAYAÇ KONTROLÜ
-        checkWorkdayCounter();
+        // GÜN SAYAÇ KONTROLÜ - HER SANİYE
+        checkDayCounter();
 
         if (now >= workStart && now <= workEnd) {
             const passed = (now - workStart)/1000;
