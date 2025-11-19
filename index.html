@@ -78,7 +78,14 @@
   }
 
   .top-panel {
-    padding: 12px 15px 8px 15px;
+    padding: 10px 15px 6px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .header-left {
+    flex: 1;
   }
 
   .top-panel h1 { 
@@ -89,69 +96,79 @@
   }
 
   .top-panel .slogan {
-    font-size: 12px;
+    font-size: 11px;
     color: #f2d16b;
-    margin-top: 4px;
+    margin-top: 2px;
     font-weight: normal;
     text-align: center;
+    line-height: 1.2;
   }
 
   #currentDate {
-    font-size: 12px;
-    text-align: center;
-    margin-top: 5px;
+    font-size: 10px;
+    text-align: right;
     opacity: 0.8;
+    white-space: nowrap;
+    margin-left: 10px;
   }
 
-  /* BİLDİRİM ALANI - HEADER İLE BİRLEŞİK */
+  /* BİLDİRİM ALANI - COMPACT */
   .notification-panel {
     background: rgba(242,209,107,0.08);
     border-top: 1px solid #f2d16b30;
-    padding: 8px 15px;
-    min-height: 44px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .notification-content {
-    flex: 1;
-    min-width: 0; /* Taşmayı önle */
-  }
-
-  .notification-text {
-    margin: 0;
-    font-size: 14px;
-    line-height: 1.4;
+    padding: 6px 15px;
+    min-height: 50px;
+    max-height: 50px;
     overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
   }
 
-  /* KÜÇÜK TEMİZLE BUTONU - 6'DA 1 BOYUT */
+  .notification-stack {
+    position: relative;
+    height: 40px;
+  }
+
+  .notification-item {
+    position: absolute;
+    width: 100%;
+    font-size: 12px;
+    line-height: 1.3;
+    margin: 0;
+    padding: 2px 0;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+  }
+
+  .notification-item.active {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .notification-item.old {
+    opacity: 0.6;
+    transform: translateY(8px);
+    font-size: 11px;
+  }
+
   .notification-clear {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
     background: rgba(242,209,107,0.2);
     border: none;
     color: #f2d16b;
-    padding: 4px 8px;
-    border-radius: 6px;
-    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 9px;
     cursor: pointer;
-    flex-shrink: 0;
-    width: auto;
-    min-width: 40px;
-    height: 24px;
-    line-height: 16px;
-  }
-
-  .notification-clear:active {
-    background: rgba(242,209,107,0.3);
-    transform: scale(0.95);
+    height: 18px;
+    line-height: 14px;
   }
 
   /* ANA İÇERİK ALANI */
   .main-content {
-    margin-top: 150px; /* Optimize edilmiş header için boşluk */
+    margin-top: 130px; /* Compact header için optimize */
   }
 
   /* FORM ALANI - RAPOR SONRASI TAKVİM ALTINA */
@@ -270,23 +287,25 @@
     }
 
     .main-content {
-      margin-top: 140px;
+      margin-top: 120px;
     }
 
-    .notification-text {
-      font-size: 13px;
+    .top-panel .slogan {
+      font-size: 10px;
+    }
+
+    #currentDate {
+      font-size: 9px;
     }
 
     .notification-panel {
-      padding: 6px 12px;
-      min-height: 40px;
+      padding: 4px 12px;
+      min-height: 45px;
+      max-height: 45px;
     }
 
-    .notification-clear {
-      padding: 3px 6px;
-      font-size: 9px;
-      min-width: 35px;
-      height: 22px;
+    .notification-item {
+      font-size: 11px;
     }
   }
 
@@ -305,37 +324,12 @@
       font-size: 7px;
     }
 
-    .notification-text {
-      font-size: 12px;
-    }
-  }
-
-  /* YATAY MOD İÇİN */
-  @media (max-height: 500px) and (orientation: landscape) {
-    body {
-      padding-bottom: 15px;
-    }
-    
-    .header-container {
-      position: relative;
-    }
-    
-    .main-content {
-      margin-top: 0;
-    }
-    
-    .calendar {
-      grid-template-columns: repeat(14, 1fr);
-      gap: 2px;
-    }
-    
-    .day {
-      min-height: 30px;
+    .top-panel .slogan {
       font-size: 9px;
     }
-    
-    .day small {
-      font-size: 7px;
+
+    #currentDate {
+      font-size: 8px;
     }
   }
 </style>
@@ -345,16 +339,19 @@
 <!-- BİRLEŞİK HEADER VE BİLDİRİM ALANI -->
 <div class="header-container">
     <div class="top-panel">
-        <h1>✊ Proletarya Mobil ✊</h1>
+        <div class="header-left">
+            <h1>✊ Proletarya Mobil ✊</h1>
+            <div class="slogan" id="dailySlogan"></div>
+        </div>
         <div id="currentDate"></div>
-        <div class="slogan" id="dailySlogan"></div>
     </div>
     
     <div class="notification-panel" id="notificationArea">
-        <div class="notification-content">
-            <p class="notification-text" id="notificationText">Uygulama açıkken bildirimler burada görünecek</p>
+        <div class="notification-stack" id="notificationStack">
+            <div class="notification-item" id="notificationItem1"></div>
+            <div class="notification-item" id="notificationItem2"></div>
+            <button class="notification-clear" onclick="clearAllNotifications()">X</button>
         </div>
-        <button class="notification-clear" onclick="clearNotification()">X</button>
     </div>
 </div>
 
@@ -383,15 +380,14 @@
     </div>
 
     <div class="mobile-footer">
-        <div>v2.3 - Optimize Bildirim</div>
+        <div>v3.0 - Devrimci Optimizasyon</div>
         <div style="margin-top: 5px;">Ana ekrene ekle → Uygulama gibi kullan</div>
     </div>
 </div>
 
 <script>
-// BİLDİRİM SİSTEMİ - INTERAKTİF
-let notificationHistory = [];
-let currentNotification = null;
+// BİLDİRİM SİSTEMİ - 2'Lİ STACK
+let notificationStack = [];
 let notificationState = {
     workStartShown: false,
     workEndShown: false,
@@ -406,37 +402,105 @@ let notificationState = {
 };
 
 function showNotification(message, type = 'info') {
-    const notificationText = document.getElementById('notificationText');
-    const notificationArea = document.getElementById('notificationArea');
-    
-    // Bildirimi kaydet
-    currentNotification = {
+    // Bildirimi stack'e ekle
+    notificationStack.unshift({
         message: message,
         type: type,
         timestamp: new Date()
-    };
+    });
     
-    notificationHistory.push(currentNotification);
+    // Maksimum 2 bildirim tut
+    if (notificationStack.length > 2) {
+        notificationStack = notificationStack.slice(0, 2);
+    }
     
-    // Bildirimi göster
-    notificationText.textContent = message;
-    
-    // Görsel efekt
-    notificationArea.style.background = 'rgba(242,209,107,0.15)';
-    notificationArea.style.borderTop = '1px solid #f2d16b';
-    
-    console.log('📢 Bildirim:', message);
+    updateNotificationDisplay();
 }
 
-function clearNotification() {
-    const notificationText = document.getElementById('notificationText');
-    const notificationArea = document.getElementById('notificationArea');
+function updateNotificationDisplay() {
+    const item1 = document.getElementById('notificationItem1');
+    const item2 = document.getElementById('notificationItem2');
     
-    notificationText.textContent = 'Bildirim yok';
-    notificationArea.style.background = 'rgba(242,209,107,0.08)';
-    notificationArea.style.borderTop = '1px solid #f2d16b30';
-    currentNotification = null;
+    // Tüm itemları sıfırla
+    item1.className = 'notification-item';
+    item2.className = 'notification-item';
+    
+    if (notificationStack.length > 0) {
+        item1.textContent = notificationStack[0].message;
+        item1.className = 'notification-item active';
+    }
+    
+    if (notificationStack.length > 1) {
+        item2.textContent = notificationStack[1].message;
+        item2.className = 'notification-item old';
+    }
+    
+    // Görsel efekt
+    const notificationArea = document.getElementById('notificationArea');
+    notificationArea.style.background = 'rgba(242,209,107,0.12)';
+    setTimeout(() => {
+        notificationArea.style.background = 'rgba(242,209,107,0.08)';
+    }, 1000);
 }
+
+function clearAllNotifications() {
+    notificationStack = [];
+    updateNotificationDisplay();
+}
+
+// ZENGİNLEŞTİRİLMİŞ SLOGANLAR - 50 ADET
+const slogans = [
+    "✊ Emekçinin birliği sermayeyi yenecek!",
+    "⚡ Sömürüye son, hakkını al!",
+    "🔨 Gücümüz birliğimizde!",
+    "⚖️ Kazanç adaletle büyür!",
+    "🌍 Her işçi bir devrimcidir!",
+    "💪 Günlük emeğin kutsaldır!",
+    "🔥 Burjuvazi yıkılacak, işçi sınıfı kazanacak!",
+    "🏭 Fabrikalar işçinin, yönetim işçinin!",
+    "⛓️ Sermayenin zincirlerini kıralım!",
+    "🚩 İşçi sınıfı örgütlü, sermaye perişan!",
+    "💥 Her fabrika bir devrim ocağı!",
+    "🛑 Ücretli kölelik son bulsun!",
+    "💰 Patronun kârı emekçinin alın teri!",
+    "📈 Asgari ücret açlık sınırı olsun!",
+    "🎯 Emeğin karşılığı tam olarak alınsın!",
+    "📢 Sendikalı işçi güçlü işçidir!",
+    "🌐 Bütün ülkelerin işçileri birleşin!",
+    "🎓 Sınıf bilinciyle donanmış işçi yenilmez!",
+    "🤝 Enternasyonal dayanışma yaşasın!",
+    "🚀 İşçi sınıfı sınır tanımaz!",
+    "❤️ Dünya işçileri kardeştir!",
+    "⚔️ Eşit işe eşit ücret!",
+    "🎪 Grev hakkımız gasp edilemez!",
+    "📜 Sendika hakkı insan hakkıdır!",
+    "⏰ Çalışma saatleri insani olsun!",
+    "🛡️ İş güvencesi temel haktır!",
+    "🌟 Her işçi bir örgütçüdür!",
+    "💢 Boyun eğme, diren, kazan!",
+    "✨ Alın terimiz, onurumuz!",
+    "🎊 Üretenden güçlü yok!",
+    "🏆 Bugünün mücadelesi yarının zaferi!",
+    "☭ Orak-çekiç işçinin gücüdür!",
+    "⚒️ Üretim araçları emekçinin olacak!",
+    "🔴 Kızıl bayrak dalgalansın!",
+    "⭐ Proletarya enternasyonalizmi yaşasın!",
+    "💎 Emek en yüce değerdir!",
+    "🚜 Toprak işleyenin, su kullananın!",
+    "🏛️ İktidar emekçilerin olacak!",
+    "🎖️ Her işçi bir kahramandır!",
+    "⚙️ Üretim emekçinin kontrolünde!",
+    "🌅 Devrim şafağı söküyor!",
+    "🦅 Özgürlük emekçidedir!",
+    "💼 Çalışanın hakkı kutsaldır!",
+    "🌟 Yıldızlar işçi sınıfından yana!",
+    "⚔️ Mücadele büyüyor, zafer yakın!",
+    "🎯 Hedef: Tam bağımsızlık!",
+    "💣 Sömürü düzeni yıkılacak!",
+    "🕊️ Gerçek barış emekçidedir!",
+    "🌈 Sosyalizm insanlığın geleceği!",
+    "🎇 Zafer işçi sınıfının olacak!"
+];
 
 // ORJİNAL KOD
 let dailyWage = 0;
@@ -447,20 +511,11 @@ let timerInterval = null;
 let daysWorkedSoFar = 0;  
 let totalWorkdaysThisMonth = 0;
 
-const slogans = [
-    "Emekçinin birliği sermayeyi yenecek!",
-    "Sömürüye son, hakkını al!",
-    "Gücümüz birliğimizde!",
-    "Kazanç adaletle büyür!",
-    "Her işçi bir devrimcidir!",
-    "Günlük emeğin kutsaldır!"
-];
-
 function updateClock(){
     const now = new Date();
     const days = ["Pazar","Pzt","Salı","Çar","Per","Cuma","Cmt"];
     const months = ["Oca","Şub","Mar","Nis","May","Haz","Tem","Ağu","Eyl","Eki","Kas","Ara"];
-    const formatted = `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} - ${now.toLocaleTimeString().slice(0,5)}`;
+    const formatted = `${now.getDate()} ${months[now.getMonth()]} ${now.toLocaleTimeString()}`;
     document.getElementById("currentDate").innerText = formatted;
 }
 setInterval(updateClock, 1000);
@@ -470,7 +525,7 @@ function randomSlogan(){
     const s = slogans[Math.floor(Math.random()*slogans.length)];
     document.getElementById("dailySlogan").innerText = s;
 }
-setInterval(randomSlogan, 15000);
+setInterval(randomSlogan, 30000); // 30 saniyede bir
 randomSlogan();
 
 function calc() {
