@@ -265,6 +265,19 @@
     opacity: 0.7;
   }
 
+  .backup-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+  }
+
+  .backup-buttons button {
+    flex: 1;
+    padding: 12px;
+    font-size: 14px;
+    margin: 0;
+  }
+
   /* KÜÇÜK EKRANLAR İÇİN */
   @media (max-width: 380px) {
     .calendar {
@@ -309,6 +322,11 @@
       font-size: 10px; /* 8px'ten 10px'e BÜYÜTÜLDÜ */
       min-width: 32px; /* 25px'ten 32px'e BÜYÜTÜLDÜ */
       height: 20px; /* 16px'ten 20px'e BÜYÜTÜLDÜ */
+    }
+
+    .backup-buttons {
+      flex-direction: column;
+      gap: 8px;
     }
   }
 
@@ -370,6 +388,7 @@
 
     <!-- FORM ALANI - RAPOR SONRASI TAKVİM ALTINDA -->
     <div class="form-section" id="formSection">
+        <h3>⚙️ Ayarlar</h3>
         <label>Maaş:</label>
         <input id="salary" type="number" placeholder="15000" inputmode="numeric"/>
 
@@ -383,16 +402,182 @@
         <input id="end" type="time" value="18:00"/>
 
         <button onclick="calc()">📊 Raporu Oluştur</button>
+
+        <!-- YEDEKLEME BUTONLARI -->
+        <div class="backup-buttons">
+            <button onclick="exportData()" style="background: #4caf50;">📥 Verileri Yedekle</button>
+            <button onclick="importData()" style="background: #2196f3;">📤 Yedekten Geri Yükle</button>
+        </div>
+        <input type="file" id="importFile" accept=".json" style="display: none;" onchange="handleFileImport(this.files[0])">
     </div>
 
     <div class="mobile-footer">
         <div>v0.31α - Designed By C.D</div>
         <div style="margin-top: 5px;">Ana ekrene ekle → Uygulama gibi kullan</div>
+        <div style="margin-top: 5px; font-size: 10px; opacity: 0.5;" id="storageInfo"></div>
     </div>
 </div>
 
 <script>
-// BİLDİRİM SİSTEMİ - ESKİ HALİ
+// 📦 LOCALSTORAGE SERVICE - VERİ KALICILIĞI
+class StorageService {
+  static STORAGE_KEY = 'proletarya_app_data';
+  
+  static defaultData = {
+    version: '1.0',
+    userSettings: {
+      salary: 15000,
+      payday: 15,
+      startTime: '09:00',
+      endTime: '18:00'
+    },
+    workHistory: [],
+    notifications: [],
+    lastSync: null
+  };
+
+  static getAllData() {
+    try {
+      const stored = localStorage.getItem(this.STORAGE_KEY);
+      if (stored) {
+        return JSON.parse(stored);
+      }
+      this.saveAllData(this.defaultData);
+      return this.defaultData;
+    } catch (error) {
+      console.error('Veri okuma hatası:', error);
+      return this.defaultData;
+    }
+  }
+
+  static saveAllData(data) {
+    try {
+      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(data));
+      return true;
+    } catch (error) {
+      console.error('Veri kaydetme hatası:', error);
+      return false;
+    }
+  }
+
+  static updateItem(keyPath, value) {
+    const allData = this.getAllData();
+    const keys = keyPath.split('.');
+    let current = allData;
+    
+    for (let i = 0; i < keys.length - 1; i++) {
+      if (!current[keys[i]]) current[keys[i]] = {};
+      current = current[keys[i]];
+    }
+    
+    current[keys[keys.length - 1]] = value;
+    return this.saveAllData(allData);
+  }
+
+  static getItem(keyPath) {
+    const allData = this.getAllData();
+    const keys = keyPath.split('.');
+    let current = allData;
+    
+    for (const key of keys) {
+      if (current[key] === undefined) return null;
+      current = current[key];
+    }
+    
+    return current;
+  }
+
+  static addWorkHistory(entry) {
+    const allData = this.getAllData();
+    
+    if (!allData.workHistory) {
+      allData.workHistory = [];
+    }
+    
+    allData.workHistory.unshift({
+      id: Date.now(),
+      date: new Date().toISOString(),
+      ...entry
+    });
+    
+    if (allData.workHistory.length > 30) {
+      allData.workHistory = allData.workHistory.slice(0, 30);
+    }
+    
+    return this.saveAllData(allData);
+  }
+
+  static addNotification(notification) {
+    const allData = this.getAllData();
+    
+    if (!allData.notifications) {
+      allData.notifications = [];
+    }
+    
+    allData.notifications.unshift({
+      id: Date.now(),
+      timestamp: new Date().toISOString(),
+      ...notification
+    });
+    
+    if (allData.notifications.length > 50) {
+      allData.notifications = allData.notifications.slice(0, 50);
+    }
+    
+    return this.saveAllData(allData);
+  }
+
+  static exportData() {
+    const data = this.getAllData();
+    const blob = new Blob([JSON.stringify(data, null, 2)], {
+      type: 'application/json'
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `proletarya_backup_${new Date().toISOString().split('T')[0]}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  static importData(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const importedData = JSON.parse(e.target.result);
+          if (this.isValidData(importedData)) {
+            this.saveAllData(importedData);
+            resolve(true);
+          } else {
+            reject('Geçersiz veri formatı');
+          }
+        } catch (error) {
+          reject('Dosya okunamadı');
+        }
+      };
+      reader.readAsText(file);
+    });
+  }
+
+  static isValidData(data) {
+    return data && typeof data === 'object' && data.version && data.userSettings;
+  }
+
+  static getStorageInfo() {
+    const data = JSON.stringify(this.getAllData());
+    const used = new Blob([data]).size;
+    const total = 5 * 1024 * 1024;
+    
+    return {
+      used: (used / 1024).toFixed(2),
+      total: (total / 1024).toFixed(2),
+      percentage: (used / total * 100).toFixed(2)
+    };
+  }
+}
+
+// 📢 BİLDİRİM SİSTEMİ
 let notificationHistory = [];
 let currentNotification = null;
 let notificationState = {
@@ -412,19 +597,21 @@ function showNotification(message, type = 'info') {
     const notificationText = document.getElementById('notificationText');
     const notificationArea = document.getElementById('notificationArea');
     
-    // Bildirimi kaydet
     currentNotification = {
         message: message,
         type: type,
         timestamp: new Date()
     };
     
+    // BİLDİRİMİ STORAGE'A KAYDET
+    StorageService.addNotification({
+        message: message,
+        type: type
+    });
+    
     notificationHistory.push(currentNotification);
     
-    // Bildirimi göster
     notificationText.textContent = message;
-    
-    // Görsel efekt
     notificationArea.style.background = 'rgba(242,209,107,0.15)';
     notificationArea.style.borderTop = '1px solid #f2d16b';
     
@@ -437,11 +624,45 @@ function clearNotification() {
     
     notificationText.textContent = 'Bildirim yok';
     notificationArea.style.background = 'rgba(242,209,107,0.08)';
-    notificationArea.style.borderTop = '1px solid #f2d16b30';
+    notificationArea.style.borderTop = ' 1px solid #f2d16b30';
     currentNotification = null;
 }
 
-// ZENGİNLEŞTİRİLMİŞ SLOGANLAR - 50 ADET
+// 💾 YEDEKLEME FONKSİYONLARI
+function exportData() {
+    StorageService.exportData();
+    showNotification('✅ Veriler yedeklendi!');
+}
+
+function importData() {
+    document.getElementById('importFile').click();
+}
+
+function handleFileImport(file) {
+    if (!file) return;
+    
+    StorageService.importData(file)
+        .then(() => {
+            showNotification('✅ Veriler geri yüklendi! Sayfa yeniden yükleniyor...');
+            setTimeout(() => location.reload(), 2000);
+        })
+        .catch(error => {
+            showNotification('❌ ' + error);
+        });
+}
+
+// 🔍 STORAGE SAĞLIK KONTROLÜ
+function checkStorageHealth() {
+    const info = StorageService.getStorageInfo();
+    document.getElementById('storageInfo').textContent = 
+        `Depolama: ${info.used}KB / ${info.total}KB (${info.percentage}%)`;
+    
+    if (info.percentage > 80) {
+        showNotification('⚠️ Depolama alanı doluyor! Eski verileri temizleyin.');
+    }
+}
+
+// ✨ ZENGİNLEŞTİRİLMİŞ SLOGANLAR
 const slogans = [
     "✊ Emekçinin birliği sermayeyi yenecek!",
     "⚡ Sömürüye son, hakkını al!",
@@ -495,7 +716,7 @@ const slogans = [
     "🎇 Zafer işçi sınıfının olacak!"
 ];
 
-// ORJİNAL KOD
+// ⏰ ORJİNAL KOD
 let dailyWage = 0;
 let workStart = null;
 let workEnd = null;
@@ -518,7 +739,7 @@ function randomSlogan(){
     const s = slogans[Math.floor(Math.random()*slogans.length)];
     document.getElementById("dailySlogan").innerText = s;
 }
-setInterval(randomSlogan, 30000); // 30 saniyede bir
+setInterval(randomSlogan, 30000);
 randomSlogan();
 
 function calc() {
@@ -534,6 +755,14 @@ function calc() {
 
     const startTime = document.getElementById("start").value;
     const endTime   = document.getElementById("end").value;
+
+    // 📝 AYARLARI STORAGE'A KAYDET
+    StorageService.updateItem('userSettings', {
+        salary: salary,
+        payday: payday,
+        startTime: startTime,
+        endTime: endTime
+    });
 
     const now = new Date();
     const [sh, sm] = startTime.split(":").map(Number);
@@ -576,6 +805,17 @@ function calc() {
         if (g!==0 && g!==6) wdRemaining++;
         tmp.setDate(tmp.getDate()+1);
     }
+
+    // 📊 ÇALIŞMA GEÇMİŞİNE EKLE
+    StorageService.addWorkHistory({
+        salary: salary,
+        payday: payday,
+        startTime: startTime,
+        endTime: endTime,
+        dailyWage: dailyWage,
+        totalWorkdays: totalWorkdaysThisMonth,
+        daysWorked: daysWorkedSoFar
+    });
 
     // CANLI PANELİ OLUŞTUR (ÜSTE)
     document.getElementById("livePanel").innerHTML = `
@@ -643,6 +883,13 @@ function calc() {
         <input id="end" type="time" value="${endTime}"/>
 
         <button onclick="calc()">🔄 Raporu Güncelle</button>
+
+        <!-- YEDEKLEME BUTONLARI -->
+        <div class="backup-buttons">
+            <button onclick="exportData()" style="background: #4caf50;">📥 Verileri Yedekle</button>
+            <button onclick="importData()" style="background: #2196f3;">📤 Yedekten Geri Yükle</button>
+        </div>
+        <input type="file" id="importFile" accept=".json" style="display: none;" onchange="handleFileImport(this.files[0])">
     `;
 
     // Bildirim durumunu sıfırla
@@ -673,6 +920,7 @@ function startLiveCounter(monthlyEarnedBase){
     document.getElementById("s").innerText = secondly.toFixed(6)+"₺";
 
     let lastEarnedToday = 0;
+    let lastSaveTime = 0;
 
     timerInterval = setInterval(() => {
         const now = new Date();
@@ -753,6 +1001,18 @@ function startLiveCounter(monthlyEarnedBase){
         }
         lastEarnedToday = earnedToday;
 
+        // 📝 HER 30 SANİYEDE BİR CANLI VERİYİ KAYDET
+        const currentTime = Date.now();
+        if (currentTime - lastSaveTime > 30000) { // 30 saniye
+            StorageService.addWorkHistory({
+                type: 'live_snapshot',
+                earnedToday: earnedToday,
+                progress: progress,
+                monthlyTotal: monthlyEarnedBase + earnedToday
+            });
+            lastSaveTime = currentTime;
+        }
+
         document.getElementById("earnedToday").innerText = earnedToday.toFixed(2)+"₺";
         const monthlyTotal = monthlyEarnedBase + earnedToday;
         document.getElementById("earnedMonth").innerText = monthlyTotal.toFixed(2)+"₺";
@@ -784,11 +1044,32 @@ document.querySelectorAll('input').forEach(input => {
     });
 });
 
-// SAYFA YÜKLENİNCE
+// SAYFA YÜKLENİNCE - STORAGE'DAN VERİLERİ YÜKLE
 window.addEventListener('load', function() {
-    document.getElementById('salary').value = '15000';
-    document.getElementById('payday').value = '15';
+    // Storage'dan ayarları yükle
+    const savedSettings = StorageService.getItem('userSettings');
     
+    if (savedSettings) {
+        document.getElementById('salary').value = savedSettings.salary || 15000;
+        document.getElementById('payday').value = savedSettings.payday || 15;
+        document.getElementById('start').value = savedSettings.startTime || '09:00';
+        document.getElementById('end').value = savedSettings.endTime || '18:00';
+    } else {
+        // Varsayılan değerler
+        document.getElementById('salary').value = 15000;
+        document.getElementById('payday').value = 15;
+    }
+
+    // Geçmiş bildirimleri yükle
+    const pastNotifications = StorageService.getItem('notifications') || [];
+    if (pastNotifications.length > 0) {
+        const lastNotification = pastNotifications[0];
+        document.getElementById('notificationText').textContent = lastNotification.message;
+    }
+
+    // Storage bilgisini göster
+    checkStorageHealth();
+
     if (window.navigator.standalone) {
         showNotification("📱 PWA modunda çalışıyorsunuz");
     }
