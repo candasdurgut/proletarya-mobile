@@ -2,10 +2,7 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#f2d16b">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Proletarya Mobil</title>
 <style>
   * {
@@ -14,7 +11,7 @@
   }
   
   body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     margin: 0;
     padding: 0;
     background-color: #1a1a1a;
@@ -22,11 +19,8 @@
     padding: 15px;
     padding-bottom: 30px;
     min-height: 100vh;
-    padding-top: env(safe-area-inset-top);
-    overflow-x: hidden;
   }
 
-  /* TÜM INPUTLAR EŞİT BOYUTTA VE ESNEK */
   input, button {
     width: 100%; 
     padding: 16px;
@@ -36,13 +30,6 @@
     background: rgba(70,70,70,0.85);
     color: #f2d16b;
     font-size: 16px;
-    -webkit-appearance: none;
-  }
-
-  input[type="time"] {
-    /* Time inputları diğerleriyle aynı boyutta */
-    height: auto;
-    min-height: 54px;
   }
 
   button { 
@@ -55,7 +42,6 @@
 
   button:active {
     transform: scale(0.98);
-    background: rgba(242,209,107,1);
   }
 
   .results {
@@ -65,129 +51,22 @@
     margin-top: 20px;
   }
 
-  /* BİRLEŞİK HEADER VE BİLDİRİM ALANI */
-  .header-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    background: rgba(30,30,30,0.95);
-    backdrop-filter: blur(15px);
-    z-index: 1000;
-    border-bottom: 1px solid #f2d16b;
-    transition: all 0.3s ease;
-  }
-
-  .top-panel {
-    padding: 10px 15px 4px 15px; /* Alt padding azaltıldı */
-    position: relative;
-  }
-
-  .header-center {
+  .header {
     text-align: center;
-    width: 100%;
+    margin-bottom: 20px;
   }
 
-  .top-panel h1 { 
-    font-weight:bold; 
+  .header h1 { 
     margin:0; 
-    font-size:18px;
-    text-align: center;
+    font-size:24px;
   }
 
-  .top-panel .slogan {
-    font-size: 11px;
-    color: #f2d16b;
-    margin-top: 2px;
-    font-weight: normal;
-    text-align: center;
-    line-height: 1.2;
-  }
-
-  #currentDate {
-    position: absolute;
-    top: 12px;
-    right: 15px;
-    font-size: 10px;
-    opacity: 0.8;
-    white-space: nowrap;
-  }
-
-  /* BİLDİRİM ALANI - 4'TE 1 KÜÇÜLTÜLMÜŞ */
-  .notification-panel {
-    background: rgba(242,209,107,0.08);
-    border-top: 1px solid #f2d16b30;
-    padding: 3px 15px; /* 8px'ten 3px'e KÜÇÜLTÜLDÜ */
-    min-height: 45px; /* 60px'ten 45px'e KÜÇÜLTÜLDÜ */
-    max-height: 45px; /* 60px'ten 45px'e KÜÇÜLTÜLDÜ */
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-  }
-
-  .notification-content {
-    flex: 1;
-    min-width: 0;
-  }
-
-  .notification-text {
-    margin: 0;
-    font-size: 13px; /* 14px'ten 13px'e KÜÇÜLTÜLDÜ */
-    line-height: 1.3; /* 1.4'ten 1.3'e KÜÇÜLTÜLDÜ */
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  /* TEMİZLE BUTONU - KÜÇÜLTÜLMÜŞ */
-  .notification-clear {
-    background: rgba(242,209,107,0.2);
-    border: none;
-    color: #f2d16b;
-    padding: 3px 6px; /* 4px 8px'ten KÜÇÜLTÜLDÜ */
-    border-radius: 4px;
-    font-size: 10px; /* 11px'ten 10px'e KÜÇÜLTÜLDÜ */
-    cursor: pointer;
-    flex-shrink: 0;
-    width: auto;
-    min-width: 30px; /* 35px'ten 30px'e KÜÇÜLTÜLDÜ */
-    height: 20px; /* 24px'ten 20px'e KÜÇÜLTÜLDÜ */
-    line-height: 14px;
-    align-self: center; /* DİKEYDE ORTALA */
-  }
-
-  .notification-clear:active {
-    background: rgba(242,209,107,0.3);
-    transform: scale(0.95);
-  }
-
-  /* ANA İÇERİK ALANI - MARGIN AYARLANDI */
-  .main-content {
-    margin-top: 115px; /* 130px'ten 115px'e KÜÇÜLTÜLDÜ */
-  }
-
-  /* FORM ALANI - RAPOR SONRASI TAKVİM ALTINA */
-  .form-section {
-    transition: all 0.3s ease;
-  }
-
-  .form-section.collapsed {
-    margin-top: 25px;
+  .header .slogan {
+    font-size: 14px;
+    margin-top: 5px;
     opacity: 0.9;
-    background: rgba(40,40,40,0.7);
-    padding: 15px;
-    border-radius: 12px;
   }
 
-  .form-section.collapsed h3 {
-    font-size: 16px;
-    margin-bottom: 12px;
-    color: #f2d16b;
-    text-align: center;
-  }
-
-  /* CANLI PANEL */
   .live-panel {
     background: rgba(60,60,60,0.6);
     padding: 15px;
@@ -195,30 +74,26 @@
     margin-bottom: 20px;
   }
 
-  /* MOBİL TAKVİM DÜZENİ */
   .calendar {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     gap: 4px;
     margin-top: 15px;
-    font-size: 12px;
   }
 
   .day {
-    padding: 6px 2px;
+    padding: 8px 2px;
     border-radius: 6px;
     text-align: center;
     min-height: 40px;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
-    font-size: 11px;
-    line-height: 1.2;
+    font-size: 12px;
   }
 
   .day small {
-    font-size: 9px;
+    font-size: 10px;
     margin-top: 2px;
     opacity: 0.9;
   }
@@ -256,17 +131,15 @@
     font-weight:bold;
     color:black;
     pointer-events:none;
-    font-size: 14px;
   }
 
-  .mobile-footer {
+  .footer {
     margin-top: 30px;
     text-align: center;
     font-size: 12px;
     opacity: 0.7;
   }
 
-  /* YAGMUR EFEKTI */
   .rain-container {
     position: fixed;
     top: 0;
@@ -275,15 +148,12 @@
     height: 100%;
     pointer-events: none;
     z-index: 9999;
-    overflow: hidden;
   }
 
   .rain-item {
     position: absolute;
     font-size: 24px;
     animation: rain-fall linear forwards;
-    user-select: none;
-    z-index: 10000;
   }
 
   @keyframes rain-fall {
@@ -296,430 +166,109 @@
       opacity: 0;
     }
   }
-
-  /* KÜÇÜK EKRANLAR İÇİN */
-  @media (max-width: 380px) {
-    .calendar {
-      gap: 3px;
-    }
-    
-    .day {
-      padding: 4px 1px;
-      min-height: 35px;
-      font-size: 10px;
-    }
-    
-    .day small {
-      font-size: 8px;
-    }
-
-    .main-content {
-      margin-top: 105px; /* Ayarlandı */
-    }
-
-    .top-panel .slogan {
-      font-size: 10px;
-    }
-
-    #currentDate {
-      font-size: 9px;
-      top: 10px;
-    }
-
-    .notification-panel {
-      padding: 2px 12px; /* Ayarlandı */
-      min-height: 38px; /* 52px'ten 38px'e KÜÇÜLTÜLDÜ */
-      max-height: 38px; /* 52px'ten 38px'e KÜÇÜLTÜLDÜ */
-    }
-
-    .notification-text {
-      font-size: 12px; /* 13px'ten 12px'e KÜÇÜLTÜLDÜ */
-    }
-
-    .notification-clear {
-      padding: 2px 4px; /* Ayarlandı */
-      font-size: 9px; /* 10px'ten 9px'e KÜÇÜLTÜLDÜ */
-      min-width: 25px; /* 32px'ten 25px'e KÜÇÜLTÜLDÜ */
-      height: 16px; /* 20px'ten 16px'e KÜÇÜLTÜLDÜ */
-    }
-
-    .rain-item {
-      font-size: 20px;
-    }
-  }
-
-  @media (max-width: 320px) {
-    .calendar {
-      gap: 2px;
-    }
-    
-    .day {
-      padding: 3px 1px;
-      min-height: 32px;
-      font-size: 9px;
-    }
-    
-    .day small {
-      font-size: 7px;
-    }
-
-    .top-panel .slogan {
-      font-size: 9px;
-    }
-
-    #currentDate {
-      font-size: 8px;
-    }
-
-    .notification-text {
-      font-size: 11px; /* 12px'ten 11px'e KÜÇÜLTÜLDÜ */
-    }
-
-    .rain-item {
-      font-size: 18px;
-    }
-  }
 </style>
 </head>
 <body>
 
-<!-- YAĞMUR KONTEYNIRI -->
 <div class="rain-container" id="rainContainer"></div>
 
-<!-- BİRLEŞİK HEADER VE BİLDİRİM ALANI -->
-<div class="header-container">
-    <div class="top-panel">
-        <div class="header-center">
-            <h1>✊ Proletarya Mobil ✊</h1>
-            <div class="slogan" id="dailySlogan"></div>
-        </div>
-        <div id="currentDate"></div>
-    </div>
-    
-    <div class="notification-panel" id="notificationArea">
-        <div class="notification-content">
-            <p class="notification-text" id="notificationText">Uygulama açıkken bildirimler burada görünecek</p>
-        </div>
-        <button class="notification-clear" onclick="clearNotification()">X</button>
-    </div>
+<div class="header">
+    <h1>✊ Proletarya Mobil ✊</h1>
+    <div class="slogan" id="dailySlogan">Emekçinin birliği sermayeyi yenecek!</div>
 </div>
 
-<div class="main-content" id="mainContent">
-    <!-- CANLI PANEL - RAPOR SONRASI ÜSTTE -->
-    <div id="livePanel"></div>
+<div id="livePanel"></div>
 
-    <!-- SONUÇLAR -->
-    <div class="results" id="results"></div>
+<div class="results" id="results"></div>
 
-    <!-- FORM ALANI - RAPOR SONRASI TAKVİM ALTINDA -->
-    <div class="form-section" id="formSection">
-        <h3>⚙️ Ayarlar</h3>
-        <label>Maaş:</label>
-        <input id="salary" type="number" placeholder="15000" inputmode="numeric"/>
+<div id="formSection">
+    <h3>⚙️ Ayarlar</h3>
+    <label>Maaş:</label>
+    <input id="salary" type="number" placeholder="15000" value="15000">
 
-        <label>Maaş Günü (1–31):</label>
-        <input id="payday" type="number" placeholder="15" min="1" max="31" inputmode="numeric"/>
+    <label>Maaş Günü (1-31):</label>
+    <input id="payday" type="number" placeholder="15" min="1" max="31" value="15">
 
-        <label>Mesai Başlangıç Saati:</label>
-        <input id="start" type="time" value="09:00"/>
+    <label>Mesai Başlangıç:</label>
+    <input id="start" type="time" value="09:00">
 
-        <label>Mesai Bitiş Saati:</label>
-        <input id="end" type="time" value="18:00"/>
+    <label>Mesai Bitiş:</label>
+    <input id="end" type="time" value="18:00">
 
-        <button onclick="calc()">📊 Raporu Oluştur</button>
-    </div>
+    <button onclick="calc()">📊 Raporu Oluştur</button>
+</div>
 
-    <div class="mobile-footer">
-        <div onclick="startMoneyRain()" style="cursor: pointer;">v0.33α - Designed By C.D</div>
-        <div style="margin-top: 5px;">Ana ekrene ekle → Uygulama gibi kullan</div>
-    </div>
+<div class="footer" onclick="startMoneyRain()" style="cursor: pointer;">
+    <div>v1.0 - Proletarya Kalkınma</div>
 </div>
 
 <script>
-// 📦 LOCALSTORAGE SERVICE - VERİ KALICILIĞI
-class StorageService {
-  static STORAGE_KEY = 'proletarya_app_data';
-  
-  static defaultData = {
-    version: '1.0',
-    userSettings: {
-      salary: 15000,
-      payday: 15,
-      startTime: '09:00',
-      endTime: '18:00'
-    },
-    workHistory: [],
-    notifications: [],
-    lastSync: null
-  };
-
-  static getAllData() {
-    try {
-      const stored = localStorage.getItem(this.STORAGE_KEY);
-      if (stored) {
-        return JSON.parse(stored);
-      }
-      this.saveAllData(this.defaultData);
-      return this.defaultData;
-    } catch (error) {
-      console.error('Veri okuma hatası:', error);
-      return this.defaultData;
-    }
-  }
-
-  static saveAllData(data) {
-    try {
-      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(data));
-      return true;
-    } catch (error) {
-      console.error('Veri kaydetme hatası:', error);
-      return false;
-    }
-  }
-
-  static updateItem(keyPath, value) {
-    const allData = this.getAllData();
-    const keys = keyPath.split('.');
-    let current = allData;
-    
-    for (let i = 0; i < keys.length - 1; i++) {
-      if (!current[keys[i]]) current[keys[i]] = {};
-      current = current[keys[i]];
-    }
-    
-    current[keys[keys.length - 1]] = value;
-    return this.saveAllData(allData);
-  }
-
-  static getItem(keyPath) {
-    const allData = this.getAllData();
-    const keys = keyPath.split('.');
-    let current = allData;
-    
-    for (const key of keys) {
-      if (current[key] === undefined) return null;
-      current = current[key];
-    }
-    
-    return current;
-  }
-
-  static addWorkHistory(entry) {
-    const allData = this.getAllData();
-    
-    if (!allData.workHistory) {
-      allData.workHistory = [];
-    }
-    
-    allData.workHistory.unshift({
-      id: Date.now(),
-      date: new Date().toISOString(),
-      ...entry
-    });
-    
-    if (allData.workHistory.length > 30) {
-      allData.workHistory = allData.workHistory.slice(0, 30);
-    }
-    
-    return this.saveAllData(allData);
-  }
-
-  static addNotification(notification) {
-    const allData = this.getAllData();
-    
-    if (!allData.notifications) {
-      allData.notifications = [];
-    }
-    
-    allData.notifications.unshift({
-      id: Date.now(),
-      timestamp: new Date().toISOString(),
-      ...notification
-    });
-    
-    if (allData.notifications.length > 50) {
-      allData.notifications = allData.notifications.slice(0, 50);
-    }
-    
-    return this.saveAllData(allData);
-  }
+// BASIT LOCALSTORAGE
+function saveSettings(settings) {
+    localStorage.setItem('proletarya_settings', JSON.stringify(settings));
 }
 
-// 🌧️ PARA YAĞMURU SİSTEMİ
+function loadSettings() {
+    const saved = localStorage.getItem('proletarya_settings');
+    return saved ? JSON.parse(saved) : null;
+}
+
+// PARA YAGMURU
 function startMoneyRain() {
     const rainContainer = document.getElementById('rainContainer');
-    const items = ['💰', '💵', '💎', '🪙', '💸', '🏆', '⭐', '🎯', '⚒️', '☭', '🔨', '⚔️'];
+    const items = ['💰', '💵', '💎', '🪙', '⚒️', '☭'];
     
-    // Konteyneri temizle
     rainContainer.innerHTML = '';
     
-    // 50 adet yağmur öğesi oluştur
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < 30; i++) {
         setTimeout(() => {
             const item = document.createElement('div');
             item.className = 'rain-item';
             item.textContent = items[Math.floor(Math.random() * items.length)];
             
-            // Rastgele pozisyon
             const left = Math.random() * 100;
-            const animationDuration = 2 + Math.random() * 2; // 2-4 saniye
-            const fontSize = 20 + Math.random() * 20; // 20-40px
+            const duration = 2 + Math.random() * 2;
+            const fontSize = 20 + Math.random() * 20;
             
             item.style.left = left + '%';
-            item.style.animationDuration = animationDuration + 's';
+            item.style.animationDuration = duration + 's';
             item.style.fontSize = fontSize + 'px';
             
-            // Rastgele renk
-            const colors = ['#f2d16b', '#ffd700', '#c0c0c0', '#ff6b6b', '#4ecdc4', '#45b7d1'];
+            const colors = ['#f2d16b', '#ffd700', '#c0c0c0', '#ff6b6b'];
             item.style.color = colors[Math.floor(Math.random() * colors.length)];
             
             rainContainer.appendChild(item);
             
-            // Animasyon bitince öğeyi kaldır
             setTimeout(() => {
                 if (item.parentNode) {
                     item.parentNode.removeChild(item);
                 }
-            }, animationDuration * 1000);
+            }, duration * 1000);
             
-        }, i * 100); // 100ms aralıklarla
+        }, i * 100);
     }
-    
-    // Özel bildirim
-    showNotification('🎊 Proletarya zaferi! Servet halka yağıyor! ✊');
 }
 
-// 📢 BİLDİRİM SİSTEMİ
-let notificationHistory = [];
-let currentNotification = null;
-let notificationState = {
-    workStartShown: false,
-    workEndShown: false,
-    progress25: false,
-    progress50: false,
-    progress75: false,
-    money100: false,
-    money250: false,
-    money500: false,
-    hourlyShown: {},
-    countdownShown: {}
-};
-
-function showNotification(message, type = 'info') {
-    const notificationText = document.getElementById('notificationText');
-    const notificationArea = document.getElementById('notificationArea');
-    
-    currentNotification = {
-        message: message,
-        type: type,
-        timestamp: new Date()
-    };
-    
-    // BİLDİRİMİ STORAGE'A KAYDET
-    StorageService.addNotification({
-        message: message,
-        type: type
-    });
-    
-    notificationHistory.push(currentNotification);
-    
-    notificationText.textContent = message;
-    notificationArea.style.background = 'rgba(242,209,107,0.15)';
-    notificationArea.style.borderTop = '1px solid #f2d16b';
-    
-    console.log('📢 Bildirim:', message);
-}
-
-function clearNotification() {
-    const notificationText = document.getElementById('notificationText');
-    const notificationArea = document.getElementById('notificationArea');
-    
-    notificationText.textContent = 'Bildirim yok';
-    notificationArea.style.background = 'rgba(242,209,107,0.08)';
-    notificationArea.style.borderTop = '1px solid #f2d16b30';
-    currentNotification = null;
-}
-
-// ✨ ZENGİNLEŞTİRİLMİŞ SLOGANLAR
+// SLOGANLAR
 const slogans = [
     "✊ Emekçinin birliği sermayeyi yenecek!",
     "⚡ Sömürüye son, hakkını al!",
     "🔨 Gücümüz birliğimizde!",
     "⚖️ Kazanç adaletle büyür!",
-    "🌍 Her işçi bir devrimcidir!",
-    "💪 Günlük emeğin kutsaldır!",
-    "🔥 Burjuvazi yıkılacak, işçi sınıfı kazanacak!",
-    "🏭 Fabrikalar işçinin, yönetim işçinin!",
-    "⛓️ Sermayenin zincirlerini kıralım!",
-    "🚩 İşçi sınıfı örgütlü, sermaye perişan!",
-    "💥 Her fabrika bir devrim ocağı!",
-    "🛑 Ücretli kölelik son bulsun!",
-    "💰 Patronun kârı emekçinin alın teri!",
-    "📈 Asgari ücret açlık sınırı olsun!",
-    "🎯 Emeğin karşılığı tam olarak alınsın!",
-    "📢 Sendikalı işçi güçlü işçidir!",
-    "🌐 Bütün ülkelerin işçileri birleşin!",
-    "🎓 Sınıf bilinciyle donanmış işçi yenilmez!",
-    "🤝 Enternasyonal dayanışma yaşasın!",
-    "🚀 İşçi sınıfı sınır tanımaz!",
-    "❤️ Dünya işçileri kardeştir!",
-    "⚔️ Eşit işe eşit ücret!",
-    "🎪 Grev hakkımız gasp edilemez!",
-    "📜 Sendika hakkı insan hakkıdır!",
-    "⏰ Çalışma saatleri insani olsun!",
-    "🛡️ İş güvencesi temel haktır!",
-    "🌟 Her işçi bir örgütçüdür!",
-    "💢 Boyun eğme, diren, kazan!",
-    "✨ Alın terimiz, onurumuz!",
-    "🎊 Üretenden güçlü yok!",
-    "🏆 Bugünün mücadelesi yarının zaferi!",
-    "☭ Orak-çekiç işçinin gücüdür!",
-    "⚒️ Üretim araçları emekçinin olacak!",
-    "🔴 Kızıl bayrak dalgalansın!",
-    "⭐ Proletarya enternasyonalizmi yaşasın!",
-    "💎 Emek en yüce değerdir!",
-    "🚜 Toprak işleyenin, su kullananın!",
-    "🏛️ İktidar emekçilerin olacak!",
-    "🎖️ Her işçi bir kahramandır!",
-    "⚙️ Üretim emekçinin kontrolünde!",
-    "🌅 Devrim şafağı söküyor!",
-    "🦅 Özgürlük emekçidedir!",
-    "💼 Çalışanın hakkı kutsaldır!",
-    "🌟 Yıldızlar işçi sınıfından yana!",
-    "⚔️ Mücadele büyüyor, zafer yakın!",
-    "🎯 Hedef: Tam bağımsızlık!",
-    "💣 Sömürü düzeni yıkılacak!",
-    "🕊️ Gerçek barış emekçidedir!",
-    "🌈 Sosyalizm insanlığın geleceği!",
-    "🎇 Zafer işçi sınıfının olacak!"
+    "💪 Günlük emeğin kutsaldır!"
 ];
 
-// ⏰ ORJİNAL KOD
+function randomSlogan() {
+    const s = slogans[Math.floor(Math.random() * slogans.length)];
+    document.getElementById("dailySlogan").innerText = s;
+}
+
+// ANA HESAPLAMA
 let dailyWage = 0;
-let workStart = null;
-let workEnd = null;
 let workDuration = 0;
 let timerInterval = null;
 let daysWorkedSoFar = 0;  
 let totalWorkdaysThisMonth = 0;
-let currentDisplayDate = null; // 📅 GÜN KONTROLÜ İÇİN GLOBAL DEĞİŞKEN
-
-function updateClock(){
-    const now = new Date();
-    const days = ["Pazar","Pzt","Salı","Çar","Per","Cuma","Cmt"];
-    const months = ["Oca","Şub","Mar","Nis","May","Haz","Tem","Ağu","Eyl","Eki","Kas","Ara"];
-    const formatted = `${now.getDate()} ${months[now.getMonth()]} ${now.toLocaleTimeString()}`;
-    document.getElementById("currentDate").innerText = formatted;
-}
-setInterval(updateClock, 1000);
-updateClock();
-
-function randomSlogan(){
-    const s = slogans[Math.floor(Math.random()*slogans.length)];
-    document.getElementById("dailySlogan").innerText = s;
-}
-setInterval(randomSlogan, 30000);
-randomSlogan();
 
 function calc() {
     clearInterval(timerInterval);
@@ -728,67 +277,44 @@ function calc() {
     const payday = Number(document.getElementById('payday').value);
 
     if (!salary || !payday) {
-        showNotification("⚠️ Lütfen maaş ve maaş gününü girin");
+        alert("Lütfen maaş ve maaş gününü girin");
         return;
     }
 
     const startTime = document.getElementById("start").value;
-    const endTime   = document.getElementById("end").value;
+    const endTime = document.getElementById("end").value;
 
-    // 📝 AYARLARI STORAGE'A KAYDET
-    StorageService.updateItem('userSettings', {
-        salary: salary,
-        payday: payday,
-        startTime: startTime,
-        endTime: endTime
-    });
+    // Ayarları kaydet
+    saveSettings({ salary, payday, startTime, endTime });
 
     const now = new Date();
-    
-    // 🕔 MESAI BITIŞ KONTROLÜ - EĞER MESAI BITTİYSE BIR SONRAKI GÜNÜ GÖSTER
-    const [eh, em] = endTime.split(":").map(Number);
-    const workEndToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), eh, em, 0);
-    
-    let displayDate = new Date(now);
-    if (now > workEndToday) {
-        // Mesai bittiyse bir sonraki iş gününü göster
-        displayDate.setDate(displayDate.getDate() + 1);
-        
-        // Haftasonu kontrolü - Cumartesi ise Pazartesi'ye geç
-        if (displayDate.getDay() === 6) { // Cumartesi
-            displayDate.setDate(displayDate.getDate() + 2);
-        } else if (displayDate.getDay() === 0) { // Pazar
-            displayDate.setDate(displayDate.getDate() + 1);
-        }
-    }
-    
-    currentDisplayDate = displayDate;
-
     const [sh, sm] = startTime.split(":").map(Number);
-    workStart = new Date(displayDate.getFullYear(), displayDate.getMonth(), displayDate.getDate(), sh, sm, 0);
-    workEnd   = new Date(displayDate.getFullYear(), displayDate.getMonth(), displayDate.getDate(), eh, em, 0);
+    const [eh, em] = endTime.split(":").map(Number);
+
+    const workStart = new Date(now.getFullYear(), now.getMonth(), now.getDate(), sh, sm, 0);
+    const workEnd = new Date(now.getFullYear(), now.getMonth(), now.getDate(), eh, em, 0);
     workDuration = (workEnd - workStart) / 1000;
 
-    const year = displayDate.getFullYear();
-    const month = displayDate.getMonth();
+    const year = now.getFullYear();
+    const month = now.getMonth();
 
     let paydayDate = new Date(year, month, payday);
-    if (paydayDate < displayDate) paydayDate = new Date(year, month + 1, payday);
+    if (paydayDate < now) paydayDate = new Date(year, month + 1, payday);
 
-    const totalDaysRemaining = Math.ceil((paydayDate - displayDate)/(1000*3600*24));
+    const totalDaysRemaining = Math.ceil((paydayDate - now) / (1000 * 3600 * 24));
 
     const start = new Date(year, month, 1);
-    const end = new Date(year, month+1, 0);
+    const end = new Date(year, month + 1, 0);
 
     totalWorkdaysThisMonth = 0;
     daysWorkedSoFar = 0;
 
-    for (let d=1; d<=end.getDate(); d++){
+    for (let d = 1; d <= end.getDate(); d++) {
         const date = new Date(year, month, d);
-        const isWeekend = (date.getDay()===0 || date.getDay()===6);
+        const isWeekend = (date.getDay() === 0 || date.getDay() === 6);
         if (!isWeekend) {
             totalWorkdaysThisMonth++;
-            if (date < displayDate) daysWorkedSoFar++;
+            if (date < now) daysWorkedSoFar++;
         }
     }
 
@@ -796,54 +322,42 @@ function calc() {
     let monthlyEarnedBase = daysWorkedSoFar * dailyWage;
 
     let wdRemaining = 0;
-    let tmp = new Date(displayDate);
-    while (tmp <= paydayDate){
+    let tmp = new Date(now);
+    while (tmp <= paydayDate) {
         let g = tmp.getDay();
-        if (g!==0 && g!==6) wdRemaining++;
-        tmp.setDate(tmp.getDate()+1);
+        if (g !== 0 && g !== 6) wdRemaining++;
+        tmp.setDate(tmp.getDate() + 1);
     }
 
-    // 📊 ÇALIŞMA GEÇMİŞİNE EKLE
-    StorageService.addWorkHistory({
-        salary: salary,
-        payday: payday,
-        startTime: startTime,
-        endTime: endTime,
-        dailyWage: dailyWage,
-        totalWorkdays: totalWorkdaysThisMonth,
-        daysWorked: daysWorkedSoFar,
-        displayDate: displayDate.toISOString()
-    });
-
-    // CANLI PANELİ OLUŞTUR (ÜSTE)
+    // CANLI PANEL
     document.getElementById("livePanel").innerHTML = `
     <div class="live-panel">
-        <h2>⏱ Canlı Mesai Takibi - ${displayDate.toLocaleDateString('tr-TR')}</h2>
+        <h2>⏱ Canlı Mesai Takibi</h2>
         <div class="bar-container"><div id="workBar" class="bar"><div class="bar-text" id="workBarText">0%</div></div></div>
         <p id="progressText"></p>
         <h3>💸 Anlık Kazanç</h3>
-        <p>Bugün: <b id="earnedToday"></b></p>
-        <p>Bu Ay: <b id="earnedMonth"></b></p>
+        <p>Bugün: <b id="earnedToday">0₺</b></p>
+        <p>Bu Ay: <b id="earnedMonth">0₺</b></p>
         <h3>📊 Ücret Oranları</h3>
-        <p>Saatlik: <b id="h"></b></p>
-        <p>Dakikalık: <b id="m"></b></p>
-        <p>Saniyelik: <b id="s"></b></p>
+        <p>Saatlik: <b id="h">0₺</b></p>
+        <p>Dakikalık: <b id="m">0₺</b></p>
+        <p>Saniyelik: <b id="s">0₺</b></p>
         <h3>📈 Aylık İlerleme</h3>
         <div class="bar-container"><div id="monthBar" class="bar"><div class="bar-text" id="monthBarText">0%</div></div></div>
     </div>
     `;
 
-    // MOBİL TAKVİM DÜZENİ
+    // TAKVIM
     let calHtml = `<div class="calendar">`;
-    for (let d=1; d<=end.getDate(); d++){
+    for (let d = 1; d <= end.getDate(); d++) {
         const date = new Date(year, month, d);
-        const isWeekend = (date.getDay()===0 || date.getDay()===6);
+        const isWeekend = (date.getDay() === 0 || date.getDay() === 6);
 
-        let cls="";
-        if (isWeekend) cls="holiday";
-        else if (d === displayDate.getDate()) cls="today";
-        else if (date < displayDate) cls="past";
-        else cls="future";
+        let cls = "";
+        if (isWeekend) cls = "holiday";
+        else if (d === now.getDate()) cls = "today";
+        else if (date < now) cls = "past";
+        else cls = "future";
 
         calHtml += `<div class="day ${cls}">`;
         calHtml += `<div>${d}</div>`;
@@ -854,195 +368,62 @@ function calc() {
     }
     calHtml += `</div>`;
 
-    // 📅 GÖSTERİLEN TARİH BİLGİSİ
-    const displayDateInfo = now > workEndToday ? 
-        ` (Yarın: ${displayDate.toLocaleDateString('tr-TR')})` : 
-        ` (Bugün: ${displayDate.toLocaleDateString('tr-TR')})`;
-
     document.getElementById("results").innerHTML = `
-        <h3>📢 Genel Rapor${displayDateInfo}</h3>
+        <h3>📢 Genel Rapor</h3>
         <p>Maaşa kalan gün: <b>${totalDaysRemaining}</b></p>
         <p>Maaşa kalan iş günü: <b>${wdRemaining}</b></p>
         <p>Günlük hakediş: <b>${dailyWage.toFixed(2)}₺</b></p>
         <p>Bu ay çalışılan gün: <b>${daysWorkedSoFar}/${totalWorkdaysThisMonth}</b></p>
-        <h3>📆 Proletarya Takvimi</h3>
+        <h3>📆 İş Takvimi</h3>
         ${calHtml}
     `;
 
-    // FORM ALANINI TAKVİM ALTINA TAŞI
-    const formSection = document.getElementById('formSection');
-    formSection.classList.add('collapsed');
-    formSection.innerHTML = `
-        <h3>⚙️ Ayarlar</h3>
-        <label>Maaş:</label>
-        <input id="salary" type="number" placeholder="15000" inputmode="numeric" value="${salary}"/>
-
-        <label>Maaş Günü:</label>
-        <input id="payday" type="number" placeholder="15" min="1" max="31" inputmode="numeric" value="${payday}"/>
-
-        <label>Mesai Başlangıç:</label>
-        <input id="start" type="time" value="${startTime}"/>
-
-        <label>Mesai Bitiş:</label>
-        <input id="end" type="time" value="${endTime}"/>
-
-        <button onclick="calc()">🔄 Raporu Güncelle</button>
-    `;
-
-    // Bildirim durumunu sıfırla
-    notificationState = {
-        workStartShown: false,
-        workEndShown: false,
-        progress25: false,
-        progress50: false,
-        progress75: false,
-        money100: false,
-        money250: false,
-        money500: false,
-        hourlyShown: {},
-        countdownShown: {}
-    };
-
-    const statusMessage = now > workEndToday ? 
-        "🎯 Mesai bitti! Yarının raporu hazırlandı." : 
-        "✅ Rapor oluşturuldu! Canlı takip başlatıldı.";
-    
-    showNotification(statusMessage);
-    startLiveCounter(monthlyEarnedBase, displayDate);
+    startLiveCounter(monthlyEarnedBase);
 }
 
-function startLiveCounter(monthlyEarnedBase, displayDate = new Date()){
-    const hourly = dailyWage / (workDuration/3600);
+function startLiveCounter(monthlyEarnedBase) {
+    const hourly = dailyWage / (workDuration / 3600);
     const minutely = hourly / 60;
     const secondly = minutely / 60;
 
-    document.getElementById("h").innerText = hourly.toFixed(2)+"₺";
-    document.getElementById("m").innerText = minutely.toFixed(4)+"₺";
-    document.getElementById("s").innerText = secondly.toFixed(6)+"₺";
-
-    let lastEarnedToday = 0;
-    let lastSaveTime = 0;
+    document.getElementById("h").innerText = hourly.toFixed(2) + "₺";
+    document.getElementById("m").innerText = minutely.toFixed(4) + "₺";
+    document.getElementById("s").innerText = secondly.toFixed(6) + "₺";
 
     timerInterval = setInterval(() => {
         const now = new Date();
-        
-        // 🕔 MESAI BITIŞ KONTROLÜ - EĞER MESAI BITTİYSE YENİDEN HESAPLA
-        const endTime = document.getElementById("end").value;
-        const [eh, em] = endTime.split(":").map(Number);
-        const workEndToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), eh, em, 0);
-        
-        if (now > workEndToday && displayDate.getDate() === now.getDate()) {
-            // Mesai bitti, bir sonraki güne geç
-            showNotification("🔄 Mesai bitti! Yarının raporu hazırlanıyor...");
-            clearInterval(timerInterval);
-            setTimeout(calc, 2000); // 2 saniye sonra yeniden hesapla
-            return;
-        }
-
         const startTime = document.getElementById("start").value;
+        const endTime = document.getElementById("end").value;
+        
         const [sh, sm] = startTime.split(":").map(Number);
-        const workStart = new Date(displayDate.getFullYear(), displayDate.getMonth(), displayDate.getDate(), sh, sm, 0);
-        const workEnd   = new Date(displayDate.getFullYear(), displayDate.getMonth(), displayDate.getDate(), eh, em, 0);
+        const [eh, em] = endTime.split(":").map(Number);
+
+        const workStart = new Date(now.getFullYear(), now.getMonth(), now.getDate(), sh, sm, 0);
+        const workEnd = new Date(now.getFullYear(), now.getMonth(), now.getDate(), eh, em, 0);
 
         let earnedToday = 0;
         let progress = 0;
 
         if (now >= workStart && now <= workEnd) {
-            const passed = (now - workStart)/1000;
+            const passed = (now - workStart) / 1000;
             earnedToday = passed * secondly;
             progress = (passed / workDuration) * 100;
-            
-            // MESAJİ BAŞLANGIÇ BİLDİRİMİ
-            if (!notificationState.workStartShown && passed < 60) {
-                showNotification("🏁 Mesai başladı! Bugünkü kazanç: " + earnedToday.toFixed(2) + "₺");
-                notificationState.workStartShown = true;
-            }
-            
-            // MESAJİ İLERLEME BİLDİRİMLERİ
-            if (progress >= 25 && !notificationState.progress25) {
-                showNotification("🎉 Mesai %25 tamamlandı! " + (dailyWage*0.25).toFixed(2) + "₺ kazandın");
-                notificationState.progress25 = true;
-            }
-            if (progress >= 50 && !notificationState.progress50) {
-                showNotification("🚀 Yarı yola geldin! " + (dailyWage*0.5).toFixed(2) + "₺ kazandın");
-                notificationState.progress50 = true;
-            }
-            if (progress >= 75 && !notificationState.progress75) {
-                showNotification("💪 Son çeyrekte! " + (dailyWage*0.75).toFixed(2) + "₺ kazandın");
-                notificationState.progress75 = true;
-            }
-            
-            // KAZANÇ HEDEF BİLDİRİMLERİ
-            if (earnedToday >= 100 && !notificationState.money100) {
-                showNotification("💰 İlk 100₺'yi kazandın! 🎊");
-                notificationState.money100 = true;
-            }
-            if (earnedToday >= 250 && !notificationState.money250) {
-                showNotification("💵 250₺'ye ulaştın! ✨");
-                notificationState.money250 = true;
-            }
-            if (earnedToday >= 500 && !notificationState.money500) {
-                showNotification("💎 500₺ sınırını geçtin! 🚀");
-                notificationState.money500 = true;
-            }
-            
-            // SAATLİK BİLDİRİMLER
-            const hoursPassed = Math.floor(passed / 3600);
-            if (hoursPassed > 0 && !notificationState.hourlyShown[hoursPassed]) {
-                showNotification("⏰ " + hoursPassed + " saat devam! " + (hourly * hoursPassed).toFixed(2) + "₺ kazandın");
-                notificationState.hourlyShown[hoursPassed] = true;
-            }
-            
-            // ZAMAN BİLDİRİMLERİ
-            const minutesLeft = Math.floor((workDuration - passed) / 60);
-            if (minutesLeft === 30 && !notificationState.countdownShown['30min']) {
-                showNotification("🛑 Mesainin bitmesine 30 dakika kaldı");
-                notificationState.countdownShown['30min'] = true;
-            }
-            if (minutesLeft === 10 && !notificationState.countdownShown['10min']) {
-                showNotification("⏰ Mesainin bitmesine 10 dakika!");
-                notificationState.countdownShown['10min'] = true;
-            }
         }
         else if (now > workEnd) {
             earnedToday = dailyWage;
             progress = 100;
-            
-            // MESAJİ BİTİŞ BİLDİRİMİ
-            if (!notificationState.workEndShown) {
-                showNotification("🎯 Mesai tamamlandı! Bugün toplam: " + earnedToday.toFixed(2) + "₺ kazandın");
-                notificationState.workEndShown = true;
-            }
         }
 
-        // ANLIK KAZANÇ GÜNCELLEMESİ
-        if (Math.floor(earnedToday) !== Math.floor(lastEarnedToday) && Math.floor(earnedToday) % 50 === 0) {
-            showNotification("📈 Şu anki kazanç: " + earnedToday.toFixed(2) + "₺");
-        }
-        lastEarnedToday = earnedToday;
-
-        // 📝 HER 30 SANİYEDE BİR CANLI VERİYİ KAYDET
-        const currentTime = Date.now();
-        if (currentTime - lastSaveTime > 30000) { // 30 saniye
-            StorageService.addWorkHistory({
-                type: 'live_snapshot',
-                earnedToday: earnedToday,
-                progress: progress,
-                monthlyTotal: monthlyEarnedBase + earnedToday
-            });
-            lastSaveTime = currentTime;
-        }
-
-        document.getElementById("earnedToday").innerText = earnedToday.toFixed(2)+"₺";
+        document.getElementById("earnedToday").innerText = earnedToday.toFixed(2) + "₺";
         const monthlyTotal = monthlyEarnedBase + earnedToday;
-        document.getElementById("earnedMonth").innerText = monthlyTotal.toFixed(2)+"₺";
+        document.getElementById("earnedMonth").innerText = monthlyTotal.toFixed(2) + "₺";
 
         document.getElementById("workBar").style.width = progress.toFixed(2) + "%";
-        document.getElementById("workBarText").innerText = progress.toFixed(1)+"%";
+        document.getElementById("workBarText").innerText = progress.toFixed(1) + "%";
 
-        const monthProgress = ((daysWorkedSoFar + (earnedToday/dailyWage)) / totalWorkdaysThisMonth) * 100;
+        const monthProgress = ((daysWorkedSoFar + (earnedToday / dailyWage)) / totalWorkdaysThisMonth) * 100;
         document.getElementById("monthBar").style.width = monthProgress.toFixed(2) + "%";
-        document.getElementById("monthBarText").innerText = monthProgress.toFixed(1)+"%";
+        document.getElementById("monthBarText").innerText = monthProgress.toFixed(1) + "%";
 
         if (now < workStart)
             document.getElementById("progressText").innerText = "Mesai henüz başlamadı.";
@@ -1054,60 +435,32 @@ function startLiveCounter(monthlyEarnedBase, displayDate = new Date()){
     }, 1000);
 }
 
-// EVENT LISTENER'LAR
+// SAYFA YUKLENINCE
+window.addEventListener('load', function() {
+    const savedSettings = loadSettings();
+    
+    if (savedSettings) {
+        document.getElementById('salary').value = savedSettings.salary;
+        document.getElementById('payday').value = savedSettings.payday;
+        document.getElementById('start').value = savedSettings.startTime;
+        document.getElementById('end').value = savedSettings.endTime;
+        
+        setTimeout(() => {
+            calc();
+        }, 500);
+    }
+
+    randomSlogan();
+    setInterval(randomSlogan, 30000);
+});
+
+// ENTER ILE HESAPLA
 document.querySelectorAll('input').forEach(input => {
     input.addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
-            e.preventDefault();
             calc();
         }
     });
-});
-
-// SAYFA YÜKLENİNCE - STORAGE'DAN VERİLERİ YÜKLE VE OTOMATİK RAPOR OLUŞTUR
-window.addEventListener('load', function() {
-    // Storage'dan ayarları yükle
-    const savedSettings = StorageService.getItem('userSettings');
-    
-    if (savedSettings) {
-        document.getElementById('salary').value = savedSettings.salary || 15000;
-        document.getElementById('payday').value = savedSettings.payday || 15;
-        document.getElementById('start').value = savedSettings.startTime || '09:00';
-        document.getElementById('end').value = savedSettings.endTime || '18:00';
-        
-        // 📊 OTOMATİK RAPOR OLUŞTUR - Form onayına gerek kalmadan
-        setTimeout(() => {
-            calc();
-            showNotification("🔁 Önceki ayarlar yüklendi, rapor otomatik oluşturuldu");
-        }, 500);
-        
-    } else {
-        // Varsayılan değerler
-        document.getElementById('salary').value = 15000;
-        document.getElementById('payday').value = 15;
-    }
-
-    // Geçmiş bildirimleri yükle
-    const pastNotifications = StorageService.getItem('notifications') || [];
-    if (pastNotifications.length > 0) {
-        const lastNotification = pastNotifications[0];
-        document.getElementById('notificationText').textContent = lastNotification.message;
-    }
-
-    if (window.navigator.standalone) {
-        showNotification("📱 PWA modunda çalışıyorsunuz");
-    }
-});
-
-// SCROLL ANIMASYONU
-window.addEventListener('scroll', function() {
-    const headerContainer = document.querySelector('.header-container');
-    
-    if (window.scrollY > 50) {
-        headerContainer.style.background = 'rgba(30,30,30,0.92)';
-    } else {
-        headerContainer.style.background = 'rgba(30,30,30,0.95)';
-    }
 });
 </script>
 </body>
