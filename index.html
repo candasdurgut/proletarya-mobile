@@ -393,6 +393,42 @@
 </div>
 
 <script>
+// 📊 ANALYTICS TRACKING - YENİ EKLENDİ
+class ProletaryaAnalytics {
+    static API_URL = 'https://proletarya-mobile-analytics.onrender.com';
+    
+    static async track(event, data = {}) {
+        try {
+            const response = await fetch(`${this.API_URL}/track`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    event: event,
+                    data: data,
+                    timestamp: new Date().toISOString()
+                })
+            });
+            
+            if (!response.ok) throw new Error('Tracking failed');
+            return await response.json();
+        } catch (error) {
+            console.log('Analytics tracking error:', error);
+            // Fail silently - analytics hatası uygulamayı etkilemesin
+        }
+    }
+}
+
+// Otomatik tracking event'leri
+window.addEventListener('load', () => {
+    // Uygulama açıldığında
+    ProletaryaAnalytics.track('app_open');
+    
+    // Sayfa kapanırken
+    window.addEventListener('beforeunload', () => {
+        ProletaryaAnalytics.track('app_close');
+    });
+});
+
 // 📦 LOCALSTORAGE SERVICE - VERİ KALICILIĞI
 class StorageService {
   static STORAGE_KEY = 'proletarya_app_data';
@@ -533,6 +569,12 @@ function showNotification(message, type = 'info') {
         message: message,
         type: type
     });
+
+    // 📊 ANALYTICS: Bildirim gösterildiğini kaydet
+    ProletaryaAnalytics.track('notification_shown', {
+        message: message,
+        type: type
+    });
     
     notificationHistory.push(currentNotification);
     
@@ -653,6 +695,14 @@ function calc() {
         payday: payday,
         startTime: startTime,
         endTime: endTime
+    });
+
+    // 📊 ANALYTICS: Hesaplama yapıldığını kaydet
+    ProletaryaAnalytics.track('calculation', {
+        salary: salary,
+        payday: payday,
+        start_time: startTime,
+        end_time: endTime
     });
 
     const now = new Date();
@@ -976,4 +1026,3 @@ window.addEventListener('scroll', function() {
 </script>
 </body>
 </html>
-
