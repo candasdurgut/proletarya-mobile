@@ -393,19 +393,28 @@
 </div>
 
 <script>
-// 📊 ANALYTICS TRACKING - YENİ EKLENDİ
+// 📊 ANALYTICS TRACKING - GELİŞMİŞ VERSİYON
 class ProletaryaAnalytics {
     static API_URL = 'https://proletarya-mobile-analytics.onrender.com';
     
     static async track(event, data = {}) {
         try {
+            // Gelişmiş metadata
+            const enhancedData = {
+                ...data,
+                screen_size: `${screen.width}x${screen.height}`,
+                language: navigator.language,
+                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                user_agent: navigator.userAgent,
+                timestamp: new Date().toISOString()
+            };
+            
             const response = await fetch(`${this.API_URL}/track`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
                     event: event,
-                    data: data,
-                    timestamp: new Date().toISOString()
+                    data: enhancedData
                 })
             });
             
@@ -413,20 +422,56 @@ class ProletaryaAnalytics {
             return await response.json();
         } catch (error) {
             console.log('Analytics tracking error:', error);
-            // Fail silently - analytics hatası uygulamayı etkilemesin
         }
     }
 }
 
 // Otomatik tracking event'leri
+let pageViewStart = Date.now();
+
 window.addEventListener('load', () => {
     // Uygulama açıldığında
-    ProletaryaAnalytics.track('app_open');
-    
-    // Sayfa kapanırken
-    window.addEventListener('beforeunload', () => {
-        ProletaryaAnalytics.track('app_close');
+    ProletaryaAnalytics.track('app_open', {
+        referrer: document.referrer,
+        load_time: performance.timing.loadEventEnd - performance.timing.navigationStart
     });
+    
+    // Sayfa görüntüleme süresi takibi
+    pageViewStart = Date.now();
+});
+
+window.addEventListener('beforeunload', () => {
+    // Sayfa kapanırken
+    const viewTime = Date.now() - pageViewStart;
+    ProletaryaAnalytics.track('app_close', {
+        view_duration: Math.round(viewTime / 1000) // saniye cinsinden
+    });
+});
+
+// Hata tracking
+window.addEventListener('error', (event) => {
+    ProletaryaAnalytics.track('error_occurred', {
+        message: event.message,
+        filename: event.filename,
+        lineno: event.lineno,
+        colno: event.colno
+    });
+});
+
+// Performans tracking
+window.addEventListener('load', () => {
+    // Sayfa yükleme performansı
+    if (performance.getEntriesByType) {
+        const perfEntries = performance.getEntriesByType('navigation');
+        if (perfEntries.length > 0) {
+            const navEntry = perfEntries[0];
+            ProletaryaAnalytics.track('performance_metrics', {
+                dom_content_loaded: Math.round(navEntry.domContentLoadedEventEnd - navEntry.domContentLoadedEventStart),
+                load_time: Math.round(navEntry.loadEventEnd - navEntry.loadEventStart),
+                dns_lookup: Math.round(navEntry.domainLookupEnd - navEntry.domainLookupStart)
+            });
+        }
+    }
 });
 
 // 📦 LOCALSTORAGE SERVICE - VERİ KALICILIĞI
@@ -570,10 +615,11 @@ function showNotification(message, type = 'info') {
         type: type
     });
 
-    // 📊 ANALYTICS: Bildirim gösterildiğini kaydet
+    // 📊 ANALYTICS: Bildirim gösterildiğini kaydet - GELİŞMİŞ
     ProletaryaAnalytics.track('notification_shown', {
-        message: message,
-        type: type
+        message: message.substring(0, 100), // İlk 100 karakter
+        type: type,
+        length: message.length
     });
     
     notificationHistory.push(currentNotification);
@@ -697,12 +743,13 @@ function calc() {
         endTime: endTime
     });
 
-    // 📊 ANALYTICS: Hesaplama yapıldığını kaydet
+    // 📊 ANALYTICS: Hesaplama yapıldığını kaydet - GELİŞMİŞ
     ProletaryaAnalytics.track('calculation', {
         salary: salary,
         payday: payday,
         start_time: startTime,
-        end_time: endTime
+        end_time: endTime,
+        calculation_time: new Date().toISOString()
     });
 
     const now = new Date();
