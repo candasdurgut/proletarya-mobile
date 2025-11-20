@@ -39,7 +39,6 @@
   }
 
   input[type="time"] {
-    /* Time inputları diğerleriyle aynı boyutta */
     height: auto;
     min-height: 54px;
   }
@@ -78,7 +77,7 @@
   }
 
   .top-panel {
-    padding: 10px 15px 4px 15px; /* Alt padding azaltıldı */
+    padding: 10px 15px 4px 15px;
     position: relative;
   }
 
@@ -112,13 +111,13 @@
     white-space: nowrap;
   }
 
-  /* BİLDİRİM ALANI - 4'TE 1 KÜÇÜLTÜLMÜŞ */
+  /* BİLDİRİM ALANI */
   .notification-panel {
     background: rgba(242,209,107,0.08);
     border-top: 1px solid #f2d16b30;
-    padding: 3px 15px; /* 8px'ten 3px'e KÜÇÜLTÜLDÜ */
-    min-height: 45px; /* 60px'ten 45px'e KÜÇÜLTÜLDÜ */
-    max-height: 45px; /* 60px'ten 45px'e KÜÇÜLTÜLDÜ */
+    padding: 3px 15px;
+    min-height: 45px;
+    max-height: 45px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -132,28 +131,28 @@
 
   .notification-text {
     margin: 0;
-    font-size: 13px; /* 14px'ten 13px'e KÜÇÜLTÜLDÜ */
-    line-height: 1.3; /* 1.4'ten 1.3'e KÜÇÜLTÜLDÜ */
+    font-size: 13px;
+    line-height: 1.3;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
-  /* TEMİZLE BUTONU - KÜÇÜLTÜLMÜŞ */
+  /* TEMİZLE BUTONU */
   .notification-clear {
     background: rgba(242,209,107,0.2);
     border: none;
     color: #f2d16b;
-    padding: 3px 6px; /* 4px 8px'ten KÜÇÜLTÜLDÜ */
+    padding: 3px 6px;
     border-radius: 4px;
-    font-size: 10px; /* 11px'ten 10px'e KÜÇÜLTÜLDÜ */
+    font-size: 10px;
     cursor: pointer;
     flex-shrink: 0;
     width: auto;
-    min-width: 30px; /* 35px'ten 30px'e KÜÇÜLTÜLDÜ */
-    height: 20px; /* 24px'ten 20px'e KÜÇÜLTÜLDÜ */
+    min-width: 30px;
+    height: 20px;
     line-height: 14px;
-    align-self: center; /* DİKEYDE ORTALA */
+    align-self: center;
   }
 
   .notification-clear:active {
@@ -161,12 +160,12 @@
     transform: scale(0.95);
   }
 
-  /* ANA İÇERİK ALANI - MARGIN AYARLANDI */
+  /* ANA İÇERİK ALANI */
   .main-content {
-    margin-top: 115px; /* 130px'ten 115px'e KÜÇÜLTÜLDÜ */
+    margin-top: 115px;
   }
 
-  /* FORM ALANI - RAPOR SONRASI TAKVİM ALTINA */
+  /* FORM ALANI */
   .form-section {
     transition: all 0.3s ease;
   }
@@ -282,7 +281,7 @@
     }
 
     .main-content {
-      margin-top: 105px; /* Ayarlandı */
+      margin-top: 105px;
     }
 
     .top-panel .slogan {
@@ -295,20 +294,20 @@
     }
 
     .notification-panel {
-      padding: 2px 12px; /* Ayarlandı */
-      min-height: 38px; /* 52px'ten 38px'e KÜÇÜLTÜLDÜ */
-      max-height: 38px; /* 52px'ten 38px'e KÜÇÜLTÜLDÜ */
+      padding: 2px 12px;
+      min-height: 38px;
+      max-height: 38px;
     }
 
     .notification-text {
-      font-size: 12px; /* 13px'ten 12px'e KÜÇÜLTÜLDÜ */
+      font-size: 12px;
     }
 
     .notification-clear {
-      padding: 2px 4px; /* Ayarlandı */
-      font-size: 9px; /* 10px'ten 9px'e KÜÇÜLTÜLDÜ */
-      min-width: 25px; /* 32px'ten 25px'e KÜÇÜLTÜLDÜ */
-      height: 16px; /* 20px'ten 16px'e KÜÇÜLTÜLDÜ */
+      padding: 2px 4px;
+      font-size: 9px;
+      min-width: 25px;
+      height: 16px;
     }
   }
 
@@ -336,7 +335,7 @@
     }
 
     .notification-text {
-      font-size: 11px; /* 12px'ten 11px'e KÜÇÜLTÜLDÜ */
+      font-size: 11px;
     }
   }
 </style>
@@ -387,28 +386,304 @@
     </div>
 
     <div class="mobile-footer">
-        <div>v0.31α - Designed By C.D.</div>
+        <div>v1.0 - Enhanced Analytics</div>
         <div style="margin-top: 5px;">Ana ekrene ekle → Uygulama gibi kullan</div>
     </div>
 </div>
 
 <script>
-// 📊 ANALYTICS TRACKING - GELİŞMİŞ VERSİYON
+// 📊 GELİŞMİŞ ANALYTICS TRACKING SİSTEMİ
 class ProletaryaAnalytics {
     static API_URL = 'https://proletarya-mobile-analytics.onrender.com';
-    
+    static sessionId = null;
+    static sessionStartTime = null;
+    static pageViewStart = null;
+
+    static async init() {
+        this.sessionId = this.generateSessionId();
+        this.sessionStartTime = Date.now();
+        this.pageViewStart = Date.now();
+        
+        // Session başlangıcını track et
+        await this.trackSessionStart();
+        
+        // Performance monitoring başlat
+        this.initPerformanceTracking();
+        
+        // User behavior tracking başlat
+        this.initBehaviorTracking();
+        
+        // Device info topla
+        this.collectDeviceInfo();
+    }
+
+    static generateSessionId() {
+        return 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    }
+
+    static async trackSessionStart() {
+        const deviceInfo = this.getDeviceInfo();
+        const locationInfo = await this.getLocationInfo();
+        
+        await this.track('session_start', {
+            session_id: this.sessionId,
+            device_info: deviceInfo,
+            location_info: locationInfo,
+            referrer: document.referrer,
+            url: window.location.href
+        });
+    }
+
+    static async trackSessionEnd() {
+        const sessionDuration = Date.now() - this.sessionStartTime;
+        
+        await this.track('session_end', {
+            session_id: this.sessionId,
+            duration: sessionDuration,
+            page_views: this.getPageViewCount(),
+            events_count: this.getEventCount()
+        });
+    }
+
+    static getDeviceInfo() {
+        const ua = navigator.userAgent;
+        const connection = navigator.connection || {};
+        const battery = navigator.battery || navigator.webkitBattery || navigator.mozBattery;
+        
+        return {
+            user_agent: ua,
+            platform: navigator.platform,
+            language: navigator.language,
+            languages: navigator.languages,
+            cookie_enabled: navigator.cookieEnabled,
+            screen_resolution: `${screen.width}x${screen.height}`,
+            viewport_size: `${window.innerWidth}x${window.innerHeight}`,
+            color_depth: screen.colorDepth,
+            pixel_ratio: window.devicePixelRatio,
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+            online: navigator.onLine,
+            connection_type: connection.effectiveType,
+            connection_speed: connection.downlink,
+            memory: navigator.deviceMemory,
+            cores: navigator.hardwareConcurrency,
+            touch_support: 'ontouchstart' in window,
+            battery_level: battery ? battery.level : null,
+            battery_charging: battery ? battery.charging : null,
+            max_touch_points: navigator.maxTouchPoints || 0
+        };
+    }
+
+    static async getLocationInfo() {
+        try {
+            // IP-based location (basit versiyon - gerçek implementasyon için IP API servisi gerekli)
+            const response = await fetch('https://api.ipify.org?format=json');
+            const data = await response.json();
+            
+            return {
+                ip: data.ip,
+                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                locale: navigator.language,
+                coordinates: await this.getGeolocation()
+            };
+        } catch (error) {
+            return {
+                ip: 'unknown',
+                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                locale: navigator.language,
+                error: error.message
+            };
+        }
+    }
+
+    static async getGeolocation() {
+        return new Promise((resolve) => {
+            if (!navigator.geolocation) {
+                resolve(null);
+                return;
+            }
+
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    resolve({
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude,
+                        accuracy: position.coords.accuracy
+                    });
+                },
+                (error) => {
+                    resolve({ error: error.message });
+                },
+                { timeout: 5000, enableHighAccuracy: false }
+            );
+        });
+    }
+
+    static initPerformanceTracking() {
+        // Core Web Vitals tracking
+        if ('PerformanceObserver' in window) {
+            // Largest Contentful Paint
+            const lcpObserver = new PerformanceObserver((entryList) => {
+                const entries = entryList.getEntries();
+                const lastEntry = entries[entries.length - 1];
+                this.track('performance_metric', {
+                    metric: 'LCP',
+                    value: lastEntry.renderTime || lastEntry.loadTime,
+                    session_id: this.sessionId
+                });
+            });
+            lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
+
+            // First Input Delay
+            const fidObserver = new PerformanceObserver((entryList) => {
+                const entries = entryList.getEntries();
+                entries.forEach(entry => {
+                    this.track('performance_metric', {
+                        metric: 'FID',
+                        value: entry.processingStart - entry.startTime,
+                        session_id: this.sessionId
+                    });
+                });
+            });
+            fidObserver.observe({ entryTypes: ['first-input'] });
+
+            // Cumulative Layout Shift
+            let clsValue = 0;
+            const clsObserver = new PerformanceObserver((entryList) => {
+                const entries = entryList.getEntries();
+                entries.forEach(entry => {
+                    if (!entry.hadRecentInput) {
+                        clsValue += entry.value;
+                        this.track('performance_metric', {
+                            metric: 'CLS',
+                            value: clsValue,
+                            session_id: this.sessionId
+                        });
+                    }
+                });
+            });
+            clsObserver.observe({ entryTypes: ['layout-shift'] });
+        }
+
+        // Memory usage tracking
+        if ('memory' in performance) {
+            setInterval(() => {
+                this.track('performance_metric', {
+                    metric: 'memory_usage',
+                    value: performance.memory.usedJSHeapSize,
+                    session_id: this.sessionId
+                });
+            }, 30000);
+        }
+    }
+
+    static initBehaviorTracking() {
+        // Click tracking
+        document.addEventListener('click', (e) => {
+            this.track('user_interaction', {
+                type: 'click',
+                element: e.target.tagName,
+                id: e.target.id,
+                class: e.target.className,
+                x: e.clientX,
+                y: e.clientY,
+                session_id: this.sessionId
+            });
+        });
+
+        // Scroll tracking
+        let scrollDepth = 0;
+        window.addEventListener('scroll', () => {
+            const newDepth = Math.round((window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100);
+            if (newDepth > scrollDepth) {
+                scrollDepth = newDepth;
+                this.track('user_interaction', {
+                    type: 'scroll',
+                    depth: scrollDepth,
+                    session_id: this.sessionId
+                });
+            }
+        });
+
+        // Form interaction tracking
+        document.querySelectorAll('input, select, textarea').forEach(element => {
+            element.addEventListener('focus', () => {
+                this.track('user_interaction', {
+                    type: 'form_focus',
+                    element: element.tagName,
+                    id: element.id,
+                    session_id: this.sessionId
+                });
+            });
+
+            element.addEventListener('blur', () => {
+                this.track('user_interaction', {
+                    type: 'form_blur',
+                    element: element.tagName,
+                    id: element.id,
+                    value_length: element.value.length,
+                    session_id: this.sessionId
+                });
+            });
+        });
+
+        // Visibility change tracking
+        document.addEventListener('visibilitychange', () => {
+            this.track('user_interaction', {
+                type: 'visibility_change',
+                state: document.visibilityState,
+                session_id: this.sessionId
+            });
+        });
+
+        // Page unload tracking
+        window.addEventListener('beforeunload', () => {
+            const viewTime = Date.now() - this.pageViewStart;
+            this.track('page_view', {
+                session_id: this.sessionId,
+                view_duration: Math.round(viewTime / 1000),
+                scroll_depth: scrollDepth
+            });
+        });
+    }
+
+    static collectDeviceInfo() {
+        // Detaylı device fingerprint
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        ctx.textBaseline = 'top';
+        ctx.font = '14px Arial';
+        ctx.fillText('Proletarya Analytics', 2, 2);
+        const canvasFingerprint = canvas.toDataURL();
+
+        this.track('device_info', {
+            session_id: this.sessionId,
+            canvas_fingerprint: canvasFingerprint,
+            device_info: this.getDeviceInfo()
+        });
+    }
+
+    static getPageViewCount() {
+        return parseInt(localStorage.getItem('proletarya_page_views') || '0');
+    }
+
+    static getEventCount() {
+        return parseInt(localStorage.getItem('proletarya_event_count') || '0');
+    }
+
     static async track(event, data = {}) {
         try {
-            // Gelişmiş metadata
+            // Event counter güncelle
+            const eventCount = this.getEventCount() + 1;
+            localStorage.setItem('proletarya_event_count', eventCount.toString());
+
             const enhancedData = {
                 ...data,
-                screen_size: `${screen.width}x${screen.height}`,
-                language: navigator.language,
-                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-                user_agent: navigator.userAgent,
-                timestamp: new Date().toISOString()
+                session_id: this.sessionId,
+                timestamp: new Date().toISOString(),
+                page_url: window.location.href,
+                event_count: eventCount
             };
-            
+
             const response = await fetch(`${this.API_URL}/track`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
@@ -417,69 +692,52 @@ class ProletaryaAnalytics {
                     data: enhancedData
                 })
             });
-            
+
             if (!response.ok) throw new Error('Tracking failed');
             return await response.json();
         } catch (error) {
             console.log('Analytics tracking error:', error);
+            // Fallback: localStorage'a kaydet
+            this.saveToLocalStorage(event, data);
+        }
+    }
+
+    static saveToLocalStorage(event, data) {
+        try {
+            const pendingEvents = JSON.parse(localStorage.getItem('proletarya_pending_events') || '[]');
+            pendingEvents.push({
+                event: event,
+                data: data,
+                timestamp: new Date().toISOString()
+            });
+            localStorage.setItem('proletarya_pending_events', JSON.stringify(pendingEvents));
+        } catch (error) {
+            console.error('LocalStorage save error:', error);
+        }
+    }
+
+    static async retryPendingEvents() {
+        try {
+            const pendingEvents = JSON.parse(localStorage.getItem('proletarya_pending_events') || '[]');
+            if (pendingEvents.length === 0) return;
+
+            for (const event of pendingEvents) {
+                await this.track(event.event, event.data);
+            }
+
+            localStorage.removeItem('proletarya_pending_events');
+        } catch (error) {
+            console.error('Retry pending events error:', error);
         }
     }
 }
 
-// Otomatik tracking event'leri
-let pageViewStart = Date.now();
-
-window.addEventListener('load', () => {
-    // Uygulama açıldığında
-    ProletaryaAnalytics.track('app_open', {
-        referrer: document.referrer,
-        load_time: performance.timing.loadEventEnd - performance.timing.navigationStart
-    });
-    
-    // Sayfa görüntüleme süresi takibi
-    pageViewStart = Date.now();
-});
-
-window.addEventListener('beforeunload', () => {
-    // Sayfa kapanırken
-    const viewTime = Date.now() - pageViewStart;
-    ProletaryaAnalytics.track('app_close', {
-        view_duration: Math.round(viewTime / 1000) // saniye cinsinden
-    });
-});
-
-// Hata tracking
-window.addEventListener('error', (event) => {
-    ProletaryaAnalytics.track('error_occurred', {
-        message: event.message,
-        filename: event.filename,
-        lineno: event.lineno,
-        colno: event.colno
-    });
-});
-
-// Performans tracking
-window.addEventListener('load', () => {
-    // Sayfa yükleme performansı
-    if (performance.getEntriesByType) {
-        const perfEntries = performance.getEntriesByType('navigation');
-        if (perfEntries.length > 0) {
-            const navEntry = perfEntries[0];
-            ProletaryaAnalytics.track('performance_metrics', {
-                dom_content_loaded: Math.round(navEntry.domContentLoadedEventEnd - navEntry.domContentLoadedEventStart),
-                load_time: Math.round(navEntry.loadEventEnd - navEntry.loadEventStart),
-                dns_lookup: Math.round(navEntry.domainLookupEnd - navEntry.domainLookupStart)
-            });
-        }
-    }
-});
-
-// 📦 LOCALSTORAGE SERVICE - VERİ KALICILIĞI
+// 📦 GELİŞMİŞ LOCALSTORAGE SERVICE
 class StorageService {
   static STORAGE_KEY = 'proletarya_app_data';
   
   static defaultData = {
-    version: '1.0',
+    version: '2.0',
     userSettings: {
       salary: 15000,
       payday: 15,
@@ -488,6 +746,7 @@ class StorageService {
     },
     workHistory: [],
     notifications: [],
+    userSessions: [],
     lastSync: null
   };
 
@@ -555,8 +814,8 @@ class StorageService {
       ...entry
     });
     
-    if (allData.workHistory.length > 30) {
-      allData.workHistory = allData.workHistory.slice(0, 30);
+    if (allData.workHistory.length > 100) {
+      allData.workHistory = allData.workHistory.slice(0, 100);
     }
     
     return this.saveAllData(allData);
@@ -575,8 +834,28 @@ class StorageService {
       ...notification
     });
     
-    if (allData.notifications.length > 50) {
-      allData.notifications = allData.notifications.slice(0, 50);
+    if (allData.notifications.length > 200) {
+      allData.notifications = allData.notifications.slice(0, 200);
+    }
+    
+    return this.saveAllData(allData);
+  }
+
+  static addUserSession(sessionData) {
+    const allData = this.getAllData();
+    
+    if (!allData.userSessions) {
+      allData.userSessions = [];
+    }
+    
+    allData.userSessions.unshift({
+      id: ProletaryaAnalytics.sessionId,
+      start_time: new Date().toISOString(),
+      ...sessionData
+    });
+    
+    if (allData.userSessions.length > 50) {
+      allData.userSessions = allData.userSessions.slice(0, 50);
     }
     
     return this.saveAllData(allData);
@@ -615,9 +894,9 @@ function showNotification(message, type = 'info') {
         type: type
     });
 
-    // 📊 ANALYTICS: Bildirim gösterildiğini kaydet - GELİŞMİŞ
+    // 📊 ANALYTICS: Bildirim gösterildiğini kaydet
     ProletaryaAnalytics.track('notification_shown', {
-        message: message.substring(0, 100), // İlk 100 karakter
+        message: message,
         type: type,
         length: message.length
     });
@@ -743,7 +1022,7 @@ function calc() {
         endTime: endTime
     });
 
-    // 📊 ANALYTICS: Hesaplama yapıldığını kaydet - GELİŞMİŞ
+    // 📊 ANALYTICS: Hesaplama yapıldığını kaydet
     ProletaryaAnalytics.track('calculation', {
         salary: salary,
         payday: payday,
@@ -984,7 +1263,7 @@ function startLiveCounter(monthlyEarnedBase){
 
         // 📝 HER 30 SANİYEDE BİR CANLI VERİYİ KAYDET
         const currentTime = Date.now();
-        if (currentTime - lastSaveTime > 30000) { // 30 saniye
+        if (currentTime - lastSaveTime > 30000) {
             StorageService.addWorkHistory({
                 type: 'live_snapshot',
                 earnedToday: earnedToday,
@@ -1025,8 +1304,11 @@ document.querySelectorAll('input').forEach(input => {
     });
 });
 
-// SAYFA YÜKLENİNCE - STORAGE'DAN VERİLERİ YÜKLE VE OTOMATİK RAPOR OLUŞTUR
+// SAYFA YÜKLENİNCE - GELİŞMİŞ ANALYTICS BAŞLAT
 window.addEventListener('load', function() {
+    // Analytics sistemini başlat
+    ProletaryaAnalytics.init();
+    
     // Storage'dan ayarları yükle
     const savedSettings = StorageService.getItem('userSettings');
     
@@ -1036,14 +1318,13 @@ window.addEventListener('load', function() {
         document.getElementById('start').value = savedSettings.startTime || '09:00';
         document.getElementById('end').value = savedSettings.endTime || '18:00';
         
-        // 📊 OTOMATİK RAPOR OLUŞTUR - Form onayına gerek kalmadan
+        // OTOMATİK RAPOR OLUŞTUR
         setTimeout(() => {
             calc();
-            showNotification("🔁 Önceki ayarlar yüklendi, rapor otomatik oluşturuldu");
+            showNotification("🔁 Önceki ayarlar yüklendi, gelişmiş analiz aktif!");
         }, 500);
         
     } else {
-        // Varsayılan değerler
         document.getElementById('salary').value = 15000;
         document.getElementById('payday').value = 15;
     }
@@ -1056,8 +1337,13 @@ window.addEventListener('load', function() {
     }
 
     if (window.navigator.standalone) {
-        showNotification("📱 PWA modunda çalışıyorsunuz");
+        showNotification("📱 PWA modunda çalışıyorsunuz - Gelişmiş analiz aktif!");
     }
+
+    // Pending event'leri retry et
+    setTimeout(() => {
+        ProletaryaAnalytics.retryPendingEvents();
+    }, 2000);
 });
 
 // SCROLL ANIMASYONU
@@ -1069,6 +1355,11 @@ window.addEventListener('scroll', function() {
     } else {
         headerContainer.style.background = 'rgba(30,30,30,0.95)';
     }
+});
+
+// Sayfa kapanırken session end track et
+window.addEventListener('beforeunload', function() {
+    ProletaryaAnalytics.trackSessionEnd();
 });
 </script>
 </body>
