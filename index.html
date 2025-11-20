@@ -25,7 +25,6 @@
     padding-top: env(safe-area-inset-top);
   }
 
-  /* TÜM INPUTLAR EŞİT BOYUTTA VE ESNEK */
   input, button {
     width: 100%; 
     padding: 16px;
@@ -39,7 +38,6 @@
   }
 
   input[type="time"] {
-    /* Time inputları diğerleriyle aynı boyutta */
     height: auto;
     min-height: 54px;
   }
@@ -64,7 +62,6 @@
     margin-top: 20px;
   }
 
-  /* BİRLEŞİK HEADER VE BİLDİRİM ALANI */
   .header-container {
     position: fixed;
     top: 0;
@@ -78,7 +75,7 @@
   }
 
   .top-panel {
-    padding: 10px 15px 4px 15px; /* Alt padding azaltıldı */
+    padding: 10px 15px 4px 15px;
     position: relative;
   }
 
@@ -112,13 +109,12 @@
     white-space: nowrap;
   }
 
-  /* BİLDİRİM ALANI - 4'TE 1 KÜÇÜLTÜLMÜŞ */
   .notification-panel {
     background: rgba(242,209,107,0.08);
     border-top: 1px solid #f2d16b30;
-    padding: 3px 15px; /* 8px'ten 3px'e KÜÇÜLTÜLDÜ */
-    min-height: 45px; /* 60px'ten 45px'e KÜÇÜLTÜLDÜ */
-    max-height: 45px; /* 60px'ten 45px'e KÜÇÜLTÜLDÜ */
+    padding: 3px 15px;
+    min-height: 45px;
+    max-height: 45px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -132,28 +128,27 @@
 
   .notification-text {
     margin: 0;
-    font-size: 13px; /* 14px'ten 13px'e KÜÇÜLTÜLDÜ */
-    line-height: 1.3; /* 1.4'ten 1.3'e KÜÇÜLTÜLDÜ */
+    font-size: 13px;
+    line-height: 1.3;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
-  /* TEMİZLE BUTONU - KÜÇÜLTÜLMÜŞ */
   .notification-clear {
     background: rgba(242,209,107,0.2);
     border: none;
     color: #f2d16b;
-    padding: 3px 6px; /* 4px 8px'ten KÜÇÜLTÜLDÜ */
+    padding: 3px 6px;
     border-radius: 4px;
-    font-size: 10px; /* 11px'ten 10px'e KÜÇÜLTÜLDÜ */
+    font-size: 10px;
     cursor: pointer;
     flex-shrink: 0;
     width: auto;
-    min-width: 30px; /* 35px'ten 30px'e KÜÇÜLTÜLDÜ */
-    height: 20px; /* 24px'ten 20px'e KÜÇÜLTÜLDÜ */
+    min-width: 30px;
+    height: 20px;
     line-height: 14px;
-    align-self: center; /* DİKEYDE ORTALA */
+    align-self: center;
   }
 
   .notification-clear:active {
@@ -161,12 +156,10 @@
     transform: scale(0.95);
   }
 
-  /* ANA İÇERİK ALANI - MARGIN AYARLANDI */
   .main-content {
-    margin-top: 115px; /* 130px'ten 115px'e KÜÇÜLTÜLDÜ */
+    margin-top: 115px;
   }
 
-  /* FORM ALANI - RAPOR SONRASI TAKVİM ALTINA */
   .form-section {
     transition: all 0.3s ease;
   }
@@ -186,7 +179,6 @@
     text-align: center;
   }
 
-  /* CANLI PANEL */
   .live-panel {
     background: rgba(60,60,60,0.6);
     padding: 15px;
@@ -194,7 +186,6 @@
     margin-bottom: 20px;
   }
 
-  /* MOBİL TAKVİM DÜZENİ */
   .calendar {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
@@ -265,7 +256,6 @@
     opacity: 0.7;
   }
 
-  /* KÜÇÜK EKRANLAR İÇİN */
   @media (max-width: 380px) {
     .calendar {
       gap: 3px;
@@ -282,7 +272,7 @@
     }
 
     .main-content {
-      margin-top: 105px; /* Ayarlandı */
+      margin-top: 105px;
     }
 
     .top-panel .slogan {
@@ -295,20 +285,20 @@
     }
 
     .notification-panel {
-      padding: 2px 12px; /* Ayarlandı */
-      min-height: 38px; /* 52px'ten 38px'e KÜÇÜLTÜLDÜ */
-      max-height: 38px; /* 52px'ten 38px'e KÜÇÜLTÜLDÜ */
+      padding: 2px 12px;
+      min-height: 38px;
+      max-height: 38px;
     }
 
     .notification-text {
-      font-size: 12px; /* 13px'ten 12px'e KÜÇÜLTÜLDÜ */
+      font-size: 12px;
     }
 
     .notification-clear {
-      padding: 2px 4px; /* Ayarlandı */
-      font-size: 9px; /* 10px'ten 9px'e KÜÇÜLTÜLDÜ */
-      min-width: 25px; /* 32px'ten 25px'e KÜÇÜLTÜLDÜ */
-      height: 16px; /* 20px'ten 16px'e KÜÇÜLTÜLDÜ */
+      padding: 2px 4px;
+      font-size: 9px;
+      min-width: 25px;
+      height: 16px;
     }
   }
 
@@ -336,14 +326,13 @@
     }
 
     .notification-text {
-      font-size: 11px; /* 12px'ten 11px'e KÜÇÜLTÜLDÜ */
+      font-size: 11px;
     }
   }
 </style>
 </head>
 <body>
 
-<!-- BİRLEŞİK HEADER VE BİLDİRİM ALANI -->
 <div class="header-container">
     <div class="top-panel">
         <div class="header-center">
@@ -362,13 +351,10 @@
 </div>
 
 <div class="main-content" id="mainContent">
-    <!-- CANLI PANEL - RAPOR SONRASI ÜSTTE -->
     <div id="livePanel"></div>
 
-    <!-- SONUÇLAR -->
     <div class="results" id="results"></div>
 
-    <!-- FORM ALANI - RAPOR SONRASI TAKVİM ALTINDA -->
     <div class="form-section" id="formSection">
         <h3>⚙️ Ayarlar</h3>
         <label>Maaş:</label>
@@ -393,7 +379,6 @@
 </div>
 
 <script>
-// 📦 LOCALSTORAGE SERVICE - VERİ KALICILIĞI
 class StorageService {
   static STORAGE_KEY = 'proletarya_app_data';
   
@@ -502,7 +487,6 @@ class StorageService {
   }
 }
 
-// 📢 BİLDİRİM SİSTEMİ
 let notificationHistory = [];
 let currentNotification = null;
 let notificationState = {
@@ -528,7 +512,6 @@ function showNotification(message, type = 'info') {
         timestamp: new Date()
     };
     
-    // BİLDİRİMİ STORAGE'A KAYDET
     StorageService.addNotification({
         message: message,
         type: type
@@ -553,7 +536,6 @@ function clearNotification() {
     currentNotification = null;
 }
 
-// ✨ ZENGİNLEŞTİRİLMİŞ SLOGANLAR
 const slogans = [
     "✊ Emekçinin birliği sermayeyi yenecek!",
     "⚡ Sömürüye son, hakkını al!",
@@ -607,7 +589,6 @@ const slogans = [
     "🎇 Zafer işçi sınıfının olacak!"
 ];
 
-// ⏰ ORJİNAL KOD
 let dailyWage = 0;
 let workStart = null;
 let workEnd = null;
@@ -647,7 +628,6 @@ function calc() {
     const startTime = document.getElementById("start").value;
     const endTime   = document.getElementById("end").value;
 
-    // 📝 AYARLARI STORAGE'A KAYDET
     StorageService.updateItem('userSettings', {
         salary: salary,
         payday: payday,
@@ -697,7 +677,6 @@ function calc() {
         tmp.setDate(tmp.getDate()+1);
     }
 
-    // 📊 ÇALIŞMA GEÇMİŞİNE EKLE
     StorageService.addWorkHistory({
         salary: salary,
         payday: payday,
@@ -708,7 +687,6 @@ function calc() {
         daysWorked: daysWorkedSoFar
     });
 
-    // CANLI PANELİ OLUŞTUR (ÜSTE)
     document.getElementById("livePanel").innerHTML = `
     <div class="live-panel">
         <h2>⏱ Canlı Mesai Takibi</h2>
@@ -726,7 +704,6 @@ function calc() {
     </div>
     `;
 
-    // MOBİL TAKVİM DÜZENİ
     let calHtml = `<div class="calendar">`;
     for (let d=1; d<=end.getDate(); d++){
         const date = new Date(year, month, d);
@@ -756,7 +733,6 @@ function calc() {
         ${calHtml}
     `;
 
-    // FORM ALANINI TAKVİM ALTINA TAŞI
     const formSection = document.getElementById('formSection');
     formSection.classList.add('collapsed');
     formSection.innerHTML = `
@@ -776,7 +752,6 @@ function calc() {
         <button onclick="calc()">🔄 Raporu Güncelle</button>
     `;
 
-    // Bildirim durumunu sıfırla
     notificationState = {
         workStartShown: false,
         workEndShown: false,
@@ -816,13 +791,11 @@ function startLiveCounter(monthlyEarnedBase){
             earnedToday = passed * secondly;
             progress = (passed / workDuration) * 100;
             
-            // MESAJİ BAŞLANGIÇ BİLDİRİMİ
             if (!notificationState.workStartShown && passed < 60) {
                 showNotification("🏁 Mesai başladı! Bugünkü kazanç: " + earnedToday.toFixed(2) + "₺");
                 notificationState.workStartShown = true;
             }
             
-            // MESAJİ İLERLEME BİLDİRİMLERİ
             if (progress >= 25 && !notificationState.progress25) {
                 showNotification("🎉 Mesai %25 tamamlandı! " + (dailyWage*0.25).toFixed(2) + "₺ kazandın");
                 notificationState.progress25 = true;
@@ -836,7 +809,6 @@ function startLiveCounter(monthlyEarnedBase){
                 notificationState.progress75 = true;
             }
             
-            // KAZANÇ HEDEF BİLDİRİMLERİ
             if (earnedToday >= 100 && !notificationState.money100) {
                 showNotification("💰 İlk 100₺'yi kazandın! 🎊");
                 notificationState.money100 = true;
@@ -850,14 +822,12 @@ function startLiveCounter(monthlyEarnedBase){
                 notificationState.money500 = true;
             }
             
-            // SAATLİK BİLDİRİMLER
             const hoursPassed = Math.floor(passed / 3600);
             if (hoursPassed > 0 && !notificationState.hourlyShown[hoursPassed]) {
                 showNotification("⏰ " + hoursPassed + " saat devam! " + (hourly * hoursPassed).toFixed(2) + "₺ kazandın");
                 notificationState.hourlyShown[hoursPassed] = true;
             }
             
-            // ZAMAN BİLDİRİMLERİ
             const minutesLeft = Math.floor((workDuration - passed) / 60);
             if (minutesLeft === 30 && !notificationState.countdownShown['30min']) {
                 showNotification("🛑 Mesainin bitmesine 30 dakika kaldı");
@@ -872,22 +842,19 @@ function startLiveCounter(monthlyEarnedBase){
             earnedToday = dailyWage;
             progress = 100;
             
-            // MESAJİ BİTİŞ BİLDİRİMİ
             if (!notificationState.workEndShown) {
                 showNotification("🎯 Mesai tamamlandı! Bugün toplam: " + earnedToday.toFixed(2) + "₺ kazandın");
                 notificationState.workEndShown = true;
             }
         }
 
-        // ANLIK KAZANÇ GÜNCELLEMESİ
         if (Math.floor(earnedToday) !== Math.floor(lastEarnedToday) && Math.floor(earnedToday) % 50 === 0) {
             showNotification("📈 Şu anki kazanç: " + earnedToday.toFixed(2) + "₺");
         }
         lastEarnedToday = earnedToday;
 
-        // 📝 HER 30 SANİYEDE BİR CANLI VERİYİ KAYDET
         const currentTime = Date.now();
-        if (currentTime - lastSaveTime > 30000) { // 30 saniye
+        if (currentTime - lastSaveTime > 30000) {
             StorageService.addWorkHistory({
                 type: 'live_snapshot',
                 earnedToday: earnedToday,
@@ -918,7 +885,6 @@ function startLiveCounter(monthlyEarnedBase){
     }, 1000);
 }
 
-// EVENT LISTENER'LAR
 document.querySelectorAll('input').forEach(input => {
     input.addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
@@ -928,9 +894,7 @@ document.querySelectorAll('input').forEach(input => {
     });
 });
 
-// SAYFA YÜKLENİNCE - STORAGE'DAN VERİLERİ YÜKLE VE OTOMATİK RAPOR OLUŞTUR
 window.addEventListener('load', function() {
-    // Storage'dan ayarları yükle
     const savedSettings = StorageService.getItem('userSettings');
     
     if (savedSettings) {
@@ -939,19 +903,16 @@ window.addEventListener('load', function() {
         document.getElementById('start').value = savedSettings.startTime || '09:00';
         document.getElementById('end').value = savedSettings.endTime || '18:00';
         
-        // 📊 OTOMATİK RAPOR OLUŞTUR - Form onayına gerek kalmadan
         setTimeout(() => {
             calc();
             showNotification("🔁 Önceki ayarlar yüklendi, rapor otomatik oluşturuldu");
         }, 500);
         
     } else {
-        // Varsayılan değerler
         document.getElementById('salary').value = 15000;
         document.getElementById('payday').value = 15;
     }
 
-    // Geçmiş bildirimleri yükle
     const pastNotifications = StorageService.getItem('notifications') || [];
     if (pastNotifications.length > 0) {
         const lastNotification = pastNotifications[0];
@@ -963,7 +924,6 @@ window.addEventListener('load', function() {
     }
 });
 
-// SCROLL ANIMASYONU
 window.addEventListener('scroll', function() {
     const headerContainer = document.querySelector('.header-container');
     
