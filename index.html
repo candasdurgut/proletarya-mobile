@@ -23,6 +23,7 @@
     padding-bottom: 30px;
     min-height: 100vh;
     padding-top: env(safe-area-inset-top);
+    overflow-x: hidden;
   }
 
   /* TÜM INPUTLAR EŞİT BOYUTTA VE ESNEK */
@@ -265,6 +266,37 @@
     opacity: 0.7;
   }
 
+  /* YAGMUR EFEKTI */
+  .rain-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+    overflow: hidden;
+  }
+
+  .rain-item {
+    position: absolute;
+    font-size: 24px;
+    animation: rain-fall linear forwards;
+    user-select: none;
+    z-index: 10000;
+  }
+
+  @keyframes rain-fall {
+    0% {
+      transform: translateY(-50px) rotate(0deg);
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(100vh) rotate(360deg);
+      opacity: 0;
+    }
+  }
+
   /* KÜÇÜK EKRANLAR İÇİN */
   @media (max-width: 380px) {
     .calendar {
@@ -310,6 +342,10 @@
       min-width: 25px; /* 32px'ten 25px'e KÜÇÜLTÜLDÜ */
       height: 16px; /* 20px'ten 16px'e KÜÇÜLTÜLDÜ */
     }
+
+    .rain-item {
+      font-size: 20px;
+    }
   }
 
   @media (max-width: 320px) {
@@ -338,10 +374,17 @@
     .notification-text {
       font-size: 11px; /* 12px'ten 11px'e KÜÇÜLTÜLDÜ */
     }
+
+    .rain-item {
+      font-size: 18px;
+    }
   }
 </style>
 </head>
 <body>
+
+<!-- YAĞMUR KONTEYNIRI -->
+<div class="rain-container" id="rainContainer"></div>
 
 <!-- BİRLEŞİK HEADER VE BİLDİRİM ALANI -->
 <div class="header-container">
@@ -387,7 +430,7 @@
     </div>
 
     <div class="mobile-footer">
-        <div>v0.32α - Designed By C.D</div>
+        <div onclick="startMoneyRain()" style="cursor: pointer;">v0.33α - Designed By C.D</div>
         <div style="margin-top: 5px;">Ana ekrene ekle → Uygulama gibi kullan</div>
     </div>
 </div>
@@ -500,6 +543,50 @@ class StorageService {
     
     return this.saveAllData(allData);
   }
+}
+
+// 🌧️ PARA YAĞMURU SİSTEMİ
+function startMoneyRain() {
+    const rainContainer = document.getElementById('rainContainer');
+    const items = ['💰', '💵', '💎', '🪙', '💸', '🏆', '⭐', '🎯', '⚒️', '☭', '🔨', '⚔️'];
+    
+    // Konteyneri temizle
+    rainContainer.innerHTML = '';
+    
+    // 50 adet yağmur öğesi oluştur
+    for (let i = 0; i < 50; i++) {
+        setTimeout(() => {
+            const item = document.createElement('div');
+            item.className = 'rain-item';
+            item.textContent = items[Math.floor(Math.random() * items.length)];
+            
+            // Rastgele pozisyon
+            const left = Math.random() * 100;
+            const animationDuration = 2 + Math.random() * 2; // 2-4 saniye
+            const fontSize = 20 + Math.random() * 20; // 20-40px
+            
+            item.style.left = left + '%';
+            item.style.animationDuration = animationDuration + 's';
+            item.style.fontSize = fontSize + 'px';
+            
+            // Rastgele renk
+            const colors = ['#f2d16b', '#ffd700', '#c0c0c0', '#ff6b6b', '#4ecdc4', '#45b7d1'];
+            item.style.color = colors[Math.floor(Math.random() * colors.length)];
+            
+            rainContainer.appendChild(item);
+            
+            // Animasyon bitince öğeyi kaldır
+            setTimeout(() => {
+                if (item.parentNode) {
+                    item.parentNode.removeChild(item);
+                }
+            }, animationDuration * 1000);
+            
+        }, i * 100); // 100ms aralıklarla
+    }
+    
+    // Özel bildirim
+    showNotification('🎊 Proletarya zaferi! Servet halka yağıyor! ✊');
 }
 
 // 📢 BİLDİRİM SİSTEMİ
@@ -881,3 +968,147 @@ function startLiveCounter(monthlyEarnedBase, displayDate = new Date()){
                 notificationState.progress50 = true;
             }
             if (progress >= 75 && !notificationState.progress75) {
+                showNotification("💪 Son çeyrekte! " + (dailyWage*0.75).toFixed(2) + "₺ kazandın");
+                notificationState.progress75 = true;
+            }
+            
+            // KAZANÇ HEDEF BİLDİRİMLERİ
+            if (earnedToday >= 100 && !notificationState.money100) {
+                showNotification("💰 İlk 100₺'yi kazandın! 🎊");
+                notificationState.money100 = true;
+            }
+            if (earnedToday >= 250 && !notificationState.money250) {
+                showNotification("💵 250₺'ye ulaştın! ✨");
+                notificationState.money250 = true;
+            }
+            if (earnedToday >= 500 && !notificationState.money500) {
+                showNotification("💎 500₺ sınırını geçtin! 🚀");
+                notificationState.money500 = true;
+            }
+            
+            // SAATLİK BİLDİRİMLER
+            const hoursPassed = Math.floor(passed / 3600);
+            if (hoursPassed > 0 && !notificationState.hourlyShown[hoursPassed]) {
+                showNotification("⏰ " + hoursPassed + " saat devam! " + (hourly * hoursPassed).toFixed(2) + "₺ kazandın");
+                notificationState.hourlyShown[hoursPassed] = true;
+            }
+            
+            // ZAMAN BİLDİRİMLERİ
+            const minutesLeft = Math.floor((workDuration - passed) / 60);
+            if (minutesLeft === 30 && !notificationState.countdownShown['30min']) {
+                showNotification("🛑 Mesainin bitmesine 30 dakika kaldı");
+                notificationState.countdownShown['30min'] = true;
+            }
+            if (minutesLeft === 10 && !notificationState.countdownShown['10min']) {
+                showNotification("⏰ Mesainin bitmesine 10 dakika!");
+                notificationState.countdownShown['10min'] = true;
+            }
+        }
+        else if (now > workEnd) {
+            earnedToday = dailyWage;
+            progress = 100;
+            
+            // MESAJİ BİTİŞ BİLDİRİMİ
+            if (!notificationState.workEndShown) {
+                showNotification("🎯 Mesai tamamlandı! Bugün toplam: " + earnedToday.toFixed(2) + "₺ kazandın");
+                notificationState.workEndShown = true;
+            }
+        }
+
+        // ANLIK KAZANÇ GÜNCELLEMESİ
+        if (Math.floor(earnedToday) !== Math.floor(lastEarnedToday) && Math.floor(earnedToday) % 50 === 0) {
+            showNotification("📈 Şu anki kazanç: " + earnedToday.toFixed(2) + "₺");
+        }
+        lastEarnedToday = earnedToday;
+
+        // 📝 HER 30 SANİYEDE BİR CANLI VERİYİ KAYDET
+        const currentTime = Date.now();
+        if (currentTime - lastSaveTime > 30000) { // 30 saniye
+            StorageService.addWorkHistory({
+                type: 'live_snapshot',
+                earnedToday: earnedToday,
+                progress: progress,
+                monthlyTotal: monthlyEarnedBase + earnedToday
+            });
+            lastSaveTime = currentTime;
+        }
+
+        document.getElementById("earnedToday").innerText = earnedToday.toFixed(2)+"₺";
+        const monthlyTotal = monthlyEarnedBase + earnedToday;
+        document.getElementById("earnedMonth").innerText = monthlyTotal.toFixed(2)+"₺";
+
+        document.getElementById("workBar").style.width = progress.toFixed(2) + "%";
+        document.getElementById("workBarText").innerText = progress.toFixed(1)+"%";
+
+        const monthProgress = ((daysWorkedSoFar + (earnedToday/dailyWage)) / totalWorkdaysThisMonth) * 100;
+        document.getElementById("monthBar").style.width = monthProgress.toFixed(2) + "%";
+        document.getElementById("monthBarText").innerText = monthProgress.toFixed(1)+"%";
+
+        if (now < workStart)
+            document.getElementById("progressText").innerText = "Mesai henüz başlamadı.";
+        else if (now > workEnd)
+            document.getElementById("progressText").innerText = "Mesai tamamlandı.";
+        else
+            document.getElementById("progressText").innerText = "Günlük mesai: %" + progress.toFixed(2);
+
+    }, 1000);
+}
+
+// EVENT LISTENER'LAR
+document.querySelectorAll('input').forEach(input => {
+    input.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            calc();
+        }
+    });
+});
+
+// SAYFA YÜKLENİNCE - STORAGE'DAN VERİLERİ YÜKLE VE OTOMATİK RAPOR OLUŞTUR
+window.addEventListener('load', function() {
+    // Storage'dan ayarları yükle
+    const savedSettings = StorageService.getItem('userSettings');
+    
+    if (savedSettings) {
+        document.getElementById('salary').value = savedSettings.salary || 15000;
+        document.getElementById('payday').value = savedSettings.payday || 15;
+        document.getElementById('start').value = savedSettings.startTime || '09:00';
+        document.getElementById('end').value = savedSettings.endTime || '18:00';
+        
+        // 📊 OTOMATİK RAPOR OLUŞTUR - Form onayına gerek kalmadan
+        setTimeout(() => {
+            calc();
+            showNotification("🔁 Önceki ayarlar yüklendi, rapor otomatik oluşturuldu");
+        }, 500);
+        
+    } else {
+        // Varsayılan değerler
+        document.getElementById('salary').value = 15000;
+        document.getElementById('payday').value = 15;
+    }
+
+    // Geçmiş bildirimleri yükle
+    const pastNotifications = StorageService.getItem('notifications') || [];
+    if (pastNotifications.length > 0) {
+        const lastNotification = pastNotifications[0];
+        document.getElementById('notificationText').textContent = lastNotification.message;
+    }
+
+    if (window.navigator.standalone) {
+        showNotification("📱 PWA modunda çalışıyorsunuz");
+    }
+});
+
+// SCROLL ANIMASYONU
+window.addEventListener('scroll', function() {
+    const headerContainer = document.querySelector('.header-container');
+    
+    if (window.scrollY > 50) {
+        headerContainer.style.background = 'rgba(30,30,30,0.92)';
+    } else {
+        headerContainer.style.background = 'rgba(30,30,30,0.95)';
+    }
+});
+</script>
+</body>
+</html>
