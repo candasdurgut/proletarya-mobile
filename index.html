@@ -74,9 +74,9 @@
     <div class="form-section" id="formSection">
         <h3>⚙️ Ayarlar</h3>
         <label>Maaş:</label>
-        <input id="salary" type="number" placeholder="15000" inputmode="numeric"/>
+        <input id="salary" type="number" placeholder="26104,67" inputmode="numeric"/>
         <label>Maaş Günü (1–31):</label>
-        <input id="payday" type="number" placeholder="15" min="1" max="31" inputmode="numeric"/>
+        <input id="payday" type="number" placeholder="1" min="1" max="31" inputmode="numeric"/>
         <label>Mesai Başlangıç Saati:</label>
         <input id="start" type="time" value="09:00"/>
         <label>Mesai Bitiş Saati:</label>
@@ -91,7 +91,7 @@
 <script>
 class StorageService {
   static STORAGE_KEY = 'proletarya_settings';
-  static defaultSettings = { salary: 15000, payday: 15, startTime: '09:00', endTime: '18:00' };
+  static defaultSettings = { salary: 26104,67, payday: 1, startTime: '09:00', endTime: '18:00' };
   static getSettings() {
     try { const stored = localStorage.getItem(this.STORAGE_KEY); if (stored) { return JSON.parse(stored); } this.saveSettings(this.defaultSettings); return this.defaultSettings; } catch (error) { console.error('Ayarlar okunamadı, varsayılanlar kullanılıyor:', error); return this.defaultSettings; }
   }
@@ -136,7 +136,7 @@ function calc() {
     document.getElementById("livePanel").innerHTML = `<div class="live-panel"><h2>⏱ Canlı Mesai Takibi</h2><div class="bar-container"><div id="workBar" class="bar"><div class="bar-text" id="workBarText">0%</div></div></div><p id="progressText"></p><h3>💸 Anlık Kazanç</h3><p>Bugün: <b id="earnedToday"></b></p><p>Bu Ay: <b id="earnedMonth"></b></p><h3>📊 Ücret Oranları</h3><p>Saatlik: <b id="h"></b></p><p>Dakikalık: <b id="m"></b></p><p>Saniyelik: <b id="s"></b></p><h3>📈 Aylık İlerleme</h3><div class="bar-container"><div id="monthBar" class="bar"><div class="bar-text" id="monthBarText">0%</div></div></div></div>`;
     let calHtml = `<div class="calendar">`; for (let d=1; d<=end.getDate(); d++){ const date = new Date(year, month, d); const isWeekend = (date.getDay()===0 || date.getDay()===6); let cls=""; if (isWeekend) cls="holiday"; else if (d === now.getDate()) cls="today"; else if (date < now) cls="past"; else cls="future"; calHtml += `<div class="day ${cls}"><div>${d}</div>`; if (!isWeekend) { calHtml += `<small>${dailyWage.toFixed(0)}₺</small>`; } calHtml += `</div>`; } calHtml += `</div>`;
     document.getElementById("results").innerHTML = `<h3>📢 Genel Rapor</h3><p>Maaşa kalan gün: <b>${totalDaysRemaining}</b></p><p>Maaşa kalan iş günü: <b>${wdRemaining}</b></p><p>Günlük hakediş: <b>${dailyWage.toFixed(2)}₺</b></p><h3>📆 Proletarya Takvimi</h3>${calHtml}`;
-    const formSection = document.getElementById('formSection'); formSection.classList.add('collapsed'); formSection.innerHTML = `<h3>⚙️ Ayarlar</h3><label>Maaş:</label><input id="salary" type="number" placeholder="15000" inputmode="numeric" value="${salary}"/><label>Maaş Günü:</label><input id="payday" type="number" placeholder="15" min="1" max="31" inputmode="numeric" value="${payday}"/><label>Mesai Başlangıç:</label><input id="start" type="time" value="${startTime}"/><label>Mesai Bitiş:</label><input id="end" type="time" value="${endTime}"/><button onclick="calc()">🔄 Raporu Güncelle</button>`;
+    const formSection = document.getElementById('formSection'); formSection.classList.add('collapsed'); formSection.innerHTML = `<h3>⚙️ Ayarlar</h3><label>Maaş:</label><input id="salary" type="number" placeholder="26104,67" inputmode="numeric" value="${salary}"/><label>Maaş Günü:</label><input id="payday" type="number" placeholder="1" min="1" max="31" inputmode="numeric" value="${payday}"/><label>Mesai Başlangıç:</label><input id="start" type="time" value="${startTime}"/><label>Mesai Bitiş:</label><input id="end" type="time" value="${endTime}"/><button onclick="calc()">🔄 Raporu Güncelle</button>`;
     notificationState = { workStartShown: false, workEndShown: false, progress25: false, progress50: false, progress75: false, money100: false, money250: false, money500: false, hourlyShown: {}, countdownShown: {} };
     showNotification("✅ Rapor oluşturuldu! Canlı takip başlatıldı."); startLiveCounter(monthlyEarnedBase);
 }
@@ -173,12 +173,13 @@ document.querySelectorAll('input').forEach(input => { input.addEventListener('ke
 window.addEventListener('load', function() {
     const savedSettings = StorageService.getSettings();
     if (savedSettings) {
-        document.getElementById('salary').value = savedSettings.salary || 15000; document.getElementById('payday').value = savedSettings.payday || 15; document.getElementById('start').value = savedSettings.startTime || '09:00'; document.getElementById('end').value = savedSettings.endTime || '18:00';
+        document.getElementById('salary').value = savedSettings.salary || 26104,67; document.getElementById('payday').value = savedSettings.payday || 1; document.getElementById('start').value = savedSettings.startTime || '09:00'; document.getElementById('end').value = savedSettings.endTime || '18:00';
         setTimeout(() => { calc(); showNotification("🔁 Önceki ayarlar yüklendi, rapor otomatik oluşturuldu"); }, 500);
-    } else { document.getElementById('salary').value = 15000; document.getElementById('payday').value = 15; }
+    } else { document.getElementById('salary').value = 26104,67; document.getElementById('payday').value = 1; }
     if (window.navigator.standalone) { showNotification("📱 PWA modunda çalışıyorsunuz"); }
 });
 window.addEventListener('scroll', function() { const headerContainer = document.querySelector('.header-container'); if (window.scrollY > 50) { headerContainer.style.background = 'rgba(30,30,30,0.92)'; } else { headerContainer.style.background = 'rgba(30,30,30,0.95)'; } });
 </script>
 </body>
 </html>
+
