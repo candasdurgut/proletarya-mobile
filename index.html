@@ -8,350 +8,51 @@
 <meta name="theme-color" content="#f2d16b">
 <title>Proletarya Mobil</title>
 <style>
-  * {
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
-  }
-  
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #1a1a1a;
-    color: #f2d16b;
-    padding: 15px;
-    padding-bottom: 30px;
-    min-height: 100vh;
-    padding-top: env(safe-area-inset-top);
-  }
-
-  input, button {
-    width: 100%; 
-    padding: 16px;
-    border-radius: 12px;
-    border: none;
-    margin: 8px 0;
-    background: rgba(70,70,70,0.85);
-    color: #f2d16b;
-    font-size: 16px;
-    -webkit-appearance: none;
-  }
-
-  input[type="time"] {
-    height: auto;
-    min-height: 54px;
-  }
-
-  button { 
-    background: rgba(242,209,107,0.9);
-    color: #1a1a1a;
-    font-weight: bold;
-    font-size: 18px;
-    margin-top: 12px;
-  }
-
-  button:active {
-    transform: scale(0.98);
-    background: rgba(242,209,107,1);
-  }
-
-  .results {
-    background: rgba(40,40,40,0.9);
-    padding: 18px;
-    border-radius: 15px;
-    margin-top: 20px;
-  }
-
-  .header-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    background: rgba(30,30,30,0.95);
-    backdrop-filter: blur(15px);
-    z-index: 1000;
-    border-bottom: 1px solid #f2d16b;
-    transition: all 0.3s ease;
-  }
-
-  .top-panel {
-    padding: 10px 15px 4px 15px;
-    position: relative;
-  }
-
-  .header-center {
-    text-align: center;
-    width: 100%;
-  }
-
-  .top-panel h1 { 
-    font-weight:bold; 
-    margin:0; 
-    font-size:18px;
-    text-align: center;
-  }
-
-  .top-panel .slogan {
-    font-size: 11px;
-    color: #f2d16b;
-    margin-top: 2px;
-    font-weight: normal;
-    text-align: center;
-    line-height: 1.2;
-  }
-
-  #currentDate {
-    position: absolute;
-    top: 12px;
-    right: 15px;
-    font-size: 10px;
-    opacity: 0.8;
-    white-space: nowrap;
-  }
-
-  .notification-panel {
-    background: rgba(242,209,107,0.08);
-    border-top: 1px solid #f2d16b30;
-    padding: 3px 15px;
-    min-height: 45px;
-    max-height: 45px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-  }
-
-  .notification-content {
-    flex: 1;
-    min-width: 0;
-  }
-
-  .notification-text {
-    margin: 0;
-    font-size: 13px;
-    line-height: 1.3;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .notification-clear {
-    background: rgba(242,209,107,0.2);
-    border: none;
-    color: #f2d16b;
-    padding: 3px 6px;
-    border-radius: 4px;
-    font-size: 10px;
-    cursor: pointer;
-    flex-shrink: 0;
-    width: auto;
-    min-width: 30px;
-    height: 20px;
-    line-height: 14px;
-    align-self: center;
-  }
-
-  .notification-clear:active {
-    background: rgba(242,209,107,0.3);
-    transform: scale(0.95);
-  }
-
-  .main-content {
-    margin-top: 115px;
-  }
-
-  .form-section {
-    transition: all 0.3s ease;
-  }
-
-  .form-section.collapsed {
-    margin-top: 25px;
-    opacity: 0.9;
-    background: rgba(40,40,40,0.7);
-    padding: 15px;
-    border-radius: 12px;
-  }
-
-  .form-section.collapsed h3 {
-    font-size: 16px;
-    margin-bottom: 12px;
-    color: #f2d16b;
-    text-align: center;
-  }
-
-  .live-panel {
-    background: rgba(60,60,60,0.6);
-    padding: 15px;
-    border-radius: 12px;
-    margin-bottom: 20px;
-  }
-
-  .calendar {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 4px;
-    margin-top: 15px;
-    font-size: 12px;
-  }
-
-  .day {
-    padding: 6px 2px;
-    border-radius: 6px;
-    text-align: center;
-    min-height: 40px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    font-size: 11px;
-    line-height: 1.2;
-  }
-
-  .day small {
-    font-size: 9px;
-    margin-top: 2px;
-    opacity: 0.9;
-  }
-
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; background-color: #1a1a1a; color: #f2d16b; padding: 15px; padding-bottom: 30px; min-height: 100vh; padding-top: env(safe-area-inset-top); }
+  input, button { width: 100%; padding: 16px; border-radius: 12px; border: none; margin: 8px 0; background: rgba(70,70,70,0.85); color: #f2d16b; font-size: 16px; -webkit-appearance: none; }
+  input[type="time"] { height: auto; min-height: 54px; }
+  button { background: rgba(242,209,107,0.9); color: #1a1a1a; font-weight: bold; font-size: 18px; margin-top: 12px; }
+  button:active { transform: scale(0.98); background: rgba(242,209,107,1); }
+  .results { background: rgba(40,40,40,0.9); padding: 18px; border-radius: 15px; margin-top: 20px; }
+  .header-container { position: fixed; top: 0; left: 0; right: 0; background: rgba(30,30,30,0.95); backdrop-filter: blur(15px); z-index: 1000; border-bottom: 1px solid #f2d16b; transition: all 0.3s ease; }
+  .top-panel { padding: 10px 15px 4px 15px; position: relative; }
+  .header-center { text-align: center; width: 100%; }
+  .top-panel h1 { font-weight:bold; margin:0; font-size:18px; text-align: center; }
+  .top-panel .slogan { font-size: 11px; color: #f2d16b; margin-top: 2px; font-weight: normal; text-align: center; line-height: 1.2; }
+  #currentDate { position: absolute; top: 12px; right: 15px; font-size: 10px; opacity: 0.8; white-space: nowrap; }
+  .notification-panel { background: rgba(242,209,107,0.08); border-top: 1px solid #f2d16b30; padding: 3px 15px; min-height: 45px; max-height: 45px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .notification-content { flex: 1; min-width: 0; }
+  .notification-text { margin: 0; font-size: 13px; line-height: 1.3; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .notification-clear { background: rgba(242,209,107,0.2); border: none; color: #f2d16b; padding: 3px 6px; border-radius: 4px; font-size: 10px; cursor: pointer; flex-shrink: 0; width: auto; min-width: 30px; height: 20px; line-height: 14px; align-self: center; }
+  .notification-clear:active { background: rgba(242,209,107,0.3); transform: scale(0.95); }
+  .main-content { margin-top: 115px; }
+  .form-section { transition: all 0.3s ease; }
+  .form-section.collapsed { margin-top: 25px; opacity: 0.9; background: rgba(40,40,40,0.7); padding: 15px; border-radius: 12px; }
+  .form-section.collapsed h3 { font-size: 16px; margin-bottom: 12px; color: #f2d16b; text-align: center; }
+  .live-panel { background: rgba(60,60,60,0.6); padding: 15px; border-radius: 12px; margin-bottom: 20px; }
+  .calendar { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-top: 15px; font-size: 12px; }
+  .day { padding: 6px 2px; border-radius: 6px; text-align: center; min-height: 40px; display: flex; flex-direction: column; justify-content: center; align-items: center; font-size: 11px; line-height: 1.2; }
+  .day small { font-size: 9px; margin-top: 2px; opacity: 0.9; }
   .past { background: #4caf50; color:white; }
   .today { background: #f2d16b; color:black; }
   .future { background: #d9534f; color:white; }
   .holiday { background: #ff80b9; color:black; }
-
-  .bar-container {
-    background: rgba(70,70,70,0.7);
-    width:100%; 
-    height:25px;
-    border-radius:15px;
-    margin-top:15px;
-    position: relative;
-  }
-
-  .bar {
-    height:100%; 
-    width:0%;
-    background:#f2d16b; 
-    border-radius:15px;
-    transition: width 0.2s linear;
-    position: relative;
-  }
-
-  .bar-text {
-    position: absolute;
-    width:100%;
-    text-align:center;
-    top:0; 
-    left:0;
-    line-height:25px;
-    font-weight:bold;
-    color:black;
-    pointer-events:none;
-    font-size: 14px;
-  }
-
-  .mobile-footer {
-    margin-top: 30px;
-    text-align: center;
-    font-size: 12px;
-    opacity: 0.7;
-  }
-
-  /* Para Yağmuru Stilleri */
-  .money-rain {
-    position: fixed;
-    top: -100px;
-    z-index: 9999;
-    pointer-events: none;
-    animation: fall linear forwards;
-    font-size: 24px;
-    opacity: 0.8;
-  }
-
-  @keyframes fall {
-    to {
-      transform: translateY(calc(100vh + 100px));
-    }
-  }
-
-  /* KÜÇÜK EKRANLAR İÇİN */
+  .bar-container { background: rgba(70,70,70,0.7); width:100%; height:25px; border-radius:15px; margin-top:15px; position: relative; }
+  .bar { height:100%; width:0%; background:#f2d16b; border-radius:15px; transition: width 0.2s linear; position: relative; }
+  .bar-text { position: absolute; width:100%; text-align:center; top:0; left:0; line-height:25px; font-weight:bold; color:black; pointer-events:none; font-size: 14px; }
+  .mobile-footer { margin-top: 30px; text-align: center; font-size: 12px; opacity: 0.7; }
+  .money-rain { position: fixed; top: -100px; z-index: 9999; pointer-events: none; animation: fall linear forwards; font-size: 24px; opacity: 0.8; }
+  @keyframes fall { to { transform: translateY(calc(100vh + 100px)); } }
   @media (max-width: 380px) {
-    .calendar {
-      gap: 3px;
-    }
-    
-    .day {
-      padding: 4px 1px;
-      min-height: 35px;
-      font-size: 10px;
-    }
-    
-    .day small {
-      font-size: 8px;
-    }
-
-    .main-content {
-      margin-top: 105px;
-    }
-
-    .top-panel .slogan {
-      font-size: 10px;
-    }
-
-    #currentDate {
-      font-size: 9px;
-      top: 10px;
-    }
-
-    .notification-panel {
-      padding: 2px 12px;
-      min-height: 38px;
-      max-height: 38px;
-    }
-
-    .notification-text {
-      font-size: 12px;
-    }
-
-    .notification-clear {
-      padding: 2px 4px;
-      font-size: 9px;
-      min-width: 25px;
-      height: 16px;
-    }
+    .calendar { gap: 3px; } .day { padding: 4px 1px; min-height: 35px; font-size: 10px; } .day small { font-size: 8px; } .main-content { margin-top: 105px; } .top-panel .slogan { font-size: 10px; } #currentDate { font-size: 9px; top: 10px; } .notification-panel { padding: 2px 12px; min-height: 38px; max-height: 38px; } .notification-text { font-size: 12px; } .notification-clear { padding: 2px 4px; font-size: 9px; min-width: 25px; height: 16px; }
   }
-
   @media (max-width: 320px) {
-    .calendar {
-      gap: 2px;
-    }
-    
-    .day {
-      padding: 3px 1px;
-      min-height: 32px;
-      font-size: 9px;
-    }
-    
-    .day small {
-      font-size: 7px;
-    }
-
-    .top-panel .slogan {
-      font-size: 9px;
-    }
-
-    #currentDate {
-      font-size: 8px;
-    }
-
-    .notification-text {
-      font-size: 11px;
-    }
+    .calendar { gap: 2px; } .day { padding: 3px 1px; min-height: 32px; font-size: 9px; } .day small { font-size: 7px; } .top-panel .slogan { font-size: 9px; } #currentDate { font-size: 8px; } .notification-text { font-size: 11px; }
   }
 </style>
 </head>
 <body>
-
-<!-- BİRLEŞİK HEADER VE BİLDİRİM ALANI -->
 <div class="header-container">
     <div class="top-panel">
         <div class="header-center">
@@ -360,7 +61,6 @@
         </div>
         <div id="currentDate"></div>
     </div>
-    
     <div class="notification-panel" id="notificationArea">
         <div class="notification-content">
             <p class="notification-text" id="notificationText">Uygulama açıkken bildirimler burada görünecek</p>
@@ -368,626 +68,117 @@
         <button class="notification-clear" onclick="clearNotification()">X</button>
     </div>
 </div>
-
 <div class="main-content" id="mainContent">
-    <!-- CANLI PANEL - RAPOR SONRASI ÜSTTE -->
     <div id="livePanel"></div>
-
-    <!-- SONUÇLAR -->
     <div class="results" id="results"></div>
-
-    <!-- FORM ALANI - RAPOR SONRASI TAKVİM ALTINDA -->
     <div class="form-section" id="formSection">
         <h3>⚙️ Ayarlar</h3>
         <label>Maaş:</label>
         <input id="salary" type="number" placeholder="15000" inputmode="numeric"/>
-
         <label>Maaş Günü (1–31):</label>
         <input id="payday" type="number" placeholder="15" min="1" max="31" inputmode="numeric"/>
-
         <label>Mesai Başlangıç Saati:</label>
         <input id="start" type="time" value="09:00"/>
-
         <label>Mesai Bitiş Saati:</label>
         <input id="end" type="time" value="18:00"/>
-
         <button onclick="calc()">📊 Raporu Oluştur</button>
     </div>
-
     <div class="mobile-footer">
         <div onclick="startMoneyRain()" style="cursor: pointer;">v0.31α - Designed By C.D.</div>
-        <div style="margin-top: 5px;">Ana ekrene ekle → Uygulama gibi kullan</div>
+        <div style="margin-top: 5px;">Ana ekrame ekle → Uygulama gibi kullan</div>
     </div>
 </div>
-
 <script>
-// STORAGE SERVICE
 class StorageService {
-  static STORAGE_KEY = 'proletarya_app_data';
-  
-  static defaultData = {
-    version: '1.0',
-    userSettings: {
-      salary: 15000,
-      payday: 15,
-      startTime: '09:00',
-      endTime: '18:00'
-    },
-    workHistory: [],
-    notifications: [],
-    lastSync: null
-  };
-
-  static getAllData() {
-    try {
-      const stored = localStorage.getItem(this.STORAGE_KEY);
-      if (stored) {
-        return JSON.parse(stored);
-      }
-      this.saveAllData(this.defaultData);
-      return this.defaultData;
-    } catch (error) {
-      console.error('Veri okuma hatası:', error);
-      return this.defaultData;
-    }
+  static STORAGE_KEY = 'proletarya_settings';
+  static defaultSettings = { salary: 15000, payday: 15, startTime: '09:00', endTime: '18:00' };
+  static getSettings() {
+    try { const stored = localStorage.getItem(this.STORAGE_KEY); if (stored) { return JSON.parse(stored); } this.saveSettings(this.defaultSettings); return this.defaultSettings; } catch (error) { console.error('Ayarlar okunamadı, varsayılanlar kullanılıyor:', error); return this.defaultSettings; }
   }
-
-  static saveAllData(data) {
-    try {
-      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(data));
-      return true;
-    } catch (error) {
-      console.error('Veri kaydetme hatası:', error);
-      return false;
-    }
+  static saveSettings(settings) {
+    try { localStorage.setItem(this.STORAGE_KEY, JSON.stringify(settings)); return true; } catch (error) { console.error('Ayarlar kaydedilemedi:', error); return false; }
   }
-
-  static updateItem(keyPath, value) {
-    const allData = this.getAllData();
-    const keys = keyPath.split('.');
-    let current = allData;
-    
-    for (let i = 0; i < keys.length - 1; i++) {
-      if (!current[keys[i]]) current[keys[i]] = {};
-      current = current[keys[i]];
-    }
-    
-    current[keys[keys.length - 1]] = value;
-    return this.saveAllData(allData);
-  }
-
-  static getItem(keyPath) {
-    const allData = this.getAllData();
-    const keys = keyPath.split('.');
-    let current = allData;
-    
-    for (const key of keys) {
-      if (current[key] === undefined) return null;
-      current = current[key];
-    }
-    
-    return current;
-  }
-
-  static addWorkHistory(entry) {
-    const allData = this.getAllData();
-    
-    if (!allData.workHistory) {
-      allData.workHistory = [];
-    }
-    
-    allData.workHistory.unshift({
-      id: Date.now(),
-      date: new Date().toISOString(),
-      ...entry
-    });
-    
-    if (allData.workHistory.length > 30) {
-      allData.workHistory = allData.workHistory.slice(0, 30);
-    }
-    
-    return this.saveAllData(allData);
-  }
-
-  static addNotification(notification) {
-    const allData = this.getAllData();
-    
-    if (!allData.notifications) {
-      allData.notifications = [];
-    }
-    
-    allData.notifications.unshift({
-      id: Date.now(),
-      timestamp: new Date().toISOString(),
-      ...notification
-    });
-    
-    if (allData.notifications.length > 50) {
-      allData.notifications = allData.notifications.slice(0, 50);
-    }
-    
-    return this.saveAllData(allData);
-  }
+  static updateSetting(key, value) { const settings = this.getSettings(); settings[key] = value; return this.saveSettings(settings); }
 }
-
-// BİLDİRİM SİSTEMİ
-let notificationHistory = [];
 let currentNotification = null;
-let notificationState = {
-    workStartShown: false,
-    workEndShown: false,
-    progress25: false,
-    progress50: false,
-    progress75: false,
-    money100: false,
-    money250: false,
-    money500: false,
-    hourlyShown: {},
-    countdownShown: {}
-};
-
+let notificationState = { workStartShown: false, workEndShown: false, progress25: false, progress50: false, progress75: false, money100: false, money250: false, money500: false, hourlyShown: {}, countdownShown: {} };
 function showNotification(message, type = 'info') {
-    const notificationText = document.getElementById('notificationText');
-    const notificationArea = document.getElementById('notificationArea');
-    
-    currentNotification = {
-        message: message,
-        type: type,
-        timestamp: new Date()
-    };
-    
-    StorageService.addNotification({
-        message: message,
-        type: type
-    });
-    
-    notificationHistory.push(currentNotification);
-    
-    notificationText.textContent = message;
-    notificationArea.style.background = 'rgba(242,209,107,0.15)';
-    notificationArea.style.borderTop = '1px solid #f2d16b';
+    const notificationText = document.getElementById('notificationText'); const notificationArea = document.getElementById('notificationArea');
+    currentNotification = { message: message, type: type, timestamp: new Date() };
+    notificationText.textContent = message; notificationArea.style.background = 'rgba(242,209,107,0.15)'; notificationArea.style.borderTop = '1px solid #f2d16b';
 }
-
 function clearNotification() {
-    const notificationText = document.getElementById('notificationText');
-    const notificationArea = document.getElementById('notificationArea');
-    
-    notificationText.textContent = 'Bildirim yok';
-    notificationArea.style.background = 'rgba(242,209,107,0.08)';
-    notificationArea.style.borderTop = '1px solid #f2d16b30';
-    currentNotification = null;
+    const notificationText = document.getElementById('notificationText'); const notificationArea = document.getElementById('notificationArea');
+    notificationText.textContent = 'Bildirim yok'; notificationArea.style.background = 'rgba(242,209,107,0.08)'; notificationArea.style.borderTop = '1px solid #f2d16b30'; currentNotification = null;
 }
-
-// SLOGANLAR
-const slogans = [
-    "✊ Emekçinin birliği sermayeyi yenecek!",
-    "⚡ Sömürüye son, hakkını al!",
-    "🔨 Gücümüz birliğimizde!",
-    "⚖️ Kazanç adaletle büyür!",
-    "🌍 Her işçi bir devrimcidir!",
-    "💪 Günlük emeğin kutsaldır!",
-    "🔥 Burjuvazi yıkılacak, işçi sınıfı kazanacak!",
-    "🏭 Fabrikalar işçinin, yönetim işçinin!",
-    "⛓️ Sermayenin zincirlerini kıralım!",
-    "🚩 İşçi sınıfı örgütlü, sermaye perişan!",
-    "💥 Her fabrika bir devrim ocağı!",
-    "🛑 Ücretli kölelik son bulsun!",
-    "💰 Patronun kârı emekçinin alın teri!",
-    "📈 Asgari ücret açlık sınırı olsun!",
-    "🎯 Emeğin karşılığı tam olarak alınsın!",
-    "📢 Sendikalı işçi güçlü işçidir!",
-    "🌐 Bütün ülkelerin işçileri birleşin!",
-    "🎓 Sınıf bilinciyle donanmış işçi yenilmez!",
-    "🤝 Enternasyonal dayanışma yaşasın!",
-    "🚀 İşçi sınıfı sınır tanımaz!",
-    "❤️ Dünya işçileri kardeştir!",
-    "⚔️ Eşit işe eşit ücret!",
-    "🎪 Grev hakkımız gasp edilemez!",
-    "📜 Sendika hakkı insan hakkıdır!",
-    "⏰ Çalışma saatleri insani olsun!",
-    "🛡️ İş güvencesi temel haktır!",
-    "🌟 Her işçi bir örgütçüdür!",
-    "💢 Boyun eğme, diren, kazan!",
-    "✨ Alın terimiz, onurumuz!",
-    "🎊 Üretenden güçlü yok!",
-    "🏆 Bugünün mücadelesi yarının zaferi!",
-    "☭ Orak-çekiç işçinin gücüdür!",
-    "⚒️ Üretim araçları emekçinin olacak!",
-    "🔴 Kızıl bayrak dalgalansın!",
-    "⭐ Proletarya enternasyonalizmi yaşasın!",
-    "💎 Emek en yüce değerdir!",
-    "🚜 Toprak işleyenin, su kullananın!",
-    "🏛️ İktidar emekçilerin olacak!",
-    "🎖️ Her işçi bir kahramandır!",
-    "⚙️ Üretim emekçinin kontrolünde!",
-    "🌅 Devrim şafağı söküyor!",
-    "🦅 Özgürlük emekçidedir!",
-    "💼 Çalışanın hakkı kutsaldır!",
-    "🌟 Yıldızlar işçi sınıfından yana!",
-    "⚔️ Mücadele büyüyor, zafer yakın!",
-    "🎯 Hedef: Tam bağımsızlık!",
-    "💣 Sömürü düzeni yıkılacak!",
-    "🕊️ Gerçek barış emekçidedir!",
-    "🌈 Sosyalizm insanlığın geleceği!",
-    "🎇 Zafer işçi sınıfının olacak!"
-];
-
-// DEĞİŞKENLER
-let dailyWage = 0;
-let workStart = null;
-let workEnd = null;
-let workDuration = 0;
-let timerInterval = null;
-let daysWorkedSoFar = 0;  
-let totalWorkdaysThisMonth = 0;
-
-function updateClock(){
-    const now = new Date();
-    const days = ["Pazar","Pzt","Salı","Çar","Per","Cuma","Cmt"];
-    const months = ["Oca","Şub","Mar","Nis","May","Haz","Tem","Ağu","Eyl","Eki","Kas","Ara"];
-    const formatted = `${now.getDate()} ${months[now.getMonth()]} ${now.toLocaleTimeString()}`;
-    document.getElementById("currentDate").innerText = formatted;
-}
-setInterval(updateClock, 1000);
-updateClock();
-
-function randomSlogan(){
-    const s = slogans[Math.floor(Math.random()*slogans.length)];
-    document.getElementById("dailySlogan").innerText = s;
-}
-setInterval(randomSlogan, 30000);
-randomSlogan();
-
+const slogans = ["✊ Emekçinin birliği sermayeyi yenecek!", "⚡ Sömürüye son, hakkını al!", "🔨 Gücümüz birliğimizde!", "⚖️ Kazanç adaletle büyür!", "🌍 Her işçi bir devrimcidir!", "💪 Günlük emeğin kutsaldır!", "🔥 Burjuvazi yıkılacak, işçi sınıfı kazanacak!", "🏭 Fabrikalar işçinin, yönetim işçinin!", "⛓️ Sermayenin zincirlerini kıralım!", "🚩 İşçi sınıfı örgütlü, sermaye perişan!", "💥 Her fabrika bir devrim ocağı!", "🛑 Ücretli kölelik son bulsun!", "💰 Patronun kârı emekçinin alın teri!", "📈 Asgari ücret açlık sınırı olsun!", "🎯 Emeğin karşılığı tam olarak alınsın!", "📢 Sendikalı işçi güçlü işçidir!", "🌐 Bütün ülkelerin işçileri birleşin!", "🎓 Sınıf bilinciyle donanmış işçi yenilmez!", "🤝 Enternasyonal dayanışma yaşasın!", "🚀 İşçi sınıfı sınır tanımaz!", "❤️ Dünya işçileri kardeştir!", "⚔️ Eşit işe eşit ücret!", "🎪 Grev hakkımız gasp edilemez!", "📜 Sendika hakkı insan hakkıdır!", "⏰ Çalışma saatleri insani olsun!", "🛡️ İş güvencesi temel haktır!", "🌟 Her işçi bir örgütçüdür!", "💢 Boyun eğme, diren, kazan!", "✨ Alın terimiz, onurumuz!", "🎊 Üretenden güçlü yok!", "🏆 Bugünün mücadelesi yarının zaferi!", "☭ Orak-çekiç işçinin gücüdür!", "⚒️ Üretim araçları emekçinin olacak!", "🔴 Kızıl bayrak dalgalansın!", "⭐ Proletarya enternasyonalizmi yaşasın!", "💎 Emek en yüce değerdir!", "🚜 Toprak işleyenin, su kullananın!", "🏛️ İktidar emekçilerin olacak!", "🎖️ Her işçi bir kahramandır!", "⚙️ Üretim emekçinin kontrolünde!", "🌅 Devrim şafağı söküyor!", "🦅 Özgürlük emekçidedir!", "💼 Çalışanın hakkı kutsaldır!", "🌟 Yıldızlar işçi sınıfından yana!", "⚔️ Mücadele büyüyor, zafer yakın!", "🎯 Hedef: Tam bağımsızlık!", "💣 Sömürü düzeni yıkılacak!", "🕊️ Gerçek barış emekçidedir!", "🌈 Sosyalizm insanlığın geleceği!", "🎇 Zafer işçi sınıfının olacak!"];
+let dailyWage = 0, workStart = null, workEnd = null, workDuration = 0, timerInterval = null, daysWorkedSoFar = 0, totalWorkdaysThisMonth = 0;
+function updateClock(){ const now = new Date(); const months = ["Oca","Şub","Mar","Nis","May","Haz","Tem","Ağu","Eyl","Eki","Kas","Ara"]; const formatted = `${now.getDate()} ${months[now.getMonth()]} ${now.toLocaleTimeString()}`; document.getElementById("currentDate").innerText = formatted; }
+setInterval(updateClock, 1000); updateClock();
+function randomSlogan(){ const s = slogans[Math.floor(Math.random()*slogans.length)]; document.getElementById("dailySlogan").innerText = s; }
+setInterval(randomSlogan, 30000); randomSlogan();
 function calc() {
     clearInterval(timerInterval);
-
-    const salary = Number(document.getElementById('salary').value);
-    const payday = Number(document.getElementById('payday').value);
-
-    if (!salary || !payday) {
-        showNotification("⚠️ Lütfen maaş ve maaş gününü girin");
-        return;
-    }
-
-    const startTime = document.getElementById("start").value;
-    const endTime   = document.getElementById("end").value;
-
-    StorageService.updateItem('userSettings', {
-        salary: salary,
-        payday: payday,
-        startTime: startTime,
-        endTime: endTime
-    });
-
-    const now = new Date();
-    const [sh, sm] = startTime.split(":").map(Number);
-    const [eh, em] = endTime.split(":").map(Number);
-
-    workStart = new Date(now.getFullYear(), now.getMonth(), now.getDate(), sh, sm, 0);
-    workEnd   = new Date(now.getFullYear(), now.getMonth(), now.getDate(), eh, em, 0);
-    workDuration = (workEnd - workStart) / 1000;
-
-    const year = now.getFullYear();
-    const month = now.getMonth();
-
-    let paydayDate = new Date(year, month, payday);
-    if (paydayDate < now) paydayDate = new Date(year, month + 1, payday);
-
+    const salary = Number(document.getElementById('salary').value); const payday = Number(document.getElementById('payday').value);
+    if (!salary || !payday) { showNotification("⚠️ Lütfen maaş ve maaş gününü girin"); return; }
+    const startTime = document.getElementById("start").value; const endTime = document.getElementById("end").value;
+    StorageService.saveSettings({ salary: salary, payday: payday, startTime: startTime, endTime: endTime });
+    const now = new Date(); const [sh, sm] = startTime.split(":").map(Number); const [eh, em] = endTime.split(":").map(Number);
+    workStart = new Date(now.getFullYear(), now.getMonth(), now.getDate(), sh, sm, 0); workEnd = new Date(now.getFullYear(), now.getMonth(), now.getDate(), eh, em, 0); workDuration = (workEnd - workStart) / 1000;
+    const year = now.getFullYear(); const month = now.getMonth();
+    let paydayDate = new Date(year, month, payday); if (paydayDate < now) paydayDate = new Date(year, month + 1, payday);
     const totalDaysRemaining = Math.ceil((paydayDate - now)/(1000*3600*24));
-
-    const start = new Date(year, month, 1);
-    const end = new Date(year, month+1, 0);
-
-    totalWorkdaysThisMonth = 0;
-    daysWorkedSoFar = 0;
-
-    for (let d=1; d<=end.getDate(); d++){
-        const date = new Date(year, month, d);
-        const isWeekend = (date.getDay()===0 || date.getDay()===6);
-        if (!isWeekend) {
-            totalWorkdaysThisMonth++;
-            if (date < now) daysWorkedSoFar++;
-        }
-    }
-
-    dailyWage = salary / totalWorkdaysThisMonth;
-    let monthlyEarnedBase = daysWorkedSoFar * dailyWage;
-
-    let wdRemaining = 0;
-    let tmp = new Date(now);
-    while (tmp <= paydayDate){
-        let g = tmp.getDay();
-        if (g!==0 && g!==6) wdRemaining++;
-        tmp.setDate(tmp.getDate()+1);
-    }
-
-    StorageService.addWorkHistory({
-        salary: salary,
-        payday: payday,
-        startTime: startTime,
-        endTime: endTime,
-        dailyWage: dailyWage,
-        totalWorkdays: totalWorkdaysThisMonth,
-        daysWorked: daysWorkedSoFar
-    });
-
-    document.getElementById("livePanel").innerHTML = `
-    <div class="live-panel">
-        <h2>⏱ Canlı Mesai Takibi</h2>
-        <div class="bar-container"><div id="workBar" class="bar"><div class="bar-text" id="workBarText">0%</div></div></div>
-        <p id="progressText"></p>
-        <h3>💸 Anlık Kazanç</h3>
-        <p>Bugün: <b id="earnedToday"></b></p>
-        <p>Bu Ay: <b id="earnedMonth"></b></p>
-        <h3>📊 Ücret Oranları</h3>
-        <p>Saatlik: <b id="h"></b></p>
-        <p>Dakikalık: <b id="m"></b></p>
-        <p>Saniyelik: <b id="s"></b></p>
-        <h3>📈 Aylık İlerleme</h3>
-        <div class="bar-container"><div id="monthBar" class="bar"><div class="bar-text" id="monthBarText">0%</div></div></div>
-    </div>
-    `;
-
-    let calHtml = `<div class="calendar">`;
-    for (let d=1; d<=end.getDate(); d++){
-        const date = new Date(year, month, d);
-        const isWeekend = (date.getDay()===0 || date.getDay()===6);
-
-        let cls="";
-        if (isWeekend) cls="holiday";
-        else if (d === now.getDate()) cls="today";
-        else if (date < now) cls="past";
-        else cls="future";
-
-        calHtml += `<div class="day ${cls}">`;
-        calHtml += `<div>${d}</div>`;
-        if (!isWeekend) {
-            calHtml += `<small>${dailyWage.toFixed(0)}₺</small>`;
-        }
-        calHtml += `</div>`;
-    }
-    calHtml += `</div>`;
-
-    document.getElementById("results").innerHTML = `
-        <h3>📢 Genel Rapor</h3>
-        <p>Maaşa kalan gün: <b>${totalDaysRemaining}</b></p>
-        <p>Maaşa kalan iş günü: <b>${wdRemaining}</b></p>
-        <p>Günlük hakediş: <b>${dailyWage.toFixed(2)}₺</b></p>
-        <h3>📆 Proletarya Takvimi</h3>
-        ${calHtml}
-    `;
-
-    const formSection = document.getElementById('formSection');
-    formSection.classList.add('collapsed');
-    formSection.innerHTML = `
-        <h3>⚙️ Ayarlar</h3>
-        <label>Maaş:</label>
-        <input id="salary" type="number" placeholder="15000" inputmode="numeric" value="${salary}"/>
-
-        <label>Maaş Günü:</label>
-        <input id="payday" type="number" placeholder="15" min="1" max="31" inputmode="numeric" value="${payday}"/>
-
-        <label>Mesai Başlangıç:</label>
-        <input id="start" type="time" value="${startTime}"/>
-
-        <label>Mesai Bitiş:</label>
-        <input id="end" type="time" value="${endTime}"/>
-
-        <button onclick="calc()">🔄 Raporu Güncelle</button>
-    `;
-
-    notificationState = {
-        workStartShown: false,
-        workEndShown: false,
-        progress25: false,
-        progress50: false,
-        progress75: false,
-        money100: false,
-        money250: false,
-        money500: false,
-        hourlyShown: {},
-        countdownShown: {}
-    };
-
-    showNotification("✅ Rapor oluşturuldu! Canlı takip başlatıldı.");
-    startLiveCounter(monthlyEarnedBase);
+    const start = new Date(year, month, 1); const end = new Date(year, month+1, 0);
+    totalWorkdaysThisMonth = 0; daysWorkedSoFar = 0;
+    for (let d=1; d<=end.getDate(); d++){ const date = new Date(year, month, d); const isWeekend = (date.getDay()===0 || date.getDay()===6); if (!isWeekend) { totalWorkdaysThisMonth++; if (date < now) daysWorkedSoFar++; } }
+    dailyWage = salary / totalWorkdaysThisMonth; let monthlyEarnedBase = daysWorkedSoFar * dailyWage;
+    let wdRemaining = 0; let tmp = new Date(now); while (tmp <= paydayDate){ let g = tmp.getDay(); if (g!==0 && g!==6) wdRemaining++; tmp.setDate(tmp.getDate()+1); }
+    document.getElementById("livePanel").innerHTML = `<div class="live-panel"><h2>⏱ Canlı Mesai Takibi</h2><div class="bar-container"><div id="workBar" class="bar"><div class="bar-text" id="workBarText">0%</div></div></div><p id="progressText"></p><h3>💸 Anlık Kazanç</h3><p>Bugün: <b id="earnedToday"></b></p><p>Bu Ay: <b id="earnedMonth"></b></p><h3>📊 Ücret Oranları</h3><p>Saatlik: <b id="h"></b></p><p>Dakikalık: <b id="m"></b></p><p>Saniyelik: <b id="s"></b></p><h3>📈 Aylık İlerleme</h3><div class="bar-container"><div id="monthBar" class="bar"><div class="bar-text" id="monthBarText">0%</div></div></div></div>`;
+    let calHtml = `<div class="calendar">`; for (let d=1; d<=end.getDate(); d++){ const date = new Date(year, month, d); const isWeekend = (date.getDay()===0 || date.getDay()===6); let cls=""; if (isWeekend) cls="holiday"; else if (d === now.getDate()) cls="today"; else if (date < now) cls="past"; else cls="future"; calHtml += `<div class="day ${cls}"><div>${d}</div>`; if (!isWeekend) { calHtml += `<small>${dailyWage.toFixed(0)}₺</small>`; } calHtml += `</div>`; } calHtml += `</div>`;
+    document.getElementById("results").innerHTML = `<h3>📢 Genel Rapor</h3><p>Maaşa kalan gün: <b>${totalDaysRemaining}</b></p><p>Maaşa kalan iş günü: <b>${wdRemaining}</b></p><p>Günlük hakediş: <b>${dailyWage.toFixed(2)}₺</b></p><h3>📆 Proletarya Takvimi</h3>${calHtml}`;
+    const formSection = document.getElementById('formSection'); formSection.classList.add('collapsed'); formSection.innerHTML = `<h3>⚙️ Ayarlar</h3><label>Maaş:</label><input id="salary" type="number" placeholder="15000" inputmode="numeric" value="${salary}"/><label>Maaş Günü:</label><input id="payday" type="number" placeholder="15" min="1" max="31" inputmode="numeric" value="${payday}"/><label>Mesai Başlangıç:</label><input id="start" type="time" value="${startTime}"/><label>Mesai Bitiş:</label><input id="end" type="time" value="${endTime}"/><button onclick="calc()">🔄 Raporu Güncelle</button>`;
+    notificationState = { workStartShown: false, workEndShown: false, progress25: false, progress50: false, progress75: false, money100: false, money250: false, money500: false, hourlyShown: {}, countdownShown: {} };
+    showNotification("✅ Rapor oluşturuldu! Canlı takip başlatıldı."); startLiveCounter(monthlyEarnedBase);
 }
-
 function startLiveCounter(monthlyEarnedBase){
-    const hourly = dailyWage / (workDuration/3600);
-    const minutely = hourly / 60;
-    const secondly = minutely / 60;
-
-    document.getElementById("h").innerText = hourly.toFixed(2)+"₺";
-    document.getElementById("m").innerText = minutely.toFixed(4)+"₺";
-    document.getElementById("s").innerText = secondly.toFixed(6)+"₺";
-
+    const hourly = dailyWage / (workDuration/3600); const minutely = hourly / 60; const secondly = minutely / 60;
+    document.getElementById("h").innerText = hourly.toFixed(2)+"₺"; document.getElementById("m").innerText = minutely.toFixed(4)+"₺"; document.getElementById("s").innerText = secondly.toFixed(6)+"₺";
     let lastEarnedToday = 0;
-    let lastSaveTime = 0;
-
     timerInterval = setInterval(() => {
-        const now = new Date();
-        let earnedToday = 0;
-        let progress = 0;
-
+        const now = new Date(); let earnedToday = 0; let progress = 0;
         if (now >= workStart && now <= workEnd) {
-            const passed = (now - workStart)/1000;
-            earnedToday = passed * secondly;
-            progress = (passed / workDuration) * 100;
-            
-            if (!notificationState.workStartShown && passed < 60) {
-                showNotification("🏁 Mesai başladı! Bugünkü kazanç: " + earnedToday.toFixed(2) + "₺");
-                notificationState.workStartShown = true;
-            }
-            
-            if (progress >= 25 && !notificationState.progress25) {
-                showNotification("🎉 Mesai %25 tamamlandı! " + (dailyWage*0.25).toFixed(2) + "₺ kazandın");
-                notificationState.progress25 = true;
-            }
-            if (progress >= 50 && !notificationState.progress50) {
-                showNotification("🚀 Yarı yola geldin! " + (dailyWage*0.5).toFixed(2) + "₺ kazandın");
-                notificationState.progress50 = true;
-            }
-            if (progress >= 75 && !notificationState.progress75) {
-                showNotification("💪 Son çeyrekte! " + (dailyWage*0.75).toFixed(2) + "₺ kazandın");
-                notificationState.progress75 = true;
-            }
-            
-            if (earnedToday >= 100 && !notificationState.money100) {
-                showNotification("💰 İlk 100₺'yi kazandın! 🎊");
-                notificationState.money100 = true;
-            }
-            if (earnedToday >= 250 && !notificationState.money250) {
-                showNotification("💵 250₺'ye ulaştın! ✨");
-                notificationState.money250 = true;
-            }
-            if (earnedToday >= 500 && !notificationState.money500) {
-                showNotification("💎 500₺ sınırını geçtin! 🚀");
-                notificationState.money500 = true;
-            }
-            
-            const hoursPassed = Math.floor(passed / 3600);
-            if (hoursPassed > 0 && !notificationState.hourlyShown[hoursPassed]) {
-                showNotification("⏰ " + hoursPassed + " saat devam! " + (hourly * hoursPassed).toFixed(2) + "₺ kazandın");
-                notificationState.hourlyShown[hoursPassed] = true;
-            }
-            
-            const minutesLeft = Math.floor((workDuration - passed) / 60);
-            if (minutesLeft === 30 && !notificationState.countdownShown['30min']) {
-                showNotification("🛑 Mesainin bitmesine 30 dakika kaldı");
-                notificationState.countdownShown['30min'] = true;
-            }
-            if (minutesLeft === 10 && !notificationState.countdownShown['10min']) {
-                showNotification("⏰ Mesainin bitmesine 10 dakika!");
-                notificationState.countdownShown['10min'] = true;
-            }
-        }
-        else if (now > workEnd) {
-            earnedToday = dailyWage;
-            progress = 100;
-            
-            if (!notificationState.workEndShown) {
-                showNotification("🎯 Mesai tamamlandı! Bugün toplam: " + earnedToday.toFixed(2) + "₺ kazandın");
-                notificationState.workEndShown = true;
-            }
-        }
-
-        if (Math.floor(earnedToday) !== Math.floor(lastEarnedToday) && Math.floor(earnedToday) % 50 === 0) {
-            showNotification("📈 Şu anki kazanç: " + earnedToday.toFixed(2) + "₺");
-        }
-        lastEarnedToday = earnedToday;
-
-        const currentTime = Date.now();
-        if (currentTime - lastSaveTime > 30000) {
-            StorageService.addWorkHistory({
-                type: 'live_snapshot',
-                earnedToday: earnedToday,
-                progress: progress,
-                monthlyTotal: monthlyEarnedBase + earnedToday
-            });
-            lastSaveTime = currentTime;
-        }
-
-        document.getElementById("earnedToday").innerText = earnedToday.toFixed(2)+"₺";
-        const monthlyTotal = monthlyEarnedBase + earnedToday;
-        document.getElementById("earnedMonth").innerText = monthlyTotal.toFixed(2)+"₺";
-
-        document.getElementById("workBar").style.width = progress.toFixed(2) + "%";
-        document.getElementById("workBarText").innerText = progress.toFixed(1)+"%";
-
-        const monthProgress = ((daysWorkedSoFar + (earnedToday/dailyWage)) / totalWorkdaysThisMonth) * 100;
-        document.getElementById("monthBar").style.width = monthProgress.toFixed(2) + "%";
-        document.getElementById("monthBarText").innerText = monthProgress.toFixed(1)+"%";
-
-        if (now < workStart)
-            document.getElementById("progressText").innerText = "Mesai henüz başlamadı.";
-        else if (now > workEnd)
-            document.getElementById("progressText").innerText = "Mesai tamamlandı.";
-        else
-            document.getElementById("progressText").innerText = "Günlük mesai: %" + progress.toFixed(2);
-
+            const passed = (now - workStart)/1000; earnedToday = passed * secondly; progress = (passed / workDuration) * 100;
+            if (!notificationState.workStartShown && passed < 60) { showNotification("🏁 Mesai başladı! Bugünkü kazanç: " + earnedToday.toFixed(2) + "₺"); notificationState.workStartShown = true; }
+            if (progress >= 25 && !notificationState.progress25) { showNotification("🎉 Mesai %25 tamamlandı! " + (dailyWage*0.25).toFixed(2) + "₺ kazandın"); notificationState.progress25 = true; }
+            if (progress >= 50 && !notificationState.progress50) { showNotification("🚀 Yarı yola geldin! " + (dailyWage*0.5).toFixed(2) + "₺ kazandın"); notificationState.progress50 = true; }
+            if (progress >= 75 && !notificationState.progress75) { showNotification("💪 Son çeyrekte! " + (dailyWage*0.75).toFixed(2) + "₺ kazandın"); notificationState.progress75 = true; }
+            if (earnedToday >= 100 && !notificationState.money100) { showNotification("💰 İlk 100₺'yi kazandın! 🎊"); notificationState.money100 = true; }
+            if (earnedToday >= 250 && !notificationState.money250) { showNotification("💵 250₺'ye ulaştın! ✨"); notificationState.money250 = true; }
+            if (earnedToday >= 500 && !notificationState.money500) { showNotification("💎 500₺ sınırını geçtin! 🚀"); notificationState.money500 = true; }
+            const hoursPassed = Math.floor(passed / 3600); if (hoursPassed > 0 && !notificationState.hourlyShown[hoursPassed]) { showNotification("⏰ " + hoursPassed + " saat devam! " + (hourly * hoursPassed).toFixed(2) + "₺ kazandın"); notificationState.hourlyShown[hoursPassed] = true; }
+            const minutesLeft = Math.floor((workDuration - passed) / 60); if (minutesLeft === 30 && !notificationState.countdownShown['30min']) { showNotification("🛑 Mesainin bitmesine 30 dakika kaldı"); notificationState.countdownShown['30min'] = true; } if (minutesLeft === 10 && !notificationState.countdownShown['10min']) { showNotification("⏰ Mesainin bitmesine 10 dakika!"); notificationState.countdownShown['10min'] = true; }
+        } else if (now > workEnd) { earnedToday = dailyWage; progress = 100; if (!notificationState.workEndShown) { showNotification("🎯 Mesai tamamlandı! Bugün toplam: " + earnedToday.toFixed(2) + "₺ kazandın"); notificationState.workEndShown = true; } }
+        if (Math.floor(earnedToday) !== Math.floor(lastEarnedToday) && Math.floor(earnedToday) % 50 === 0) { showNotification("📈 Şu anki kazanç: " + earnedToday.toFixed(2) + "₺"); } lastEarnedToday = earnedToday;
+        document.getElementById("earnedToday").innerText = earnedToday.toFixed(2)+"₺"; const monthlyTotal = monthlyEarnedBase + earnedToday; document.getElementById("earnedMonth").innerText = monthlyTotal.toFixed(2)+"₺";
+        document.getElementById("workBar").style.width = progress.toFixed(2) + "%"; document.getElementById("workBarText").innerText = progress.toFixed(1)+"%";
+        const monthProgress = ((daysWorkedSoFar + (earnedToday/dailyWage)) / totalWorkdaysThisMonth) * 100; document.getElementById("monthBar").style.width = monthProgress.toFixed(2) + "%"; document.getElementById("monthBarText").innerText = monthProgress.toFixed(1)+"%";
+        if (now < workStart) document.getElementById("progressText").innerText = "Mesai henüz başlamadı."; else if (now > workEnd) document.getElementById("progressText").innerText = "Mesai tamamlandı."; else document.getElementById("progressText").innerText = "Günlük mesai: %" + progress.toFixed(2);
     }, 1000);
 }
-
-// PARA YAĞMURU FONKSİYONU
 function startMoneyRain() {
-    const moneyItems = ['💰', '💎', '🔨', '⚒️', '☭', '💵', '💸', '🪙', '🏆', '🌟'];
-    const colors = ['#f2d16b', '#FFD700', '#FFA500', '#FF8C00', '#FF6347', '#FF4500'];
-    
-    for (let i = 0; i < 50; i++) {
-        setTimeout(() => {
-            const moneyItem = document.createElement('div');
-            moneyItem.className = 'money-rain';
-            moneyItem.style.left = Math.random() * window.innerWidth + 'px';
-            moneyItem.style.color = colors[Math.floor(Math.random() * colors.length)];
-            moneyItem.style.fontSize = (Math.random() * 20 + 15) + 'px';
-            moneyItem.style.animationDuration = (Math.random() * 2 + 3) + 's';
-            moneyItem.textContent = moneyItems[Math.floor(Math.random() * moneyItems.length)];
-            
-            document.body.appendChild(moneyItem);
-            
-            // Animasyon bitince elementi kaldır
-            setTimeout(() => {
-                document.body.removeChild(moneyItem);
-            }, 5000);
-        }, i * 100);
-    }
-    
-    showNotification("🎉 Proletarya zaferi! Devrim başladı!");
+    const moneyItems = ['💰', '💎', '🔨', '⚒️', '☭', '💵', '💸', '🪙', '🏆', '🌟']; const colors = ['#f2d16b', '#FFD700', '#FFA500', '#FF8C00', '#FF6347', '#FF4500'];
+    for (let i = 0; i < 50; i++) { setTimeout(() => { const moneyItem = document.createElement('div'); moneyItem.className = 'money-rain'; moneyItem.style.left = Math.random() * window.innerWidth + 'px'; moneyItem.style.color = colors[Math.floor(Math.random() * colors.length)]; moneyItem.style.fontSize = (Math.random() * 20 + 15) + 'px'; moneyItem.style.animationDuration = (Math.random() * 2 + 3) + 's'; moneyItem.textContent = moneyItems[Math.floor(Math.random() * moneyItems.length)]; document.body.appendChild(moneyItem); setTimeout(() => { document.body.removeChild(moneyItem); }, 5000); }, i * 100); } showNotification("🎉 Proletarya zaferi! Devrim başladı!");
 }
-
-// EVENT LISTENER'LAR
-document.querySelectorAll('input').forEach(input => {
-    input.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            calc();
-        }
-    });
-});
-
-// SAYFA YÜKLENİNCE
+document.querySelectorAll('input').forEach(input => { input.addEventListener('keypress', function(e) { if (e.key === 'Enter') { e.preventDefault(); calc(); } }); });
 window.addEventListener('load', function() {
-    const savedSettings = StorageService.getItem('userSettings');
-    
+    const savedSettings = StorageService.getSettings();
     if (savedSettings) {
-        document.getElementById('salary').value = savedSettings.salary || 15000;
-        document.getElementById('payday').value = savedSettings.payday || 15;
-        document.getElementById('start').value = savedSettings.startTime || '09:00';
-        document.getElementById('end').value = savedSettings.endTime || '18:00';
-        
-        setTimeout(() => {
-            calc();
-            showNotification("🔁 Önceki ayarlar yüklendi, rapor otomatik oluşturuldu");
-        }, 500);
-        
-    } else {
-        document.getElementById('salary').value = 15000;
-        document.getElementById('payday').value = 15;
-    }
-
-    const pastNotifications = StorageService.getItem('notifications') || [];
-    if (pastNotifications.length > 0) {
-        const lastNotification = pastNotifications[0];
-        document.getElementById('notificationText').textContent = lastNotification.message;
-    }
-
-    if (window.navigator.standalone) {
-        showNotification("📱 PWA modunda çalışıyorsunuz");
-    }
+        document.getElementById('salary').value = savedSettings.salary || 15000; document.getElementById('payday').value = savedSettings.payday || 15; document.getElementById('start').value = savedSettings.startTime || '09:00'; document.getElementById('end').value = savedSettings.endTime || '18:00';
+        setTimeout(() => { calc(); showNotification("🔁 Önceki ayarlar yüklendi, rapor otomatik oluşturuldu"); }, 500);
+    } else { document.getElementById('salary').value = 15000; document.getElementById('payday').value = 15; }
+    if (window.navigator.standalone) { showNotification("📱 PWA modunda çalışıyorsunuz"); }
 });
-
-// SCROLL ANIMASYONU
-window.addEventListener('scroll', function() {
-    const headerContainer = document.querySelector('.header-container');
-    
-    if (window.scrollY > 50) {
-        headerContainer.style.background = 'rgba(30,30,30,0.92)';
-    } else {
-        headerContainer.style.background = 'rgba(30,30,30,0.95)';
-    }
-});
+window.addEventListener('scroll', function() { const headerContainer = document.querySelector('.header-container'); if (window.scrollY > 50) { headerContainer.style.background = 'rgba(30,30,30,0.92)'; } else { headerContainer.style.background = 'rgba(30,30,30,0.95)'; } });
 </script>
 </body>
 </html>
-
