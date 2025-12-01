@@ -84,8 +84,8 @@
         <button onclick="calc()">📊 Raporu Oluştur</button>
     </div>
     <div class="mobile-footer">
-        <div onclick="startMoneyRain()" style="cursor: pointer;">v0.31α - Designed By C.D.</div>
-        <div style="margin-top: 5px;">Ana ekrame ekle → Uygulama gibi kullan</div>
+        <div onclick="startMoneyRain()" style="cursor: pointer;">v0.32β - Designed By C.D.</div>
+        <div style="margin-top: 5px;">Ana ekrana ekle → Uygulama gibi kullan</div>
     </div>
 </div>
 <script>
@@ -98,7 +98,6 @@ class StorageService {
   static saveSettings(settings) {
     try { localStorage.setItem(this.STORAGE_KEY, JSON.stringify(settings)); return true; } catch (error) { console.error('Ayarlar kaydedilemedi:', error); return false; }
   }
-  static updateSetting(key, value) { const settings = this.getSettings(); settings[key] = value; return this.saveSettings(settings); }
 }
 let currentNotification = null;
 let notificationState = { workStartShown: false, workEndShown: false, progress25: false, progress50: false, progress75: false, money100: false, money250: false, money500: false, hourlyShown: {}, countdownShown: {} };
@@ -113,58 +112,166 @@ function clearNotification() {
 }
 const slogans = ["✊ Emekçinin birliği sermayeyi yenecek!", "⚡ Sömürüye son, hakkını al!", "🔨 Gücümüz birliğimizde!", "⚖️ Kazanç adaletle büyür!", "🌍 Her işçi bir devrimcidir!", "💪 Günlük emeğin kutsaldır!", "🔥 Burjuvazi yıkılacak, işçi sınıfı kazanacak!", "🏭 Fabrikalar işçinin, yönetim işçinin!", "⛓️ Sermayenin zincirlerini kıralım!", "🚩 İşçi sınıfı örgütlü, sermaye perişan!", "💥 Her fabrika bir devrim ocağı!", "🛑 Ücretli kölelik son bulsun!", "💰 Patronun kârı emekçinin alın teri!", "📈 Asgari ücret açlık sınırı olsun!", "🎯 Emeğin karşılığı tam olarak alınsın!", "📢 Sendikalı işçi güçlü işçidir!", "🌐 Bütün ülkelerin işçileri birleşin!", "🎓 Sınıf bilinciyle donanmış işçi yenilmez!", "🤝 Enternasyonal dayanışma yaşasın!", "🚀 İşçi sınıfı sınır tanımaz!", "❤️ Dünya işçileri kardeştir!", "⚔️ Eşit işe eşit ücret!", "🎪 Grev hakkımız gasp edilemez!", "📜 Sendika hakkı insan hakkıdır!", "⏰ Çalışma saatleri insani olsun!", "🛡️ İş güvencesi temel haktır!", "🌟 Her işçi bir örgütçüdür!", "💢 Boyun eğme, diren, kazan!", "✨ Alın terimiz, onurumuz!", "🎊 Üretenden güçlü yok!", "🏆 Bugünün mücadelesi yarının zaferi!", "☭ Orak-çekiç işçinin gücüdür!", "⚒️ Üretim araçları emekçinin olacak!", "🔴 Kızıl bayrak dalgalansın!", "⭐ Proletarya enternasyonalizmi yaşasın!", "💎 Emek en yüce değerdir!", "🚜 Toprak işleyenin, su kullananın!", "🏛️ İktidar emekçilerin olacak!", "🎖️ Her işçi bir kahramandır!", "⚙️ Üretim emekçinin kontrolünde!", "🌅 Devrim şafağı söküyor!", "🦅 Özgürlük emekçidedir!", "💼 Çalışanın hakkı kutsaldır!", "🌟 Yıldızlar işçi sınıfından yana!", "⚔️ Mücadele büyüyor, zafer yakın!", "🎯 Hedef: Tam bağımsızlık!", "💣 Sömürü düzeni yıkılacak!", "🕊️ Gerçek barış emekçidedir!", "🌈 Sosyalizm insanlığın geleceği!", "🎇 Zafer işçi sınıfının olacak!"];
 let dailyWage = 0, workStart = null, workEnd = null, workDuration = 0, timerInterval = null, daysWorkedSoFar = 0, totalWorkdaysThisMonth = 0;
+
 function updateClock(){ const now = new Date(); const months = ["Oca","Şub","Mar","Nis","May","Haz","Tem","Ağu","Eyl","Eki","Kas","Ara"]; const formatted = `${now.getDate()} ${months[now.getMonth()]} ${now.toLocaleTimeString()}`; document.getElementById("currentDate").innerText = formatted; }
 setInterval(updateClock, 1000); updateClock();
 function randomSlogan(){ const s = slogans[Math.floor(Math.random()*slogans.length)]; document.getElementById("dailySlogan").innerText = s; }
 setInterval(randomSlogan, 30000); randomSlogan();
+
 function calc() {
     clearInterval(timerInterval);
     const salary = Number(document.getElementById('salary').value); const payday = Number(document.getElementById('payday').value);
     if (!salary || !payday) { showNotification("⚠️ Lütfen maaş ve maaş gününü girin"); return; }
     const startTime = document.getElementById("start").value; const endTime = document.getElementById("end").value;
     StorageService.saveSettings({ salary: salary, payday: payday, startTime: startTime, endTime: endTime });
-    const now = new Date(); const [sh, sm] = startTime.split(":").map(Number); const [eh, em] = endTime.split(":").map(Number);
-    workStart = new Date(now.getFullYear(), now.getMonth(), now.getDate(), sh, sm, 0); workEnd = new Date(now.getFullYear(), now.getMonth(), now.getDate(), eh, em, 0); workDuration = (workEnd - workStart) / 1000;
+    
+    const now = new Date(); 
+    const [sh, sm] = startTime.split(":").map(Number); 
+    const [eh, em] = endTime.split(":").map(Number);
+    workStart = new Date(now.getFullYear(), now.getMonth(), now.getDate(), sh, sm, 0); 
+    workEnd = new Date(now.getFullYear(), now.getMonth(), now.getDate(), eh, em, 0); 
+    workDuration = (workEnd - workStart) / 1000;
+    
     const year = now.getFullYear(); const month = now.getMonth();
-    let paydayDate = new Date(year, month, payday); if (paydayDate < now) paydayDate = new Date(year, month + 1, payday);
+    let paydayDate = new Date(year, month, payday); 
+    if (paydayDate < now) paydayDate = new Date(year, month + 1, payday);
+    
     const totalDaysRemaining = Math.ceil((paydayDate - now)/(1000*3600*24));
-    const start = new Date(year, month, 1); const end = new Date(year, month+1, 0);
-    totalWorkdaysThisMonth = 0; daysWorkedSoFar = 0;
-    for (let d=1; d<=end.getDate(); d++){ const date = new Date(year, month, d); const isWeekend = (date.getDay()===0 || date.getDay()===6); if (!isWeekend) { totalWorkdaysThisMonth++; if (date < now) daysWorkedSoFar++; } }
-    dailyWage = salary / totalWorkdaysThisMonth; let monthlyEarnedBase = daysWorkedSoFar * dailyWage;
-    let wdRemaining = 0; let tmp = new Date(now); while (tmp <= paydayDate){ let g = tmp.getDay(); if (g!==0 && g!==6) wdRemaining++; tmp.setDate(tmp.getDate()+1); }
+    const start = new Date(year, month, 1); 
+    const end = new Date(year, month+1, 0); // Ayın son günü
+    
+    totalWorkdaysThisMonth = 0; 
+    daysWorkedSoFar = 0;
+    
+    // DÜZELTME 1: Sadece bugünden ÖNCEKİ tam günleri geçmiş kazanca ekle.
+    const todayMidnight = new Date(year, month, now.getDate()); // Bugün 00:00:00
+
+    for (let d=1; d<=end.getDate(); d++){ 
+        const date = new Date(year, month, d); 
+        const isWeekend = (date.getDay()===0 || date.getDay()===6); 
+        
+        if (!isWeekend) { 
+            totalWorkdaysThisMonth++; 
+            // Eğer kontrol edilen tarih bugün gece yarısından küçükse (yani dün veya öncesiyse)
+            if (date < todayMidnight) {
+                daysWorkedSoFar++; 
+            }
+        } 
+    }
+    
+    dailyWage = salary / totalWorkdaysThisMonth; 
+    let monthlyEarnedBase = daysWorkedSoFar * dailyWage;
+    
+    let wdRemaining = 0; let tmp = new Date(now); 
+    while (tmp <= paydayDate){ 
+        let g = tmp.getDay(); 
+        if (g!==0 && g!==6) wdRemaining++; 
+        tmp.setDate(tmp.getDate()+1); 
+    }
+    
     document.getElementById("livePanel").innerHTML = `<div class="live-panel"><h2>⏱ Canlı Mesai Takibi</h2><div class="bar-container"><div id="workBar" class="bar"><div class="bar-text" id="workBarText">0%</div></div></div><p id="progressText"></p><h3>💸 Anlık Kazanç</h3><p>Bugün: <b id="earnedToday"></b></p><p>Bu Ay: <b id="earnedMonth"></b></p><h3>📊 Ücret Oranları</h3><p>Saatlik: <b id="h"></b></p><p>Dakikalık: <b id="m"></b></p><p>Saniyelik: <b id="s"></b></p><h3>📈 Aylık İlerleme</h3><div class="bar-container"><div id="monthBar" class="bar"><div class="bar-text" id="monthBarText">0%</div></div></div></div>`;
-    let calHtml = `<div class="calendar">`; for (let d=1; d<=end.getDate(); d++){ const date = new Date(year, month, d); const isWeekend = (date.getDay()===0 || date.getDay()===6); let cls=""; if (isWeekend) cls="holiday"; else if (d === now.getDate()) cls="today"; else if (date < now) cls="past"; else cls="future"; calHtml += `<div class="day ${cls}"><div>${d}</div>`; if (!isWeekend) { calHtml += `<small>${dailyWage.toFixed(0)}₺</small>`; } calHtml += `</div>`; } calHtml += `</div>`;
+    
+    let calHtml = `<div class="calendar">`; 
+    for (let d=1; d<=end.getDate(); d++){ 
+        const date = new Date(year, month, d); 
+        const isWeekend = (date.getDay()===0 || date.getDay()===6); 
+        let cls=""; 
+        if (isWeekend) cls="holiday"; 
+        else if (d === now.getDate()) cls="today"; 
+        else if (date < todayMidnight) cls="past"; // Artık sadece dünden öncekiler past
+        else cls="future"; 
+        
+        calHtml += `<div class="day ${cls}"><div>${d}</div>`; 
+        if (!isWeekend) { calHtml += `<small>${dailyWage.toFixed(0)}₺</small>`; } 
+        calHtml += `</div>`; 
+    } 
+    calHtml += `</div>`;
+    
     document.getElementById("results").innerHTML = `<h3>📢 Genel Rapor</h3><p>Maaşa kalan gün: <b>${totalDaysRemaining}</b></p><p>Maaşa kalan iş günü: <b>${wdRemaining}</b></p><p>Günlük hakediş: <b>${dailyWage.toFixed(2)}₺</b></p><h3>📆 Proletarya Takvimi</h3>${calHtml}`;
+    
     const formSection = document.getElementById('formSection'); formSection.classList.add('collapsed'); formSection.innerHTML = `<h3>⚙️ Ayarlar</h3><label>Maaş:</label><input id="salary" type="number" placeholder="15000" inputmode="numeric" value="${salary}"/><label>Maaş Günü:</label><input id="payday" type="number" placeholder="15" min="1" max="31" inputmode="numeric" value="${payday}"/><label>Mesai Başlangıç:</label><input id="start" type="time" value="${startTime}"/><label>Mesai Bitiş:</label><input id="end" type="time" value="${endTime}"/><button onclick="calc()">🔄 Raporu Güncelle</button>`;
+    
     notificationState = { workStartShown: false, workEndShown: false, progress25: false, progress50: false, progress75: false, money100: false, money250: false, money500: false, hourlyShown: {}, countdownShown: {} };
-    showNotification("✅ Rapor oluşturuldu! Canlı takip başlatıldı."); startLiveCounter(monthlyEarnedBase);
+    showNotification("✅ Rapor oluşturuldu! Canlı takip başlatıldı."); 
+    
+    startLiveCounter(monthlyEarnedBase);
 }
+
 function startLiveCounter(monthlyEarnedBase){
     const hourly = dailyWage / (workDuration/3600); const minutely = hourly / 60; const secondly = minutely / 60;
     document.getElementById("h").innerText = hourly.toFixed(2)+"₺"; document.getElementById("m").innerText = minutely.toFixed(4)+"₺"; document.getElementById("s").innerText = secondly.toFixed(6)+"₺";
+    
     let lastEarnedToday = 0;
+    
     timerInterval = setInterval(() => {
-        const now = new Date(); let earnedToday = 0; let progress = 0;
-        if (now >= workStart && now <= workEnd) {
-            const passed = (now - workStart)/1000; earnedToday = passed * secondly; progress = (passed / workDuration) * 100;
-            if (!notificationState.workStartShown && passed < 60) { showNotification("🏁 Mesai başladı! Bugünkü kazanç: " + earnedToday.toFixed(2) + "₺"); notificationState.workStartShown = true; }
-            if (progress >= 25 && !notificationState.progress25) { showNotification("🎉 Mesai %25 tamamlandı! " + (dailyWage*0.25).toFixed(2) + "₺ kazandın"); notificationState.progress25 = true; }
-            if (progress >= 50 && !notificationState.progress50) { showNotification("🚀 Yarı yola geldin! " + (dailyWage*0.5).toFixed(2) + "₺ kazandın"); notificationState.progress50 = true; }
-            if (progress >= 75 && !notificationState.progress75) { showNotification("💪 Son çeyrekte! " + (dailyWage*0.75).toFixed(2) + "₺ kazandın"); notificationState.progress75 = true; }
-            if (earnedToday >= 100 && !notificationState.money100) { showNotification("💰 İlk 100₺'yi kazandın! 🎊"); notificationState.money100 = true; }
-            if (earnedToday >= 250 && !notificationState.money250) { showNotification("💵 250₺'ye ulaştın! ✨"); notificationState.money250 = true; }
-            if (earnedToday >= 500 && !notificationState.money500) { showNotification("💎 500₺ sınırını geçtin! 🚀"); notificationState.money500 = true; }
-            const hoursPassed = Math.floor(passed / 3600); if (hoursPassed > 0 && !notificationState.hourlyShown[hoursPassed]) { showNotification("⏰ " + hoursPassed + " saat devam! " + (hourly * hoursPassed).toFixed(2) + "₺ kazandın"); notificationState.hourlyShown[hoursPassed] = true; }
-            const minutesLeft = Math.floor((workDuration - passed) / 60); if (minutesLeft === 30 && !notificationState.countdownShown['30min']) { showNotification("🛑 Mesainin bitmesine 30 dakika kaldı"); notificationState.countdownShown['30min'] = true; } if (minutesLeft === 10 && !notificationState.countdownShown['10min']) { showNotification("⏰ Mesainin bitmesine 10 dakika!"); notificationState.countdownShown['10min'] = true; }
-        } else if (now > workEnd) { earnedToday = dailyWage; progress = 100; if (!notificationState.workEndShown) { showNotification("🎯 Mesai tamamlandı! Bugün toplam: " + earnedToday.toFixed(2) + "₺ kazandın"); notificationState.workEndShown = true; } }
-        if (Math.floor(earnedToday) !== Math.floor(lastEarnedToday) && Math.floor(earnedToday) % 50 === 0) { showNotification("📈 Şu anki kazanç: " + earnedToday.toFixed(2) + "₺"); } lastEarnedToday = earnedToday;
-        document.getElementById("earnedToday").innerText = earnedToday.toFixed(2)+"₺"; const monthlyTotal = monthlyEarnedBase + earnedToday; document.getElementById("earnedMonth").innerText = monthlyTotal.toFixed(2)+"₺";
-        document.getElementById("workBar").style.width = progress.toFixed(2) + "%"; document.getElementById("workBarText").innerText = progress.toFixed(1)+"%";
-        const monthProgress = ((daysWorkedSoFar + (earnedToday/dailyWage)) / totalWorkdaysThisMonth) * 100; document.getElementById("monthBar").style.width = monthProgress.toFixed(2) + "%"; document.getElementById("monthBarText").innerText = monthProgress.toFixed(1)+"%";
-        if (now < workStart) document.getElementById("progressText").innerText = "Mesai henüz başlamadı."; else if (now > workEnd) document.getElementById("progressText").innerText = "Mesai tamamlandı."; else document.getElementById("progressText").innerText = "Günlük mesai: %" + progress.toFixed(2);
+        const now = new Date(); 
+        let earnedToday = 0; 
+        let progress = 0;
+
+        // DÜZELTME 2: Bugün hafta sonu mu kontrol et
+        const isWeekendToday = (now.getDay() === 0 || now.getDay() === 6);
+
+        if (isWeekendToday) {
+            // Hafta sonu ise bugün kazanç yok, progress 0
+            earnedToday = 0;
+            progress = 0;
+            document.getElementById("progressText").innerText = "Hafta sonu tatili 🏖️";
+        } else {
+            // Hafta içi ise normal hesaplama
+            if (now >= workStart && now <= workEnd) {
+                const passed = (now - workStart)/1000; 
+                earnedToday = passed * secondly; 
+                progress = (passed / workDuration) * 100;
+                
+                if (!notificationState.workStartShown && passed < 60) { showNotification("🏁 Mesai başladı! Bugünkü kazanç: " + earnedToday.toFixed(2) + "₺"); notificationState.workStartShown = true; }
+                if (progress >= 25 && !notificationState.progress25) { showNotification("🎉 Mesai %25 tamamlandı! " + (dailyWage*0.25).toFixed(2) + "₺ kazandın"); notificationState.progress25 = true; }
+                if (progress >= 50 && !notificationState.progress50) { showNotification("🚀 Yarı yola geldin! " + (dailyWage*0.5).toFixed(2) + "₺ kazandın"); notificationState.progress50 = true; }
+                if (progress >= 75 && !notificationState.progress75) { showNotification("💪 Son çeyrekte! " + (dailyWage*0.75).toFixed(2) + "₺ kazandın"); notificationState.progress75 = true; }
+                if (earnedToday >= 100 && !notificationState.money100) { showNotification("💰 İlk 100₺'yi kazandın! 🎊"); notificationState.money100 = true; }
+                if (earnedToday >= 250 && !notificationState.money250) { showNotification("💵 250₺'ye ulaştın! ✨"); notificationState.money250 = true; }
+                if (earnedToday >= 500 && !notificationState.money500) { showNotification("💎 500₺ sınırını geçtin! 🚀"); notificationState.money500 = true; }
+                
+                const hoursPassed = Math.floor(passed / 3600); 
+                if (hoursPassed > 0 && !notificationState.hourlyShown[hoursPassed]) { showNotification("⏰ " + hoursPassed + " saat devam! " + (hourly * hoursPassed).toFixed(2) + "₺ kazandın"); notificationState.hourlyShown[hoursPassed] = true; }
+                
+                const minutesLeft = Math.floor((workDuration - passed) / 60); 
+                if (minutesLeft === 30 && !notificationState.countdownShown['30min']) { showNotification("🛑 Mesainin bitmesine 30 dakika kaldı"); notificationState.countdownShown['30min'] = true; } 
+                if (minutesLeft === 10 && !notificationState.countdownShown['10min']) { showNotification("⏰ Mesainin bitmesine 10 dakika!"); notificationState.countdownShown['10min'] = true; }
+                
+                document.getElementById("progressText").innerText = "Günlük mesai: %" + progress.toFixed(2);
+                
+            } else if (now > workEnd) { 
+                earnedToday = dailyWage; 
+                progress = 100; 
+                document.getElementById("progressText").innerText = "Mesai tamamlandı.";
+                if (!notificationState.workEndShown) { showNotification("🎯 Mesai tamamlandı! Bugün toplam: " + earnedToday.toFixed(2) + "₺ kazandın"); notificationState.workEndShown = true; } 
+            } else {
+                // Mesai başlamadı
+                earnedToday = 0;
+                progress = 0;
+                document.getElementById("progressText").innerText = "Mesai henüz başlamadı.";
+            }
+        }
+
+        if (Math.floor(earnedToday) !== Math.floor(lastEarnedToday) && Math.floor(earnedToday) % 50 === 0 && earnedToday > 0) { showNotification("📈 Şu anki kazanç: " + earnedToday.toFixed(2) + "₺"); } 
+        lastEarnedToday = earnedToday;
+        
+        document.getElementById("earnedToday").innerText = earnedToday.toFixed(2)+"₺"; 
+        const monthlyTotal = monthlyEarnedBase + earnedToday; 
+        document.getElementById("earnedMonth").innerText = monthlyTotal.toFixed(2)+"₺";
+        
+        document.getElementById("workBar").style.width = progress.toFixed(2) + "%"; 
+        document.getElementById("workBarText").innerText = progress.toFixed(1)+"%";
+        
+        const monthProgress = ((daysWorkedSoFar + (earnedToday/dailyWage)) / totalWorkdaysThisMonth) * 100; 
+        // Zero division protection
+        const validMonthProgress = isNaN(monthProgress) ? 0 : monthProgress;
+        document.getElementById("monthBar").style.width = validMonthProgress.toFixed(2) + "%"; 
+        document.getElementById("monthBarText").innerText = validMonthProgress.toFixed(1)+"%";
+        
     }, 1000);
 }
+
 function startMoneyRain() {
     const moneyItems = ['💰', '💎', '🔨', '⚒️', '☭', '💵', '💸', '🪙', '🏆', '🌟']; const colors = ['#f2d16b', '#FFD700', '#FFA500', '#FF8C00', '#FF6347', '#FF4500'];
     for (let i = 0; i < 50; i++) { setTimeout(() => { const moneyItem = document.createElement('div'); moneyItem.className = 'money-rain'; moneyItem.style.left = Math.random() * window.innerWidth + 'px'; moneyItem.style.color = colors[Math.floor(Math.random() * colors.length)]; moneyItem.style.fontSize = (Math.random() * 20 + 15) + 'px'; moneyItem.style.animationDuration = (Math.random() * 2 + 3) + 's'; moneyItem.textContent = moneyItems[Math.floor(Math.random() * moneyItems.length)]; document.body.appendChild(moneyItem); setTimeout(() => { document.body.removeChild(moneyItem); }, 5000); }, i * 100); } showNotification("🎉 Proletarya zaferi! Devrim başladı!");
