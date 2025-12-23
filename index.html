@@ -9,24 +9,76 @@
 <title>Proletarya Mobil</title>
 <style>
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; background-color: #1a1a1a; color: #f2d16b; padding: 15px; padding-bottom: 30px; min-height: 100vh; padding-top: env(safe-area-inset-top); }
+  body { 
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+    margin: 0; 
+    padding: 0; 
+    background-color: #1a1a1a; 
+    color: #f2d16b; 
+    padding: 15px; 
+    padding-bottom: 30px; 
+    min-height: 100vh; 
+    padding-top: env(safe-area-inset-top); /* iPhone çentik için üst boşluk */
+  }
   input, button { width: 100%; padding: 16px; border-radius: 12px; border: none; margin: 8px 0; background: rgba(70,70,70,0.85); color: #f2d16b; font-size: 16px; -webkit-appearance: none; }
   input[type="time"] { height: auto; min-height: 54px; }
   button { background: rgba(242,209,107,0.9); color: #1a1a1a; font-weight: bold; font-size: 18px; margin-top: 12px; }
   button:active { transform: scale(0.98); background: rgba(242,209,107,1); }
   .results { background: rgba(40,40,40,0.9); padding: 18px; border-radius: 15px; margin-top: 20px; }
-  .header-container { position: fixed; top: 0; left: 0; right: 0; background: rgba(30,30,30,0.95); backdrop-filter: blur(15px); z-index: 1000; border-bottom: 1px solid #f2d16b; transition: all 0.3s ease; }
-  .top-panel { padding: 10px 15px 4px 15px; position: relative; }
+  
+  /* HEADER DÜZENLEMESİ - iPhone çentik düzeltmesi */
+  .header-container { 
+    position: fixed; 
+    top: env(safe-area-inset-top); /* Çentiğin altından başlat */
+    left: 0; 
+    right: 0; 
+    background: rgba(30,30,30,0.95); 
+    backdrop-filter: blur(15px); 
+    z-index: 1000; 
+    border-bottom: 1px solid #f2d16b; 
+    transition: all 0.3s ease;
+  }
+  
+  .top-panel { 
+    padding: 10px 15px 4px 15px; 
+    position: relative; 
+    padding-top: 0; /* Üst padding'i kaldırdık */
+  }
+  
   .header-center { text-align: center; width: 100%; }
-  .top-panel h1 { font-weight:bold; margin:0; font-size:18px; text-align: center; }
+  .top-panel h1 { font-weight:bold; margin:0; font-size:18px; text-align: center; padding-top: 5px; }
   .top-panel .slogan { font-size: 11px; color: #f2d16b; margin-top: 2px; font-weight: normal; text-align: center; line-height: 1.2; }
-  #currentDate { position: absolute; top: 12px; right: 15px; font-size: 10px; opacity: 0.8; white-space: nowrap; }
-  .notification-panel { background: rgba(242,209,107,0.08); border-top: 1px solid #f2d16b30; padding: 3px 15px; min-height: 45px; max-height: 45px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  #currentDate { 
+    position: absolute; 
+    top: 12px; 
+    right: 15px; 
+    font-size: 10px; 
+    opacity: 0.8; 
+    white-space: nowrap; 
+  }
+  
+  .notification-panel { 
+    background: rgba(242,209,107,0.08); 
+    border-top: 1px solid #f2d16b30; 
+    padding: 3px 15px; 
+    min-height: 45px; 
+    max-height: 45px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between; 
+    gap: 8px; 
+  }
+  
   .notification-content { flex: 1; min-width: 0; }
   .notification-text { margin: 0; font-size: 13px; line-height: 1.3; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .notification-clear { background: rgba(242,209,107,0.2); border: none; color: #f2d16b; padding: 3px 6px; border-radius: 4px; font-size: 10px; cursor: pointer; flex-shrink: 0; width: auto; min-width: 30px; height: 20px; line-height: 14px; align-self: center; }
   .notification-clear:active { background: rgba(242,209,107,0.3); transform: scale(0.95); }
-  .main-content { margin-top: 115px; }
+  
+  /* Ana içerik - header yüksekliğine göre ayarlandı */
+  .main-content { 
+    margin-top: calc(115px + env(safe-area-inset-top)); /* Header yüksekliği + safe area */
+  }
+  
   .form-section { transition: all 0.3s ease; }
   .form-section.collapsed { margin-top: 25px; opacity: 0.9; background: rgba(40,40,40,0.7); padding: 15px; border-radius: 12px; }
   .form-section.collapsed h3 { font-size: 16px; margin-bottom: 12px; color: #f2d16b; text-align: center; }
@@ -44,11 +96,37 @@
   .mobile-footer { margin-top: 30px; text-align: center; font-size: 12px; opacity: 0.7; }
   .money-rain { position: fixed; top: -100px; z-index: 9999; pointer-events: none; animation: fall linear forwards; font-size: 24px; opacity: 0.8; }
   @keyframes fall { to { transform: translateY(calc(100vh + 100px)); } }
+  
   @media (max-width: 380px) {
-    .calendar { gap: 3px; } .day { padding: 4px 1px; min-height: 35px; font-size: 10px; } .day small { font-size: 8px; } .main-content { margin-top: 105px; } .top-panel .slogan { font-size: 10px; } #currentDate { font-size: 9px; top: 10px; } .notification-panel { padding: 2px 12px; min-height: 38px; max-height: 38px; } .notification-text { font-size: 12px; } .notification-clear { padding: 2px 4px; font-size: 9px; min-width: 25px; height: 16px; }
+    .calendar { gap: 3px; } 
+    .day { padding: 4px 1px; min-height: 35px; font-size: 10px; } 
+    .day small { font-size: 8px; } 
+    .main-content { margin-top: calc(105px + env(safe-area-inset-top)); } 
+    .top-panel .slogan { font-size: 10px; } 
+    #currentDate { font-size: 9px; top: 10px; } 
+    .notification-panel { padding: 2px 12px; min-height: 38px; max-height: 38px; } 
+    .notification-text { font-size: 12px; } 
+    .notification-clear { padding: 2px 4px; font-size: 9px; min-width: 25px; height: 16px; }
   }
+  
   @media (max-width: 320px) {
-    .calendar { gap: 2px; } .day { padding: 3px 1px; min-height: 32px; font-size: 9px; } .day small { font-size: 7px; } .top-panel .slogan { font-size: 9px; } #currentDate { font-size: 8px; } .notification-text { font-size: 11px; }
+    .calendar { gap: 2px; } 
+    .day { padding: 3px 1px; min-height: 32px; font-size: 9px; } 
+    .day small { font-size: 7px; } 
+    .main-content { margin-top: calc(100px + env(safe-area-inset-top)); } 
+    .top-panel .slogan { font-size: 9px; } 
+    #currentDate { font-size: 8px; } 
+    .notification-text { font-size: 11px; }
+  }
+  
+  /* iPhone çentik için özel stiller */
+  @supports (padding: max(0px)) {
+    .header-container {
+      top: max(env(safe-area-inset-top), 15px);
+    }
+    .main-content {
+      margin-top: calc(115px + max(env(safe-area-inset-top), 15px));
+    }
   }
 </style>
 </head>
@@ -84,7 +162,7 @@
         <button onclick="calc()">📊 Raporu Oluştur</button>
     </div>
     <div class="mobile-footer">
-        <div onclick="startMoneyRain()" style="cursor: pointer;">v0.32β - Designed By C.D.</div>
+        <div onclick="startMoneyRain()" style="cursor: pointer;">v0.31α - Designed By C.D.</div>
         <div style="margin-top: 5px;">Ana ekrana ekle → Uygulama gibi kullan</div>
     </div>
 </div>
